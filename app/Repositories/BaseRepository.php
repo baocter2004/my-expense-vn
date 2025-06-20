@@ -185,21 +185,20 @@ abstract class BaseRepository
 
     public function update($id, array $params)
     {
-        $result = $this->getModel()->find($id);
-        $result->fill($params);
-        $saved = $result->save();
-
-        return $saved ? $result : null;
+        $item = $this->getModel()->find($id);
+        if (! $item) {
+            return null;
+        }
+        return $item->update($params) ? $item : null;
     }
 
     public function updateWithTimestamp($id, array $params, $timestamps  = true)
     {
-        $result = $this->getModel()->find($id);
-        $result->fill($params);
-        $result->timestamps = $timestamps;
-        $saved = $result->save();
-
-        return $saved ? $result : null;
+        $item = $this->getModel()->find($id);
+        if (! $item) {
+            return null;
+        }
+        return $item->update($params) ? $item : null;
     }
 
     public function updateOrCreate(array $values, array $attributes = [])
