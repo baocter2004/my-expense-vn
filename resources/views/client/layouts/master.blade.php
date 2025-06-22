@@ -13,7 +13,7 @@
     <header>
         @include('client.layouts.partials.header')
     </header>
-    <div class="w-full flex justify-center items-center px-20 m-auto mt-20">
+    <div class="w-full px-10 md:px-20 m-auto mt-20">
         @yield('content')
     </div>
     <footer>
