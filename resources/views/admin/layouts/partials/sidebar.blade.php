@@ -28,7 +28,7 @@
         </a>
     </li>
     <li>
-        <a href="" class="sidebar-link">
+        <a href="{{ route('auth.admin.logout') }}" class="sidebar-link">
             <i class="fa-solid fa-right-from-bracket"></i> Đăng Xuất
         </a>
     </li>
