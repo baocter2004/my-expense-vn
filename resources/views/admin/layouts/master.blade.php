@@ -26,7 +26,7 @@
 
         <div class="line"></div>
 
-        <div class="container">
+        <div class="flex justify-center items-center m-auto">
             @yield('content')
         </div>
     </div>

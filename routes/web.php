@@ -1,7 +1,46 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\Auth\AdminAuthController;
+use App\Http\Controllers\Auth\ClientAuthController;
+use App\Http\Controllers\Client\HomeController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('admin.dashboard');
-});
+// ========================== ADMIN ==============================
+Route::name('client.')
+    ->group(function () {
+        Route::get('/', [HomeController::class, 'index'])->name('index');
+    });
+
+// ========================== ADMIN ==============================
+
+Route::prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+    });
+
+// ========================== AUTH ===============================
+Route::name('auth.')
+    ->group(function () {
+        Route::name('admin.')
+            ->prefix('admin')
+            ->group(function () {
+                Route::get('/login', [AdminAuthController::class, 'showFormLogin'])->name('showFormLogin');
+                Route::post('/login', [AdminAuthController::class, 'login'])->name('login');
+                Route::get('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+            });
+
+        Route::name('client.')
+            ->group(function () {
+                Route::get('/register', [ClientAuthController::class, 'showFormRegister'])->name('showFormRegister');
+                Route::post('/register', [ClientAuthController::class, 'register'])->name('register');
+                Route::get('/login', [ClientAuthController::class, 'showFormLogin'])->name('showFormLogin');
+                Route::post('/login', [ClientAuthController::class, 'login'])->name('login');
+                Route::post('/logout', [ClientAuthController::class, 'logout'])->name('logout');
+
+                Route::get('/google', [ClientAuthController::class, 'redirectToGoogle'])->name('redirectToGoogle');
+                Route::get('/google/callback', [ClientAuthController::class, 'handleGoogleCallback'])->name('handleGoogleCallback');
+            });
+    });
