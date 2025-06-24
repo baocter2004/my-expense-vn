@@ -5,12 +5,16 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\Auth\ClientAuthController;
 use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Client\UserController;
 use Illuminate\Support\Facades\Route;
 
 // ========================== ADMIN ==============================
 Route::name('client.')
     ->group(function () {
         Route::get('/', [HomeController::class, 'index'])->name('index');
+
+        // PROFILE 
+        Route::get('/profile',[UserController::class,'index'])->name('profile');
     });
 
 // ========================== ADMIN ==============================

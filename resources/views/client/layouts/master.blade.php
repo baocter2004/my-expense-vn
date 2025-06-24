@@ -13,7 +13,8 @@
     <header>
         @include('client.layouts.partials.header')
     </header>
-    <div class="w-full px-10 md:px-20 m-auto mt-20">
+    <div class="w-full px-10 md:px-20 mx-auto mt-20 overflow-x-hidden">
+        @include('client.components.elements.breadcrumb', ['items' => $breadcrumb ?? []])
         @yield('content')
     </div>
     <footer>
