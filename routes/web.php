@@ -15,6 +15,9 @@ Route::name('client.')
 
         // PROFILE 
         Route::get('/profile',[UserController::class,'index'])->name('profile');
+        Route::patch('/update-info',[UserController::class,'update'])->name('update-info');
+        Route::patch('/avatar', [UserController::class, 'updateImage'])->name('update-avatar');
+
     });
 
 // ========================== ADMIN ==============================

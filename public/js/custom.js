@@ -32,4 +32,10 @@ $(document).ready(function () {
     $('#scrollToTop').on('click', function () {
         $('html, body').animate({ scrollTop: 0 }, 500)
     })
+
+    $('#avatarInput').on('change', function () {
+        if (this.files && this.files[0]) {
+            $('#avatarForm').submit();
+        }
+    });
 });

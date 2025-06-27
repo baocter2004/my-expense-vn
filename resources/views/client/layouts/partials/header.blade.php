@@ -22,15 +22,15 @@
 
     @if (!Auth::user())
         <div class="space-x-3 hidden md:flex">
-            <a href="{{ route('auth.client.showFormLogin')}}"
+            <a href="{{ route('auth.client.showFormLogin') }}"
                 class="py-1 px-3 border border-teal-500 text-teal-500 rounded-md hover:bg-teal-500 hover:text-white transition-colors">Đăng
                 nhập</a>
-            <a href="{{ route('auth.client.showFormRegister')}}"
+            <a href="{{ route('auth.client.showFormRegister') }}"
                 class="py-1 px-3 bg-teal-500 text-white rounded-md hover:bg-teal-600 transition-colors">Đăng ký</a>
         </div>
     @else
         <div class="hidden md:flex space-x-3">
-            <a href="/profile"
+            <a href="{{ route('client.profile') }}"
                 class="py-1 px-3 bg-teal-500 text-white rounded-md hover:bg-teal-600 transition-colors">Hồ sơ của
                 bạn</a>
             <form action="/logout" method="POST">

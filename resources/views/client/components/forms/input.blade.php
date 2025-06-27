@@ -1,4 +1,11 @@
-@props(['label' => '', 'name' => '', 'type' => 'text', 'icon' => ''])
+@props([
+    'label' => '',
+    'name' => '',
+    'type' => 'text',
+    'icon' => '',
+    'value' => '',
+    'placeholder' => '',
+])
 
 <div class="w-full">
     <label for="{{ $name }}" class="flex items-center gap-x-2 text-sm font-medium text-gray-700 mb-1">
@@ -9,14 +16,14 @@
     </label>
 
     <div class="relative">
-        <input id="{{ $name }}" name="{{ $name }}" type="{{ $type }}" value="{{ old($name) }}"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500 pr-10 
-            @error($name) border-red-500 focus:ring-red-500 @enderror">
-
+        <input id="{{ $name }}" name="{{ $name }}" type="{{ $type }}"
+            value="{{ old($name, $value) }}" placeholder="{{ $placeholder }}"
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500
+             {{ $type === 'password' ? 'pr-10' : 'pr-4' }}">
         @if ($type === 'password')
             <button type="button"
                 class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-teal-500 toggle-password"
-                data-target="#{{ $name }}">
+                data-target="#{{ $name }}" id="toggle-{{ $name }}">
                 <i class="fa-solid fa-eye"></i>
             </button>
         @endif
@@ -28,19 +35,18 @@
 </div>
 
 @if ($type === 'password')
-    @push('js')
+    @push('scripts')
         <script>
             $(function() {
-                $('.toggle-password').off('click').on('click', function() {
-                    let target = $($(this).data('target'));
-                    let icon = $(this).find('i');
-
-                    if (target.attr('type') === 'password') {
-                        target.attr('type', 'text');
-                        icon.removeClass('fa-eye').addClass('fa-eye-slash');
+                $('#toggle-{{ $name }}').off('click').on('click', function() {
+                    let $inp = $($(this).data('target'));
+                    let $icon = $(this).find('i');
+                    if ($inp.attr('type') === 'password') {
+                        $inp.attr('type', 'text');
+                        $icon.removeClass('fa-eye').addClass('fa-eye-slash');
                     } else {
-                        target.attr('type', 'password');
-                        icon.removeClass('fa-eye-slash').addClass('fa-eye');
+                        $inp.attr('type', 'password');
+                        $icon.removeClass('fa-eye-slash').addClass('fa-eye');
                     }
                 });
             });
