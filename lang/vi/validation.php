@@ -138,6 +138,9 @@ return [
         'email' => 'Địa chỉ email',
         'password' => 'Mật khẩu',
         'first_name' => 'Tên',
-        'last_name' => 'Họ'
+        'last_name' => 'Họ',
+        'gender' => 'Giới tính',
+        'birth_date' => 'Ngày sinh',
+        'avatar' => 'Ảnh đại diện'
     ],
 ];

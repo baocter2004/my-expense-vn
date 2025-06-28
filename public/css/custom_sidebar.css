@@ -1,3 +1,8 @@
+::selection {
+    background-color: #14b8a6;
+    color: #fff;
+}
+
 .wrapper {
     background: #fafafa;
     display: flex;
@@ -52,7 +57,7 @@
 
 #sidebar .sidebar-header {
     padding: 20px;
-    background: linear-gradient(90deg, #26A69A, #4DD0E1); 
+    background: linear-gradient(90deg, #26A69A, #4DD0E1);
 }
 
 #sidebar .sidebar-header h3 {
@@ -104,7 +109,7 @@
     width: calc(100% - 250px);
 }
 
-#sidebar.active + #content {
+#sidebar.active+#content {
     margin-left: 0;
     width: 100%;
 }
@@ -123,7 +128,7 @@
         width: 100%;
     }
 
-    #sidebar.active + #content {
+    #sidebar.active+#content {
         margin-left: 250px;
         width: calc(100% - 250px);
     }

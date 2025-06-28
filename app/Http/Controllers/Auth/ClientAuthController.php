@@ -48,6 +48,22 @@ class ClientAuthController extends Controller
         return view('client.pages.auth.login');
     }
 
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+
+            return redirect()->route('client.index')->with('success', 'Đăng Nhập Thành Công');
+        }
+
+        return back()->with('error', 'Đăng Nhập Không Thành Công')->withInput();
+    }
+
     public function redirectToGoogle()
     {
         return Socialite::driver('google')->redirect();

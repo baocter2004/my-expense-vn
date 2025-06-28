@@ -66,7 +66,7 @@ abstract class BaseRepository
      * @return Builder
      */
 
-    public function filter($array): Builder
+    public function filter(array $params): Builder
     {
         $query = $this->getModel()->query();
 

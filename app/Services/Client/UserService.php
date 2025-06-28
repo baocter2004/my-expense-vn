@@ -1,0 +1,77 @@
+<?php
+
+namespace App\Services\Client;
+
+use App\Consts\GlobalConst;
+use App\Models\User;
+use App\Repositories\UserRepository;
+use App\Services\BaseCRUDService;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+
+class UserService extends BaseCRUDService
+{
+    public function getRepository(): UserRepository
+    {
+        if (empty($this->repository)) {
+            $this->repository = app()->make(UserRepository::class);
+        }
+        return $this->repository;
+    }
+
+    protected function buildFilterParams(array $params): array
+    {
+        $wheres     = Arr::get($params, 'wheres', []);
+        $whereLikes = Arr::get($params, 'likes', []);
+        $sort       = Arr::get($params, 'sort', 'created_at');
+        $order      = Arr::get($params, 'order', 'desc');
+        $relates    = Arr::get($params, 'relates', []);
+
+        return [
+            'wheres' => $wheres,
+            'likes'  => $whereLikes,
+            'sort'   => $sort . ':' . $order,
+            'relates' => $relates,
+        ];
+    }
+
+    public function show(int|string $id)
+    {
+        $params['relates'] = ['categories', 'wallets', 'transactions'];
+
+        $user = $this->filter([
+            'wheres'  => ['id' => $id],
+            $params
+        ])->first();
+
+        return [
+            'id' => $id,
+            'user' => $user,
+            'categories' => $user->categories,
+            'wallets' => $user->wallets,
+            'transactions' => $user->transactions
+        ];
+    }
+
+    public function updateAvatar(int $userId, \Illuminate\Http\UploadedFile $file): ?string
+    {
+        return DB::transaction(function () use ($userId, $file) {
+            $user = $this->find($userId);
+
+            $folder = 'users/avatars';
+
+            $path = $file->store($folder, 'public');
+
+            if ($user->avatar && $user->avatar !== $path) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+
+            $user->update([
+                'avatar' => $path,
+            ]);
+
+            return $path;
+        });
+    }
+}
