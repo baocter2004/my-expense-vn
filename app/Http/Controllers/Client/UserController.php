@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\Client\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
@@ -50,5 +51,19 @@ class UserController extends Controller
         }
 
         return back()->with('error', 'Cập nhật ảnh thất bại, vui lòng thử lại.');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $id = Auth::id();
+
+        if (!$id) {
+            return redirect()->route('auth.client.showFormLogin')->with('error', 'Bạn không có quyền truy cập !');
+        }
+
+        $this->userService->handleChangePassword($id, $request->all());
+        Auth::logout();
+
+        return redirect()->route('auth.client.showFormLogin')->with('success', 'Đổi mật khẩu thành công. Vui lòng đăng nhập lại.');
     }
 }

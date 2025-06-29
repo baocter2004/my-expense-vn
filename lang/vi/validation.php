@@ -141,6 +141,8 @@ return [
         'last_name' => 'Họ',
         'gender' => 'Giới tính',
         'birth_date' => 'Ngày sinh',
-        'avatar' => 'Ảnh đại diện'
+        'avatar' => 'Ảnh đại diện',
+        'current_password' => 'Mật khẩu hiện tại',
+        'new_password' => 'Mật khẩu mới'
     ],
 ];

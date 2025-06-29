@@ -16,6 +16,7 @@ Route::name('client.')
         // PROFILE 
         Route::get('/profile',[UserController::class,'index'])->name('profile');
         Route::patch('/update-info',[UserController::class,'update'])->name('update-info');
+        Route::patch('/update-password',[UserController::class,'updatePassword'])->name('update-password');
         Route::patch('/avatar', [UserController::class, 'updateImage'])->name('update-avatar');
 
     });
@@ -49,5 +50,8 @@ Route::name('auth.')
 
                 Route::get('/google', [ClientAuthController::class, 'redirectToGoogle'])->name('redirectToGoogle');
                 Route::get('/google/callback', [ClientAuthController::class, 'handleGoogleCallback'])->name('handleGoogleCallback');
+
+                Route::get('forgot-password',[ClientAuthController::class,'showFormForgotPassword'])->name('showFormForgotPassword');
+                Route::post('/forgot-password', [AuthController::class, 'handleForgotPassword'])->name('auth.client.forgotPassword');
             });
     });

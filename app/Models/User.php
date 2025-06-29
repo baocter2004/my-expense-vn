@@ -30,7 +30,8 @@ class User extends Authenticatable
         'google_id',
         'birth_date',
         'gender',
-        'is_active'
+        'is_active',
+        'is_change_password'
     ];
 
     /**

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->unsignedInteger('is_change_password')->default(0);
             $table->rememberToken();
             $table->unsignedInteger('is_active')->default(GlobalConst::ACTIVE);
             $table->timestamps();

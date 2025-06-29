@@ -120,4 +120,8 @@ class ClientAuthController extends Controller
         return redirect()->route('client.index')
             ->with('success', $message);
     }
+
+    public function showFormForgotPassword() {
+        return view('client.pages.auth.forgot-password');
+    }
 }
