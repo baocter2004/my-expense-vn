@@ -7,8 +7,12 @@ use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Services\BaseCRUDService;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class UserService extends BaseCRUDService
 {
@@ -73,5 +77,33 @@ class UserService extends BaseCRUDService
 
             return $path;
         });
+    }
+    public function handleChangePassword(int $userId, array $data): void
+    {
+        $user = $this->find($userId);
+
+        $isGoogleFirstChange = $user->google_id !== null && !$user->is_change_password;
+
+        if ($isGoogleFirstChange) {
+            Validator::make($data, [
+                'new_password' => 'required|min:8|confirmed',
+            ])->validate();
+        } else {
+            Validator::make($data, [
+                'current_password' => 'required',
+                'new_password' => 'required|min:8|confirmed',
+            ])->validate();
+
+            if (!Hash::check($data['current_password'], $user->password)) {
+                throw ValidationException::withMessages([
+                    'current_password' => ['Mật khẩu hiện tại không đúng.'],
+                ]);
+            }
+        }
+
+        $this->update($userId, [
+            'password' => $data['new_password'],
+            'is_change_password' => 1,
+        ]);
     }
 }
