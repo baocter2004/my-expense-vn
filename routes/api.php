@@ -8,3 +8,4 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::post('/password/email', [AuthController::class, 'sendResetLinkEmail'])->name('sendResetLinkEmail');
+Route::post('/password/reset', [AuthController::class, 'handleResetPassword'])->name('password.update');

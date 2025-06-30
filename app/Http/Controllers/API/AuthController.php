@@ -31,6 +31,13 @@ class AuthController extends Controller
                 ], 200);
             }
 
+            if ($status === Password::RESET_THROTTLED) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Vui lòng đợi ít nhất 60 giây trước khi gửi lại.',
+                ], 429);
+            }
+
             return response()->json([
                 'success' => false,
                 'message' => trans($status),
@@ -52,7 +59,7 @@ class AuthController extends Controller
     /**
      * Xử lý reset mật khẩu.
      */
-    public function resetPassword(Request $request)
+    public function handleResetPassword(Request $request)
     {
         $data = $request->validate([
             'token'    => 'required|string',

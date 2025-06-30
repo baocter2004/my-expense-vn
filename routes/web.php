@@ -51,7 +51,7 @@ Route::name('auth.')
                 Route::get('/google', [ClientAuthController::class, 'redirectToGoogle'])->name('redirectToGoogle');
                 Route::get('/google/callback', [ClientAuthController::class, 'handleGoogleCallback'])->name('handleGoogleCallback');
 
-                Route::get('forgot-password',[ClientAuthController::class,'showFormForgotPassword'])->name('showFormForgotPassword');
-                Route::post('/forgot-password', [AuthController::class, 'handleForgotPassword'])->name('auth.client.forgotPassword');
+                Route::get('forgot-password', [ClientAuthController::class, 'showFormForgotPassword'])->name('showFormForgotPassword');
+                Route::get('password/reset', [ClientAuthController::class, 'showFormResetPassword'])->name('password.reset');
             });
     });
