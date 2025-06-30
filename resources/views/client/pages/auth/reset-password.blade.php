@@ -1,8 +1,9 @@
 @extends('client.layouts.master-blank')
 
-@section('title')
-    Quên Mật Khẩu
-@endsection
+@section('title', 'Cập Nhật Mật Khẩu')
+
+@push('css')
+@endpush
 
 @push('css')
     <style>
@@ -59,24 +60,35 @@
                     <div class="w-20 h-1 rounded-full bg-gradient-to-r from-teal-500 to-cyan-400 opacity-50"></div>
                 </div>
                 <h2 class="text-base sm:text-lg font-medium text-center text-gray-600 tracking-wide">
-                    Quên Mật Khẩu
+                    Thay Đổi Mật Khẩu
                 </h2>
             </div>
 
             <div>
-
-                <form id="forgot-form" class="space-y-5">
+                <form id="reset-form" class="space-y-4">
                     @csrf
+                    <input type="hidden" name="token" value="{{ request('token') }}">
+                    <input type="hidden" name="email" value="{{ request('email') }}">
+
                     @include('client.components.forms.input', [
-                        'icon' => 'envelope',
-                        'label' => 'Email',
-                        'name' => 'email',
-                        'placeholder' => 'Vui Lòng Nhập Email',
+                        'icon' => 'lock',
+                        'label' => 'Mật khẩu mới',
+                        'name' => 'password',
+                        'type' => 'password',
+                        'placeholder' => 'Nhập mật khẩu mới',
+                    ])
+
+                    @include('client.components.forms.input', [
+                        'icon' => 'lock',
+                        'label' => 'Xác nhận mật khẩu',
+                        'name' => 'password_confirmation',
+                        'type' => 'password',
+                        'placeholder' => 'Nhập lại mật khẩu',
                     ])
 
                     <button type="submit"
-                        class="w-full bg-gradient-to-r from-teal-500 to-cyan-400 text-white font-semibold py-2 px-4 rounded-full flex items-center justify-center gap-x-2 shadow hover:shadow-lg transition">
-                        <i class="fa-solid fa-paper-plane"></i> Gửi Link Khôi Phục
+                        class="w-full bg-gradient-to-r from-teal-500 to-cyan-400 text-white font-semibold py-2 rounded-full">
+                        Cập nhật mật khẩu
                     </button>
                 </form>
             </div>
@@ -94,44 +106,36 @@
                 }
             });
 
-            $('#forgot-form').on('submit', function(e) {
+            $('#reset-form').on('submit', function(e) {
                 e.preventDefault();
+                const data = $(this).serialize();
 
-                let email = $(this).find('input[name="email"]').val().trim();
-                if (!email) {
-                    return Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi',
-                        text: 'Vui lòng nhập email.',
-                        confirmButtonText: 'OK'
-                    });
-                }
-
-                $.post('/api/password/email', {
-                        email: email
-                    })
-                    .done(function(res) {
+                $.post('/api/password/reset', data)
+                    .done(res => {
                         Swal.fire({
                             icon: 'success',
                             title: 'Thành công!',
                             text: res.message ||
-                                'Link khôi phục đã được gửi vào email của bạn.',
-                            confirmButtonText: 'OK'
+                                'Mật khẩu đã được cập nhật. Vui lòng đăng nhập lại!',
+                            confirmButtonText: 'OK',
+                            timer: 3000,
+                            timerProgressBar: true
+                        }).then(() => {
+                            window.location.href = '/login';
                         });
-                        $('#forgot-form')[0].reset();
                     })
-                    .fail(function(xhr) {
+                    .fail(xhr => {
                         let msg = 'Có lỗi xảy ra, vui lòng thử lại.';
-                        if (xhr.status === 422 && xhr.responseJSON.errors && xhr.responseJSON.errors
-                            .email) {
-                            msg = xhr.responseJSON.errors.email[0];
+                        if (xhr.status === 422 && xhr.responseJSON.errors) {
+                            const errors = xhr.responseJSON.errors;
+                            msg = Object.values(errors).flat().join('<br>');
                         } else if (xhr.responseJSON && xhr.responseJSON.message) {
                             msg = xhr.responseJSON.message;
                         }
                         Swal.fire({
                             icon: 'error',
                             title: 'Thất bại!',
-                            text: msg,
+                            html: msg,
                             confirmButtonText: 'OK'
                         });
                     });

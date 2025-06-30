@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -121,7 +122,16 @@ class ClientAuthController extends Controller
             ->with('success', $message);
     }
 
-    public function showFormForgotPassword() {
+    public function showFormForgotPassword()
+    {
         return view('client.pages.auth.forgot-password');
+    }
+
+    public function showFormResetPassword(Request $request)
+    {
+        return view('client.pages.auth.reset-password', [
+            'token' => $request->query('token'),
+            'email' => $request->query('email'),
+        ]);
     }
 }
