@@ -20,7 +20,18 @@ class UserController extends Controller
     public function index()
     {
         $id = Auth::id();
-        $items = $this->userService->show($id);
+
+        $items = $this->userService->show($id, [
+            'categories_limit' => 10,
+            'categories_page' => request('categories_page', 1),
+
+            'wallets_limit' => 10,
+            'wallets_page' => request('wallets_page', 1),
+
+            'transactions_limit' => 10,
+            'transactions_page' => request('transactions_page', 1),
+        ]);
+
         $items['greeting'] = Helper::getGreetingMessage(now()->hour);
 
         return view('client.pages.profile.index', $items);
