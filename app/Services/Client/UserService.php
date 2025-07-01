@@ -40,21 +40,33 @@ class UserService extends BaseCRUDService
         ];
     }
 
-    public function show(int|string $id)
+    public function show(int|string $id, array $params = [])
     {
-        $params['relates'] = ['categories', 'wallets', 'transactions'];
+        $filterParams = array_merge($params, [
+            'wheres' => ['id' => $id],
+            'relates' => ['categories', 'wallets', 'transactions'],
+        ]);
 
-        $user = $this->filter([
-            'wheres'  => ['id' => $id],
-            $params
-        ])->first();
+        $user = $this->filter($filterParams)->first();
+        if (!$user) {
+            return null;
+        }
+
+        $categoriesLimit = Arr::get($params, 'categories_limit', 10);
+        $categoriesPage = Arr::get($params, 'categories_page', 1);
+
+        $walletsLimit = Arr::get($params, 'wallets_limit', 10);
+        $walletsPage = Arr::get($params, 'wallets_page', 1);
+
+        $transactionsLimit = Arr::get($params, 'transactions_limit', 10);
+        $transactionsPage = Arr::get($params, 'transactions_page', 1);
 
         return [
             'id' => $id,
             'user' => $user,
-            'categories' => $user->categories,
-            'wallets' => $user->wallets,
-            'transactions' => $user->transactions
+            'categories' => $user->categories()->paginate($categoriesLimit, ['*'], 'categories_page', $categoriesPage),
+            'wallets' => $user->wallets()->paginate($walletsLimit, ['*'], 'wallets_page', $walletsPage),
+            'transactions' => $user->transactions()->paginate($transactionsLimit, ['*'], 'transactions_page', $transactionsPage),
         ];
     }
 
