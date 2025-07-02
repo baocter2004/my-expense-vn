@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Hashids\Hashids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Transaction extends Model
 {
@@ -17,8 +19,17 @@ class Transaction extends Model
         'transaction_type',
         'occurred_at',
         'description',
+        'code'
     ];
+    // ============================= Booted ===============================
+    protected static function boot()
+    {
+        parent::boot();
 
+        static::creating(function ($model) {
+            $model->code = (string) Str::ulid();
+        });
+    }
     // ============================= Relation =============================
     public function user()
     {
