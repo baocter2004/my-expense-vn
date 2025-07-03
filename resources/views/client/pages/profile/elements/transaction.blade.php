@@ -4,7 +4,7 @@
     <h2
         class="flex items-center gap-2 text-lg font-extrabold text-teal-600
            border-b-2 border-teal-200 pb-1 md:pb-0">
-        <i class="fa-solid fa-clock-rotate-left text-teal-500 text-xl"></i>
+        <i class="fa-solid fa-clock-rotate-left text-teal-500 text-lg md:text-xl"></i>
         Lịch sử Giao Dịch
     </h2>
 
@@ -26,7 +26,7 @@
                     <div
                         class="tx-header flex flex-col md:flex-row md:justify-between md:items-center bg-white border-b border-gray-100 px-4 py-3 hover:shadow-sm hover:bg-teal-50 transition cursor-pointer">
                         <div class="flex flex-col text-left">
-                            <span class="text-gray-800 text-base md:text-lg font-semibold">
+                            <span class="text-gray-800 text-base font-semibold">
                                 {{ \Carbon\Carbon::parse($tx->occurred_at)->format('d/m/Y H:i') }}
                             </span>
                             <span class="text-gray-500 text-xs md:text-sm truncate max-w-full md:max-w-[300px]">
@@ -35,7 +35,7 @@
                         </div>
                         <div class="flex items-center gap-2 mt-2 md:mt-0">
                             <span
-                                class="font-bold text-base md:text-xl tracking-tight {{ $tx->transaction_type == \App\Consts\TransactionConst::INCOME ? 'text-green-600' : 'text-red-600' }}">
+                                class="font-bold text-base tracking-tight {{ $tx->transaction_type == \App\Consts\TransactionConst::INCOME ? 'text-green-600' : 'text-red-600' }}">
                                 {{ $tx->transaction_type == \App\Consts\TransactionConst::INCOME ? '+' : '-' }}
                                 {{ number_format($tx->amount, 0, ',', '.') }}₫
                             </span>

@@ -4,7 +4,7 @@
 
 @section('content')
     <div
-        class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-6 rounded-3xl">
+        class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-6 [border-radius:60px_0_60px_0]">
         <div class="text-center mb-8">
             <h1
                 class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-cyan-400 flex items-center justify-center gap-x-2">
@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4  text-center mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 max-w-3xl text-center mb-8">
             @foreach ([['icon' => 'fa-chart-line', 'title' => 'Thống kê thông minh'], ['icon' => 'fa-lock', 'title' => 'Bảo mật tuyệt đối'], ['icon' => 'fa-wallet', 'title' => 'Quản lý dễ dàng']] as $feature)
                 <div
                     class="bg-white p-6 shadow hover:shadow-xl transform hover:scale-105 border border-teal-500 transition [border-radius:30px_0_30px_0]">
@@ -72,7 +72,7 @@
     </div>
 
     <div
-        class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-6 rounded-3xl">
+        class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-6 [border-radius:60px_0_60px_0]">
 
         <div class="text-center mb-8">
             <h2
@@ -148,7 +148,7 @@
         </div>
     </div>
 
-    <div class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-6 rounded-3xl"
+    <div class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-6 rounded-[60px_0_60px_0]"
         data-aos="zoom-in">
         <div class="w-full flex flex-col justify-center items-center p-8 space-y-6">
             <h2 class="text-3xl font-extrabold text-teal-500">Câu hỏi thường gặp</h2>

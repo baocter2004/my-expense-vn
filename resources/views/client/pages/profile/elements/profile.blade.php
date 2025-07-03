@@ -5,7 +5,7 @@
         <h2
             class="flex items-center gap-2 text-lg font-extrabold text-teal-600
            border-b-2  border-teal-200 pb-1 md:pb-0">
-            <i class="fa-solid fa-user text-teal-500 text-xl"></i> Thông Tin Cá Nhân
+            <i class="fa-solid fa-user text-teal-500 text-lg md:text-xl"></i> Thông Tin Cá Nhân
         </h2>
     </div>
 </div>
