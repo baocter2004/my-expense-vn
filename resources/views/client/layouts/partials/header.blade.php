@@ -8,7 +8,7 @@
     </a>
 
     <ul class="hidden md:flex space-x-6">
-        @foreach ([['/', 'Trang chủ'], ['/about', 'Giới thiệu'], ['/contact', 'Liên hệ']] as [$url, $label])
+        @foreach ([['/', 'Trang chủ'], ['/about', 'Giới thiệu'], ['/contact', 'Liên hệ'], ['/categories', 'Danh Mục']] as [$url, $label])
             <li>
                 <a href="{{ $url }}"
                     class="relative group inline-block text-gray-800 hover:text-teal-500 transition-colors">
@@ -54,7 +54,7 @@
     class="fixed inset-0 bg-black bg-opacity-50 opacity-0 pointer-events-none transition-opacity z-40"></div>
 <aside id="offcanvas-menu"
     class="fixed top-0 right-0 w-64 h-full bg-white shadow-lg transform translate-x-full transition-transform duration-300 z-50 flex flex-col space-y-2 p-4">
-    <button id="close-offcanvas" class="self-end text-gray-600 hover:text-black mb-2 text-xl">✕</button>
+    <button id="close-offcanvas" class="self-end text-gray-600 hover:text-black mb-2 text-lg md:text-xl">✕</button>
 
     @foreach ([['/', 'Trang chủ'], ['/about', 'Giới thiệu'], ['/contact', 'Liên hệ']] as [$url, $label])
         <a href="{{ $url }}"

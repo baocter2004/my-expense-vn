@@ -17,7 +17,7 @@
 
 @section('content')
     <div
-        class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-4">
+        class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-4 rounded-3xl">
         <div class="text-center mb-8">
             <h1
                 class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-cyan-400 flex items-center justify-center gap-x-2">
@@ -26,9 +26,9 @@
             <div class="my-2 flex justify-center">
                 <div class="w-20 h-1 rounded-full bg-gradient-to-r from-teal-500 to-cyan-400 opacity-50"></div>
             </div>
-            <h2 class="text-base sm:text-lg font-medium text-center text-gray-600 tracking-wide">Thông Tin Trang Cá Nhân</h2>
+            <h2 class="text-lg md:text-xl font-medium text-center text-gray-600 tracking-wide">Thông Tin Trang Cá Nhân</h2>
 
-            <h3 class="text-base sm:text-lg font-medium text-center text-gray-600 tracking-wide">
+            <h3 class="text-lg md:text-xl font-medium text-center text-gray-600 tracking-wide">
                 Xin chào <span class="text-teal-600 underline decoration-2 decoration-cyan-400 decoration-dotted">
                     {{ $user->fullname }}
                 </span> ,

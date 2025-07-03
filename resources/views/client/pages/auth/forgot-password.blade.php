@@ -58,7 +58,7 @@
                 <div class="my-2 flex justify-center">
                     <div class="w-20 h-1 rounded-full bg-gradient-to-r from-teal-500 to-cyan-400 opacity-50"></div>
                 </div>
-                <h2 class="text-base sm:text-lg font-medium text-center text-gray-600 tracking-wide">
+                <h2 class="text-lg md:text-xl font-medium text-center text-gray-600 tracking-wide">
                     Quên Mật Khẩu
                 </h2>
             </div>
