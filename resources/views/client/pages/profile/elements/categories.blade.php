@@ -4,33 +4,31 @@
     </h2>
 </div>
 
-<div class="mt-2">
-
-</div>
-
-@if ($categories->count())
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        @foreach ($categories as $category)
-            <div
-                class="bg-white border border-gray-200 rounded-xl shadow hover:shadow-md transition-shadow duration-300 p-4 flex justify-between md:justify-center items-center gap-3 hover:bg-teal-50">
-                <div class="flex items-center gap-3">
-                    <i class="fa-solid fa-tag text-teal-500 text-lg"></i>
-                    <span class="font-semibold text-gray-800">{{ $category->name }}</span>
+<div class="w-full bg-gray-50 p-2 md:p-6 rounded-lg border border-gray-100">
+    @if ($categories->count())
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            @foreach ($categories as $category)
+                <div
+                    class="bg-white border border-gray-200 rounded-xl shadow hover:shadow-md transition-shadow duration-300 p-4 flex justify-between md:justify-center items-center gap-3 hover:bg-teal-50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-tag text-teal-500 text-lg"></i>
+                        <span class="font-semibold text-gray-800">{{ $category->name }}</span>
+                    </div>
+                    <button
+                        class="edit-category-btn flex items-center gap-1 text-sm text-teal-600 hover:text-teal-800 transition"
+                        data-id="{{ $category->id }}" data-name="{{ $category->name }}">Chỉnh sửa
+                    </button>
                 </div>
-                <button
-                    class="edit-category-btn flex items-center gap-1 text-sm text-teal-600 hover:text-teal-800 transition"
-                    data-id="{{ $category->id }}" data-name="{{ $category->name }}">Chỉnh sửa
-                </button>
-            </div>
-        @endforeach
-    </div>
+            @endforeach
+        </div>
 
-    <div class="mt-6 flex justify-end">
-        {{ $categories->onEachSide(1)->links('client.components.elements.paginate') }}
-    </div>
-@else
-    <p class="text-center text-gray-500 italic">Bạn chưa có danh mục nào.</p>
-@endif
+        <div class="mt-6 flex justify-end">
+            {{ $categories->onEachSide(1)->links('client.components.elements.paginate') }}
+        </div>
+    @else
+        <p class="text-center text-gray-500 italic">Bạn chưa có danh mục nào.</p>
+    @endif
+</div>
 
 <div id="editCategoryModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
     <div class="bg-white rounded-lg p-6 w-full max-w-sm shadow relative">

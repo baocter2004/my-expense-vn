@@ -28,7 +28,7 @@ class UserController extends Controller
             'wallets_limit' => 10,
             'wallets_page' => request('wallets_page', 1),
 
-            'transactions_limit' => 10,
+            'transactions_limit' => 5,
             'transactions_page' => request('transactions_page', 1),
         ]);
 
