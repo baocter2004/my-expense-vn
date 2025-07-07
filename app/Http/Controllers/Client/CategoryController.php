@@ -17,26 +17,35 @@ class CategoryController extends Controller
     {
         $id = Auth::id();
 
-        $items = $this->categoryService->getList($id,$request->validated());
+        $items = $this->categoryService->getList($id, $request->validated());
 
-        return view('client.pages.categories.index',compact('items'));
+        return view('client.pages.categories.index', compact('items'));
     }
 
     public function create() {}
 
     public function update(Request $request)
-    {
-        $id   = $request->input('id');
-        $name = $request->input('name');
+{
+    $id = $request->input('id');
 
-        $result = $this->categoryService->update($id, ['name' => $name]);
+    $data = [
+        'name' => $request->input('name'),
+        'descriptions' => $request->input('descriptions'),
+    ];
 
-        if ($result) {
-            return redirect()
-                ->route('client.profile')
-                ->with('success', 'Thay đổi tên danh mục thành công!');
+    $result = $this->categoryService->update($id, $data);
+
+    if ($result) {
+        if ($request->filled('descriptions')) {
+            return redirect()->route('client.categories.index')
+                ->with('success', 'Cập nhật danh mục thành công!');
         } else {
-            return back()->with('error', 'Không thể cập nhật danh mục. Vui lòng thử lại.');
+            return redirect()->route('client.profile')
+                ->with('success', 'Thay đổi tên danh mục thành công!');
         }
+    } else {
+        return back()->with('error', 'Không thể cập nhật danh mục. Vui lòng thử lại.');
     }
+}
+
 }

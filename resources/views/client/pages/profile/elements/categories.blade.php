@@ -2,12 +2,14 @@
     class="mx-auto mb-6 bg-white rounded-lg shadow-sm flex flex-col items-center text-center gap-3
          md:flex-row md:justify-between md:items-center md:text-left md:gap-0 p-4">
     <div class="flex items-center gap-2">
-        <h2
-            class="flex items-center gap-2 text-lg font-extrabold text-teal-600
+        <a href="{{ route('client.categories.index') }}">
+            <h2
+                class="flex items-center gap-2 text-lg font-extrabold text-teal-600
            border-b-2 border-teal-200 pb-1 md:pb-0">
-            <i class="fa-solid fa-list-ul text-teal-500 text-lg md:text-xl"></i>
-            Danh Mục
-        </h2>
+                <i class="fa-solid fa-list-ul text-teal-500 text-lg md:text-xl"></i>
+                Danh Mục
+            </h2>
+        </a>
     </div>
     <a href="#"
         class="inline-flex items-center gap-2 text-sm md:text-base font-medium
@@ -44,8 +46,9 @@
     @endif
 </div>
 
-<div id="editCategoryModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
-    <div class="bg-white rounded-lg p-6 w-full max-w-sm shadow relative">
+<div id="editCategoryModal"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm">
+    <div class="bg-white rounded-lg p-6 w-full max-w-sm shadow relative animate-fade-in">
         <h3 class="text-lg font-bold mb-4">Chỉnh sửa danh mục</h3>
         <form id="editCategoryForm" method="POST" action="{{ route('client.categories.update') }}">
             @csrf
@@ -66,6 +69,25 @@
         </button>
     </div>
 </div>
+
+<style>
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fade-in 0.3s ease-out;
+    }
+</style>
+
 
 @push('js')
     <script>
