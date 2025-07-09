@@ -1,7 +1,13 @@
-<div class="flex justify-center items-center">
-    <h2 class="text-2xl font-extrabold text-teal-600 mb-4 flex items-center gap-2">
-        <i class="fa-solid fa-user text-teal-500"></i> Thông Tin Cá Nhân
-    </h2>
+<div
+    class=" mx-auto mb-6 bg-white rounded-lg shadow-sm flex flex-col items-center text-center gap-3
+         md:flex-row md:justify-between md:items-center md:text-left md:gap-0 p-4">
+    <div class="flex items-center gap-2">
+        <h2
+            class="flex items-center gap-2 text-lg font-extrabold text-teal-600
+           border-b-2  border-teal-200 pb-1 md:pb-0">
+            <i class="fa-solid fa-user text-teal-500 text-lg md:text-xl"></i> Thông Tin Cá Nhân
+        </h2>
+    </div>
 </div>
 
 <form action="{{ route('client.update-info') }}" method="POST" enctype="multipart/form-data"

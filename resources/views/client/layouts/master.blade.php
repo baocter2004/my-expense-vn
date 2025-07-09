@@ -13,7 +13,7 @@
     <header>
         @include('client.layouts.partials.header')
     </header>
-    <div class="w-full px-10 md:px-20 mx-auto mt-20 overflow-x-hidden">
+    <div class="w-full px-5 md:px-20 mx-auto mt-20 overflow-x-hidden">
         @include('client.components.elements.breadcrumb', ['items' => $breadcrumb ?? []])
         @yield('content')
         <div id="preloader"

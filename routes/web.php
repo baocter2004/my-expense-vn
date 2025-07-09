@@ -25,6 +25,7 @@ Route::name('client.')
             ->name('categories.')
             ->group(function () {
                 Route::get('/', [CategoryController::class, 'index'])->name('index');
+                Route::delete('/{id}/soft-delele',[CategoryController::class, 'delete'])->name('soft-delete');
                 Route::patch('/update', [CategoryController::class, 'update'])->name('update');
             });
     });

@@ -13,6 +13,7 @@ class Category extends Model
         'user_id',
         'group_id',
         'name',
+        'descriptions'
     ];
 
     // ============================= Relation =============================

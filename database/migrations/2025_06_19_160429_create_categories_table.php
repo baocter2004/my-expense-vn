@@ -1,5 +1,6 @@
 <?php
 
+use App\Consts\GlobalConst;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -18,6 +19,8 @@ return new class extends Migration
             $table->foreignIdFor(User::class)->nullable()->constrained()->onDelete('cascade');
             $table->foreignIdFor(Group::class)->nullable()->constrained()->onDelete('cascade');
             $table->string('name');
+            $table->text('descriptions')->nullable();
+            $table->boolean('is_active')->default(GlobalConst::ACTIVE);
             $table->timestamps();
             $table->softDeletes();
         });

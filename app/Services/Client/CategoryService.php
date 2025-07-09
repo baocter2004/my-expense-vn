@@ -1,16 +1,18 @@
-<?php 
+<?php
 
 namespace App\Services\Client;
 
+use App\Consts\GlobalConst;
 use App\Repositories\CategoryRepository;
 use App\Services\BaseCRUDService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
 class CategoryService extends BaseCRUDService
 {
     protected function getRepository(): CategoryRepository
     {
-        if(empty($this->repository)) {
+        if (empty($this->repository)) {
             $this->repository = app()->make(CategoryRepository::class);
         }
         return $this->repository;
@@ -29,5 +31,19 @@ class CategoryService extends BaseCRUDService
             'sort'   => $sort . ':' . $order,
             'relates' => $relates,
         ];
+    }
+
+    public function getList(int|string $id, array $params, $limit = GlobalConst::DEFAULT_LIMIT)
+    {
+        if (!empty($params['limit'])) {
+            $limit = $params['limit'];
+        }
+
+        $params['wheres'][] = ['user_id', '=', $id];
+        $params['wheres'][] = ['is_active', '=', 1];
+
+        $query = $this->filter($params);
+
+        return $query->paginate($limit)->appends(request()->query());
     }
 }

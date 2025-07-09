@@ -1,33 +1,41 @@
-<div class="flex flex-col md:flex-row md:justify-between md:items-center gap-2 mb-4">
-    <h2 class="text-2xl font-extrabold text-teal-600 flex items-center gap-2">
-        <i class="fa-solid fa-clock-rotate-left text-teal-500"></i>
+<div
+    class=" mx-auto mb-6 bg-white rounded-lg shadow-sm flex flex-col items-center text-center gap-3
+         md:flex-row md:justify-between md:items-center md:text-left md:gap-0 p-4">
+    <h2
+        class="flex items-center gap-2 text-lg font-extrabold text-teal-600
+           border-b-2 border-teal-200 pb-1 md:pb-0">
+        <i class="fa-solid fa-clock-rotate-left text-teal-500 text-lg md:text-xl"></i>
         Lịch sử Giao Dịch
     </h2>
+
     <a href="#"
-        class="inline-flex items-center gap-2 text-base font-semibold px-3 py-2 border border-teal-500 text-teal-600 rounded-full hover:bg-teal-50 transition">
+        class="inline-flex items-center gap-2 text-sm md:text-base font-medium
+            px-4 py-2 border border-teal-300 text-teal-600 rounded-full
+            hover:bg-teal-50 transition mt-2 md:mt-0">
         <i class="fa-solid fa-plus"></i>
         Thêm Mới
     </a>
 </div>
 
-<div class="w-full bg-gray-50 p-2 md:p-6 rounded-lg border border-gray-100">
+
+<div class="w-full bg-gray-50 p-3 md:p-6 rounded-lg border border-gray-100">
     @if ($transactions->count())
-        <ul class="space-y-2">
+        <ul class="space-y-3">
             @foreach ($transactions as $tx)
                 <li class="border rounded-lg overflow-hidden shadow-sm">
                     <div
-                        class="tx-header w-full flex justify-between items-center px-4 py-3 bg-white hover:bg-teal-50 transition cursor-pointer">
+                        class="tx-header flex flex-col md:flex-row md:justify-between md:items-center bg-white border-b border-gray-100 px-4 py-3 hover:shadow-sm hover:bg-teal-50 transition cursor-pointer">
                         <div class="flex flex-col text-left">
-                            <span class="text-gray-700 font-medium">
+                            <span class="text-gray-800 text-base font-semibold">
                                 {{ \Carbon\Carbon::parse($tx->occurred_at)->format('d/m/Y H:i') }}
                             </span>
-                            <span class="text-gray-500 text-sm truncate" style="max-width: 300px;">
+                            <span class="text-gray-500 text-xs md:text-sm truncate max-w-full md:max-w-[300px]">
                                 {{ Str::limit($tx->description, 50) }}
                             </span>
                         </div>
-                        <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-2 mt-2 md:mt-0">
                             <span
-                                class="font-semibold text-lg {{ $tx->transaction_type == \App\Consts\TransactionConst::INCOME ? 'text-green-600' : 'text-red-600' }}">
+                                class="font-bold text-base tracking-tight {{ $tx->transaction_type == \App\Consts\TransactionConst::INCOME ? 'text-green-600' : 'text-red-600' }}">
                                 {{ $tx->transaction_type == \App\Consts\TransactionConst::INCOME ? '+' : '-' }}
                                 {{ number_format($tx->amount, 0, ',', '.') }}₫
                             </span>
@@ -40,18 +48,16 @@
                     </div>
 
                     <div class="tx-body px-4 py-3 bg-gray-50 border-t" style="display: none;">
-                        <div class="grid grid-cols-2 gap-4 text-sm text-gray-700">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
                             <div>
                                 <span class="font-medium">Mã giao dịch:</span>
                                 <p class="break-all">{{ $tx->code }}</p>
                             </div>
                             <div>
                                 <span class="font-medium">Loại giao dịch:</span>
-                                <p>
-                                    {{ \App\Consts\TransactionConst::TRANSACTION_TYPE[$tx->transaction_type] }}
-                                </p>
+                                <p>{{ \App\Consts\TransactionConst::TRANSACTION_TYPE[$tx->transaction_type] }}</p>
                             </div>
-                            <div class="col-span-2">
+                            <div class="md:col-span-2">
                                 <span class="font-medium">Mô tả chi tiết:</span>
                                 <p>{{ $tx->description }}</p>
                             </div>
@@ -74,17 +80,13 @@
 <script>
     $(function() {
         $('.tx-header').on('click', function() {
-            var $li = $(this).closest('li');
-            var $body = $li.find('.tx-body');
-            var $icon = $li.find('.toggle-icon');
+            const $li = $(this).closest('li');
+            const $body = $li.find('.tx-body');
+            const $icon = $li.find('.toggle-icon');
 
             $body.slideToggle(200);
-
-            if ($icon.hasClass('rotated')) {
-                $icon.removeClass('rotated').css('transform', 'rotate(0deg)');
-            } else {
-                $icon.addClass('rotated').css('transform', 'rotate(180deg)');
-            }
+            $icon.toggleClass('rotated').css('transform', $icon.hasClass('rotated') ? 'rotate(180deg)' :
+                'rotate(0deg)');
         });
     });
 </script>
