@@ -44,7 +44,6 @@
             'name' => 'birth_date',
             'label' => trans('users.users.birth_date'),
             'value' => $user->birth_date,
-            'type' => 'date',
             'placeholder' => '2004-04-10',
         ])
 

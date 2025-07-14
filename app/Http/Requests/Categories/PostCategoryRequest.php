@@ -6,7 +6,7 @@ use App\Consts\GlobalConst;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class GetCategoryRequest extends FormRequest
+class PostCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,14 +24,22 @@ class GetCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'nullable|string|max:255',
-            'descriptions' => 'nullable|string',
+            'name' => ['required', 'string', 'max:255'],
+            'descriptions' => ['required', 'string'],
             'is_active' => [
-                'integer',
                 'nullable',
-                Rule::in(GlobalConst::STATUS)
+                'integer',
+                Rule::in(array_keys(GlobalConst::STATUS)),
             ],
-            'keyword' => 'nullable|string|max:255',
+            'group_id' => ['nullable', 'integer', 'exists:groups,id'],
+        ];
+    }
+
+    public function attributes() {
+        return [
+            'name' => 'Tên danh mục',
+            'descriptions' => 'Mô tả danh mục',
+            'is_active' => 'Hoạt động'
         ];
     }
 }
