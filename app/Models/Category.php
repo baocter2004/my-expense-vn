@@ -13,7 +13,13 @@ class Category extends Model
         'user_id',
         'group_id',
         'name',
+        'is_active',
         'descriptions'
+    ];
+
+    // ============================= Attributes ===========================
+    public $attributes = [
+        'is_active' => 0
     ];
 
     // ============================= Relation =============================

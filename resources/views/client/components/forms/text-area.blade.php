@@ -7,9 +7,13 @@
     'rows' => 4,
 ])
 
+@php
+    $hasError = $errors->has($name);
+@endphp
+
 <div class="w-full">
     @if ($label)
-        <label for="{{ $name }}" class="flex items-center gap-x-2 text-sm font-medium text-gray-700 mb-1">
+        <label for="{{ $name }}" class="flex items-center gap-x-2 text-sm font-medium text-teal-500 mb-1">
             @if ($icon)
                 <i class="fa-solid fa-{{ $icon }}"></i>
             @endif
@@ -19,7 +23,7 @@
 
     <div class="relative">
         <textarea id="{{ $name }}" name="{{ $name }}" rows="{{ $rows }}" placeholder="{{ $placeholder }}"
-            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500">{{ old($name, $value) }}</textarea>
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500 {{ $hasError ? 'is-valid' : '' }}">{{ old($name, $value) }}</textarea>
     </div>
 
     @error($name)

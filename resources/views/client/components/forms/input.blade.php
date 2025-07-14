@@ -7,8 +7,12 @@
     'placeholder' => '',
 ])
 
+@php
+    $hasError = $errors->has($name);
+@endphp
+
 <div class="w-full">
-    <label for="{{ $name }}" class="flex items-center gap-x-2 text-sm font-medium text-gray-700 mb-1">
+    <label for="{{ $name }}" class="flex items-center gap-x-2 text-sm font-medium text-teal-500 mb-1">
         @if ($icon)
             <i class="fa-solid fa-{{ $icon }}"></i>
         @endif
@@ -18,8 +22,7 @@
     <div class="relative">
         <input id="{{ $name }}" name="{{ $name }}" type="{{ $type }}"
             value="{{ old($name, $value) }}" placeholder="{{ $placeholder }}"
-            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500
-             {{ $type === 'password' ? 'pr-10' : 'pr-4' }}">
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500 {{ $hasError ? 'is-valid' : '' }} {{ $type === 'password' ? 'pr-10' : 'pr-4' }}">
         @if ($type === 'password')
             <button type="button"
                 class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-teal-500 toggle-password"

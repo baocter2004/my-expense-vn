@@ -32,14 +32,46 @@
             </h3>
         </div>
 
-        <div class="w-full flex justify-center md:justify-end mb-4">
-            <a href="#"
-                class="inline-flex items-center gap-2 text-sm md:text-base font-medium
-            px-4 py-2 border border-teal-300 text-teal-600 rounded-full
-            hover:bg-teal-50 transition mt-2 md:mt-0">
-                <i class="fa-solid fa-plus"></i>
-                Thêm Mới
-            </a>
+        <div class="w-full grid grid-cols-1 md:grid-cols-3 mb-6 gap-6">
+            <div class="md:col-span-2">
+                <form method="GET" action="{{ route('client.categories.index') }}" class="w-full">
+                    <div
+                        class="flex i max-w-[500px] items-center border border-gray-300 rounded-full px-4 py-2 focus-within:border-teal-500 transition">
+                        <input type="text" name="keyword" value="{{ request('keyword') }}"
+                            placeholder="Tìm kiếm danh mục..."
+                            class="w-full outline-none bg-transparent text-sm md:text-base placeholder-gray-400">
+                        <button type="submit" class="text-teal-600 hover:text-teal-800 transition">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="flex items-center justify-end gap-2">
+                <a href="#" id="reset-search"
+                    class="inline-flex items-center gap-2 text-sm md:text-base font-medium
+    px-4 py-2 border border-gray-400 text-gray-700 rounded-full
+    hover:bg-gray-100 transition">
+                    <i class="fa-solid fa-rotate-left"></i>
+                    <span class="hidden md:inline">Xóa Sạch</span>
+                </a>
+
+                <a href="{{ route('client.categories.trash') }}"
+                    class="inline-flex items-center gap-2 text-sm md:text-base font-medium
+    px-4 py-2 border border-red-500 text-red-600 rounded-full
+    hover:bg-red-50 transition">
+                    <i class="fa-solid fa-trash"></i>
+                    <span class="hidden md:inline">Thùng Rác</span>
+                </a>
+
+                <a href="{{ route('client.categories.create') }}"
+                    class="inline-flex items-center gap-2 text-sm md:text-base font-medium
+    px-4 py-2 border border-teal-300 text-teal-600 rounded-full
+    hover:bg-teal-50 transition">
+                    <i class="fa-solid fa-plus"></i>
+                    <span class="hidden md:inline">Thêm Mới</span>
+                </a>
+            </div>
         </div>
 
         <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -54,11 +86,14 @@
                         </div>
                         <div class="flex items-center justify-between">
                             <label class="inline-flex relative items-center cursor-pointer">
-                                <input type="checkbox" @if ($item?->is_active) checked @endif
-                                    class="sr-only peer">
+                                <input type="checkbox" class="sr-only peer toggle-status" data-id="{{ $item->id }}"
+                                    data-url="{{ route('client.update-status', ['id' => $item->id]) }}"
+                                    @if ($item?->is_active) checked @endif>
+
                                 <div
                                     class="w-10 h-5 bg-gray-200 peer-focus:ring-2 peer-focus:ring-teal-300 rounded-full peer-checked:bg-teal-500 transition-all">
                                 </div>
+
                                 <span
                                     class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full peer-checked:translate-x-5 transition-transform"></span>
                             </label>
@@ -119,6 +154,10 @@
 @endsection
 
 @push('js')
+    @include('client.components.scripts.reset', [
+        'route' => route('client.categories.index'),
+    ])
+    @include('client.components.scripts.update-status')
     <script>
         $(document).ready(function() {
             $('.btn-edit').on('click', function() {

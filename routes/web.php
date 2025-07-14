@@ -27,6 +27,9 @@ Route::name('client.')
                 Route::get('/', [CategoryController::class, 'index'])->name('index');
                 Route::delete('/{id}/soft-delele',[CategoryController::class, 'delete'])->name('soft-delete');
                 Route::patch('/update', [CategoryController::class, 'update'])->name('update');
+                Route::get('/create',[CategoryController::class,'create'])->name('create');
+                Route::post('/create',[CategoryController::class,'store'])->name('store');
+                Route::get('/trash',[CategoryController::class,'trash'])->name('trash');
             });
     });
 

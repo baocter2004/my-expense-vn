@@ -11,7 +11,7 @@
             </h2>
         </a>
     </div>
-    <a href="#"
+    <a href="{{ route('client.categories.create')}}"
         class="inline-flex items-center gap-2 text-sm md:text-base font-medium
             px-4 py-2 border border-teal-300 text-teal-600 rounded-full
             hover:bg-teal-50 transition mt-2 md:mt-0">
@@ -58,6 +58,9 @@
                 <label class="block text-sm font-medium text-gray-700 mb-1">Tên danh mục mới</label>
                 <input type="text" name="name" id="editCategoryName"
                     class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500">
+                @if ($errors->has('name'))
+                    <p class="text-red-500 text-sm mt-1">{{ $errors->first('name') }}</p>
+                @endif
             </div>
             <div class="flex justify-end gap-2">
                 <button type="button" id="cancelEditBtn" class="px-3 py-1 bg-gray-300 rounded">Hủy</button>
@@ -103,6 +106,11 @@
             $('#cancelEditBtn, #closeEditModalBtn').click(function() {
                 $('#editCategoryModal').addClass('hidden').removeClass('flex');
             });
+
+            @if ($errors->any() && session('edit_mode'))
+
+                $('#editCategoryModal').removeClass('hidden').addClass('flex');
+            @endif
         });
     </script>
 @endpush

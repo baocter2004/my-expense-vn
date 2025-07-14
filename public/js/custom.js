@@ -38,4 +38,11 @@ $(document).ready(function () {
             $('#avatarForm').submit();
         }
     });
+
+    const firstInvalid = $('.is-valid').first();
+    if (firstInvalid.length) {
+        $('html, body').animate({
+            scrollTop: firstInvalid.offset().top - 100
+        }, 500);
+    }
 });
