@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Client;
 use App\Consts\GlobalConst;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Categories\GetCategoryRequest;
-use App\Http\Requests\Categories\PostCategory;
 use App\Http\Requests\Categories\PostCategoryRequest;
 use App\Services\Client\CategoryService;
 use Illuminate\Http\Request;
@@ -92,6 +91,9 @@ class CategoryController extends Controller
     }
 
     public function trash() {
-        
+        $id = Auth::id();
+
+        $items = $this->categoryService->getListTrashed($id);
+        return view('client.pages.categories.trash', compact('items'));
     }
 }
