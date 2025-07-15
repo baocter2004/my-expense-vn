@@ -29,7 +29,7 @@ class CategoryService extends BaseCRUDService
         $relates    = Arr::get($params, 'relates', []);
 
         $relates = ['transactions'];
-        
+
         if (!empty($params['keyword'])) {
             $wheres[] = [
                 function ($query) use ($params) {
@@ -48,7 +48,7 @@ class CategoryService extends BaseCRUDService
         ];
     }
 
-    public function getList(int|string $id, array $params, $limit = GlobalConst::DEFAULT_LIMIT)
+    public function getList(int|string $id, array $params, $limit = 6)
     {
         if (!empty($params['limit'])) {
             $limit = $params['limit'];
@@ -59,6 +59,15 @@ class CategoryService extends BaseCRUDService
         $query = $this->filter($params);
 
         return $query->paginate($limit)->appends(request()->query());
+    }
+
+    public function getListTrashed(int|string $id, $limit = 6)
+    {
+        $params['wheres'][] = ['user_id', '=', $id];
+
+        $query = $this->filter($params);
+
+        return $query->onlyTrashed()->paginate($limit)->appends(request()->query());
     }
 
     public function create(array $params = []): Category

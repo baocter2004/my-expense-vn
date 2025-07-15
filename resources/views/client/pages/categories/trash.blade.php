@@ -11,13 +11,14 @@
 @php
     $breadcrumb = [
         ['label' => 'Trang chủ', 'url' => route('client.index'), 'icon' => 'fa-home'],
-        ['label' => 'Danh Mục Chi Tiêu'],
+        ['label' => 'Danh Mục', 'url' => route('client.categories.index') , 'icon' => 'fa-list'],
+        ['label' => 'Danh Mục Đã Xóa',],
     ];
 @endphp
 
 @section('content')
     <div
-        class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-4 rounded-3xl">
+        class="w-full flex flex-col items-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-4 rounded-3xl">
         <div class="text-center mb-8">
             <h1
                 class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-cyan-400 flex items-center justify-center gap-x-2">
@@ -161,7 +162,7 @@
 
 @push('js')
     @include('client.components.scripts.reset', [
-        'route' => route('client.categories.trash'),
+        'route' => route('client.categories.index'),
     ])
     @include('client.components.scripts.update-status')
     <script>
