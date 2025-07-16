@@ -16,8 +16,7 @@
 @endphp
 
 @section('content')
-    <div
-        class="w-full flex flex-col items-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-4 rounded-3xl">
+    <div class="w-full flex flex-col items-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-4 rounded-3xl">
         <div class="text-center mb-8">
             <h1
                 class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-cyan-400 flex items-center justify-center gap-x-2">
@@ -75,7 +74,7 @@
         </div>
 
         <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            @foreach ($items as $item)
+            @forelse ($items as $item)
                 <div
                     class="bg-white border border-teal-400 rounded-2xl shadow-sm p-6 flex flex-col justify-between hover:shadow-md transition relative">
 
@@ -150,7 +149,12 @@
                         </form>
                     </div>
                 </div>
-            @endforeach
+            @empty
+                <div
+                    class="w-full col-span-full bg-white border border-teal-400 rounded-2xl shadow-sm p-6 flex flex-col justify-center items-center hover:shadow-md transition">
+                    Không có dữ liệu.
+                </div>
+            @endforelse
         </div>
         <div class="w-full flex justify-end items-center">
             {{ $items->onEachSide(1)->links('client.components.elements.paginate') }}
@@ -161,7 +165,7 @@
 
 @push('js')
     @include('client.components.scripts.reset', [
-        'route' => route('client.categories.trash'),
+        'route' => route('client.categories.index'),
     ])
     @include('client.components.scripts.update-status')
     <script>
