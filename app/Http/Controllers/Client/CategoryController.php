@@ -21,7 +21,7 @@ class CategoryController extends Controller
 
         $items = $this->categoryService->getList($id, $request->validated());
 
-        return view('client.pages.categories.index', compact('items'));
+        return view('client.pages.categories.index', $items);
     }
 
     public function create()
@@ -90,10 +90,21 @@ class CategoryController extends Controller
         return back()->with('error', $result['message']);
     }
 
-    public function trash() {
+    public function trash(GetCategoryRequest $request) {
         $id = Auth::id();
 
-        $items = $this->categoryService->getListTrashed($id);
+        $items = $this->categoryService->getListTrashed($id, $request->validated());
         return view('client.pages.categories.trash', compact('items'));
+    }
+
+    public function restore($id) {
+        $result = $this->categoryService->restore($id);
+
+        if ($result) {
+            return redirect()->route('client.categories.index')
+                ->with('success', 'Khôi phục danh mục thành công!');
+        } else {
+            return back()->with('error', 'Có lỗi khi khôi phục. Vui lòng thử lại.');
+        }
     }
 }

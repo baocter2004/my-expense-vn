@@ -30,6 +30,7 @@ Route::name('client.')
                 Route::get('/create',[CategoryController::class,'create'])->name('create');
                 Route::post('/create',[CategoryController::class,'store'])->name('store');
                 Route::get('/trash',[CategoryController::class,'trash'])->name('trash');
+                Route::post('/{id}/restore',[CategoryController::class,'restore'])->name('restore');
             });
     });
 

@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Log;
 
 class CategoryService extends BaseCRUDService
 {
+    public function __construct(
+        protected CategoryRepository $categoryRepository
+    ) {
+        parent::__construct();
+    }
+
     protected function getRepository(): CategoryRepository
     {
         if (empty($this->repository)) {
@@ -20,6 +26,7 @@ class CategoryService extends BaseCRUDService
         }
         return $this->repository;
     }
+
     protected function buildFilterParams(array $params): array
     {
         $wheres     = Arr::get($params, 'wheres', []);
@@ -56,12 +63,19 @@ class CategoryService extends BaseCRUDService
 
         $params['wheres'][] = ['user_id', '=', $id];
 
-        $query = $this->filter($params);
+        $items = $this->filter($params)->paginate($limit)->appends(request()->query());
+        $itemCountTrash = $this->repository->countOnlyTrashed([
+            ['user_id', '=', $id],
+        ]);
 
-        return $query->paginate($limit)->appends(request()->query());
+
+        return [
+            'items' => $items,
+            'count' => $itemCountTrash
+        ];
     }
 
-    public function getListTrashed(int|string $id, $limit = 6)
+    public function getListTrashed(int|string $id, array $params, $limit = 6)
     {
         $params['wheres'][] = ['user_id', '=', $id];
 
@@ -109,6 +123,26 @@ class CategoryService extends BaseCRUDService
         }
     }
 
+    public function restore($id)
+    {
+        try {
+            $category = $this->repository->restore($id);
+            $category = parent::find($id);
+            if ($category) {
+                $category->is_active = 1;
+                $category->save();
+            }
+            return $category;
+        } catch (\Throwable $th) {
+            Log::error('Error in ' . __CLASS__ . '::' . __FUNCTION__ . ' => ' . $th->getMessage(), [
+                'file' => $th->getFile(),
+                'line' => $th->getLine(),
+                'trace' => $th->getTraceAsString(),
+            ]);
+            throw $th;
+        }
+    }
+
     public function delete($id)
     {
         try {
@@ -135,6 +169,7 @@ class CategoryService extends BaseCRUDService
                 ];
             }
 
+            $category->update(['is_active' => 0]);
 
             $this->repository->delete($id);
 

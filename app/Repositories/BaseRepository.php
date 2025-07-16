@@ -250,4 +250,15 @@ abstract class BaseRepository
     {
         return $this->getModel()->withTrashed()->where('id', $id)->first();
     }
+
+    public function countOnlyTrashed(array $conditions = []): int
+    {
+        $query = $this->model->onlyTrashed();
+
+        foreach ($conditions as $condition) {
+            $query->where(...$condition);
+        }
+
+        return $query->count();
+    }
 }
