@@ -8,24 +8,46 @@
     </a>
 
     <ul class="hidden md:flex space-x-6">
-        @foreach ([['/', 'Trang chủ'], ['/about', 'Giới thiệu'], ['/contact', 'Liên hệ'], ['/categories', 'Danh Mục']] as [$url, $label])
+        @foreach ([['/', 'Trang chủ'], ['/about', 'Giới thiệu'], ['/contact', 'Liên hệ']] as [$url, $label])
             @php
                 $isActive = request()->is(trim($url, '/')) || (request()->is('/') && $url === '/');
             @endphp
             <li>
                 <a href="{{ $url }}"
                     class="relative group inline-block transition-colors
-                      {{ $isActive ? 'text-teal-500 font-semibold' : 'text-gray-800 hover:text-teal-500' }}">
+                  {{ $isActive ? 'text-teal-500 font-semibold' : 'text-gray-800 hover:text-teal-500' }}">
                     {{ $label }}
                     <span
                         class="absolute left-0 bottom-0
-                           {{ $isActive ? 'w-full' : 'w-0 group-hover:w-full' }}
-                           h-[2px] bg-teal-500 transition-all"></span>
+                       {{ $isActive ? 'w-full' : 'w-0 group-hover:w-full' }}
+                       h-[2px] bg-teal-500 transition-all"></span>
                 </a>
             </li>
         @endforeach
-    </ul>
 
+        @auth
+            @foreach (App\Helpers\Helper::getMenuItems() as $item)
+                @php
+                    $url = route($item['route']);
+                    $routePath = trim(parse_url($url, PHP_URL_PATH), '/');
+                    $isActive = request()->is($routePath);
+                @endphp
+
+                <li>
+                    <a href="{{ $url }}"
+                        class="relative group inline-block transition-colors
+                    {{ $isActive ? 'text-teal-500 font-semibold' : 'text-gray-800 hover:text-teal-500' }}">
+                        {{ $item['label'] }}
+                        <span
+                            class="absolute left-0 bottom-0
+                        {{ $isActive ? 'w-full' : 'w-0 group-hover:w-full' }}
+                        h-[2px] bg-teal-500 transition-all"></span>
+                    </a>
+                </li>
+            @endforeach
+        @endauth
+
+    </ul>
 
     @if (!Auth::user())
         <div class="space-x-3 hidden md:flex">

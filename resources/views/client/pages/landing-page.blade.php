@@ -37,7 +37,7 @@
                     alt="Hình minh họa trang" loading="lazy">
             </div>
 
-            <ul class="w-full md:w-1/3 text-sm grid grid-cols-1 gap-2">
+            <ul class="w-full md:w-1/3 text-sm ml-[100px] grid grid-cols-1 gap-2">
                 <li class="flex items-center gap-x-2"><i class="fa-solid fa-check text-teal-500"></i> Quản lý chi tiêu
                     dễ
                     dàng</li>
