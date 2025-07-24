@@ -249,9 +249,13 @@
                         </div>
                     </li>
                 </ul>
-                <div class="w-full md:w-1/3 flex justify-center">
-                    <img class="w-full object-contain max-h-64" src="{{ asset('images/faq.png') }}"
-                        alt="Hình minh họa trang" loading="lazy">
+                <div class="w-full flex justify-center gap-4">
+                    <img class="w-full md:w-1/3 object-contain max-h-64" src="{{ asset('images/faq-1.png') }}"
+                        alt="FAQ 1">
+                    <img class="hidden md:block w-1/3 object-contain max-h-64" src="{{ asset('images/faq.png') }}"
+                        alt="FAQ 2">
+                    <img class="hidden md:block w-1/3 object-contain max-h-64" src="{{ asset('images/faq-2.png') }}"
+                        alt="FAQ 3">
                 </div>
             </div>
         </div>
