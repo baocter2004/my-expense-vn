@@ -6,7 +6,11 @@ module.exports = {
     './resources/js/**/*.js',
   ],
   theme: {
-    extend: {},
+    extend: {
+      borderRadius: {
+        'custom-sides': '60px 0 60px 0',
+      }
+    },
   },
   plugins: [],
 };
