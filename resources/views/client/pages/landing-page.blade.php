@@ -257,9 +257,9 @@
         </div>
 
         <div class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-6 rounded-custom-sides"
-            data-aos="fade-up">
+            data-aos="fade-down">
             <div class="w-full flex flex-col justify-center items-center p-8 space-y-6">
-                <h2 class="text-3xl font-extrabold text-teal-500">Đăng Ký Ngay~~~</h2>
+                <h2 class="text-3xl font-extrabold text-teal-500">Đăng Ký Ngay</h2>
                 <p class="text-base text-gray-600 max-w-lg leading-relaxed text-center">
                     Đăng ký thành viên của MyExpenseVn để trải nghiệm những tính năng mới nhất từ chúng tôi
                 </p>
