@@ -90,14 +90,16 @@ class CategoryController extends Controller
         return back()->with('error', $result['message']);
     }
 
-    public function trash(GetCategoryRequest $request) {
+    public function trash(GetCategoryRequest $request)
+    {
         $id = Auth::id();
 
         $items = $this->categoryService->getListTrashed($id, $request->validated());
         return view('client.pages.categories.trash', compact('items'));
     }
 
-    public function restore($id) {
+    public function restore($id)
+    {
         $result = $this->categoryService->restore($id);
 
         if ($result) {

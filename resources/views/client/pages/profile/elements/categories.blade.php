@@ -11,7 +11,7 @@
             </h2>
         </a>
     </div>
-    <a href="{{ route('client.categories.create')}}"
+    <a href="{{ route('client.categories.create') }}"
         class="inline-flex items-center gap-2 text-sm md:text-base font-medium
             px-4 py-2 border border-teal-300 text-teal-600 rounded-full
             hover:bg-teal-50 transition mt-2 md:mt-0">
@@ -49,13 +49,18 @@
 <div id="editCategoryModal"
     class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm">
     <div class="bg-white rounded-lg p-6 w-full max-w-sm shadow relative animate-fade-in">
-        <h3 class="text-lg font-bold mb-4">Chỉnh sửa danh mục</h3>
+        <h3 class="text-lg text-teal-500 font-bold mb-4">Chỉnh sửa danh mục</h3>
         <form id="editCategoryForm" method="POST" action="{{ route('client.categories.update') }}">
             @csrf
             @method('PATCH')
             <input type="hidden" name="id" id="editCategoryId">
             <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Tên danh mục mới</label>
+                <div class="flex items-center gap-2">
+                    <label class="flex items-center gap-x-2 text-sm font-medium text-teal-500 mb-1">
+                        Tên danh mục mới
+                    </label>
+                    <span class="text-red-500 text-base leading-none">*</span>
+                </div>
                 <input type="text" name="name" id="editCategoryName"
                     class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500">
                 @if ($errors->has('name'))

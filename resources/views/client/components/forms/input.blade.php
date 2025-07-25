@@ -5,6 +5,7 @@
     'icon' => '',
     'value' => '',
     'placeholder' => '',
+    'required' => false,
 ])
 
 @php
@@ -17,6 +18,9 @@
             <i class="fa-solid fa-{{ $icon }}"></i>
         @endif
         {{ $label }}
+        @if ($required)
+            <span class="text-red-500 text-base leading-none">*</span>
+        @endif
     </label>
 
     <div class="relative">

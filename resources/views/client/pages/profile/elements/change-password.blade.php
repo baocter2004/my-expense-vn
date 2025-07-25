@@ -24,6 +24,7 @@
                 'label' => 'Mật khẩu hiện tại',
                 'type' => 'password',
                 'placeholder' => 'Nhập mật khẩu hiện tại',
+                'required' => true,
             ])
         </div>
     @endif
@@ -34,6 +35,7 @@
             'label' => 'Mật khẩu mới',
             'type' => 'password',
             'placeholder' => 'Nhập mật khẩu mới',
+            'required' => true,
         ])
     </div>
 
@@ -43,6 +45,7 @@
             'label' => 'Xác nhận mật khẩu mới',
             'type' => 'password',
             'placeholder' => 'Nhập lại mật khẩu mới',
+            'required' => true,
         ])
     </div>
 
