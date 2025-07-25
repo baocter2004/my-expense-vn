@@ -4,6 +4,7 @@
     'value' => '',
     'placeholder' => '',
     'icon' => '',
+    'required' => false
 ])
 
 @php
@@ -12,7 +13,13 @@
 
 <div class="w-full">
     <label for="{{ $name }}" class="flex items-center gap-x-2 text-sm font-medium text-teal-500 mb-1">
+        @if ($icon)
+            <i class="fa-solid fa-{{ $icon }}"></i>
+        @endif
         {{ $label }}
+        @if ($required)
+            <span class="text-red-500 text-base leading-none">*</span>
+        @endif
     </label>
 
     <div class="relative">

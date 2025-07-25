@@ -31,24 +31,8 @@
 
 @section('content')
     <div class="relative min-h-screen w-full flex items-center justify-center bg-gray-100 p-4 overflow-hidden">
-        <i class="fa-solid fa-wallet text-teal-200 absolute top-10 left-10 text-6xl animate-bounce hidden sm:block"></i>
-        <i
-            class="fa-solid fa-coins text-emerald-200 absolute top-32 right-16 text-5xl animate-spin-slow hidden sm:block"></i>
-        <i
-            class="fa-solid fa-credit-card text-cyan-200 absolute bottom-16 left-24 text-4xl animate-pulse hidden md:block"></i>
-        <i
-            class="fa-solid fa-receipt text-cyan-100 absolute bottom-24 right-32 text-7xl animate-bounce-slow hidden md:block"></i>
-        <i class="fa-solid fa-piggy-bank text-pink-200 absolute top-20 right-48 text-4xl animate-pulse hidden lg:block"></i>
-        <i
-            class="fa-solid fa-chart-line text-blue-200 absolute bottom-40 left-10 text-6xl animate-bounce-slow hidden lg:block"></i>
-        <i
-            class="fa-solid fa-money-bill-wave text-teal-200 absolute top-40 left-40 text-5xl animate-spin-slow hidden lg:block"></i>
-        <i
-            class="fa-solid fa-hand-holding-dollar text-violet-200 absolute top-24 right-8 text-4xl animate-bounce hidden lg:block"></i>
-        <i
-            class="fa-solid fa-file-invoice-dollar text-rose-200 absolute bottom-32 left-1/2 text-5xl animate-pulse hidden lg:block"></i>
-        <i
-            class="fa-solid fa-calculator text-indigo-200 absolute bottom-48 right-48 text-6xl animate-spin-slow hidden lg:block"></i>
+        
+        @include('client.pages.auth.elements.background')
 
         <div class="bg-white rounded-2xl shadow-xl w-full p-8 relative z-10 max-w-md">
             <div class="text-center mb-8">
@@ -76,6 +60,7 @@
                         'name' => 'password',
                         'type' => 'password',
                         'placeholder' => 'Nhập mật khẩu mới',
+                        'required' => true
                     ])
 
                     @include('client.components.forms.input', [
@@ -84,6 +69,7 @@
                         'name' => 'password_confirmation',
                         'type' => 'password',
                         'placeholder' => 'Nhập lại mật khẩu',
+                        'required' => true
                     ])
 
                     <button type="submit"

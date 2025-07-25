@@ -21,12 +21,14 @@
             'label' => trans('users.users.first_name'),
             'value' => $user->first_name,
             'placeholder' => 'Vui Lòng Nhập Tên Của Bạn',
+            'required' => true,
         ])
         @include('client.components.forms.input', [
             'name' => 'last_name',
             'label' => trans('users.users.last_name'),
             'value' => $user->last_name,
             'placeholder' => 'Vui Lòng Nhập Họ Của Bạn',
+            'required' => true,
         ])
     </div>
 
@@ -36,6 +38,7 @@
             'label' => trans('users.users.email'),
             'value' => $user->email,
             'placeholder' => 'Vui Lòng Nhập Email Của Bạn',
+            'required' => true,
         ])
     </div>
 

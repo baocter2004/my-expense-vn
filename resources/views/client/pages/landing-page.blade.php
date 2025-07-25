@@ -277,18 +277,21 @@
                                 'label' => trans('auth.registers.first_name'),
                                 'name' => 'first_name',
                                 'placeholder' => 'Vui Lòng Nhập Tên',
+                                'required' => true,
                             ])
                             @include('client.components.forms.input', [
                                 'icon' => 'user',
                                 'label' => trans('auth.registers.last_name'),
                                 'name' => 'last_name',
                                 'placeholder' => 'Vui Lòng Nhập Họ',
+                                'required' => true,
                             ])
                             @include('client.components.forms.input', [
                                 'icon' => 'envelope',
                                 'label' => 'Email',
                                 'name' => 'email',
                                 'placeholder' => 'Vui Lòng Nhập Email',
+                                'required' => true,
                             ])
                             @include('client.components.forms.input', [
                                 'icon' => 'lock',
@@ -296,6 +299,7 @@
                                 'name' => 'password',
                                 'placeholder' => 'Vui Lòng Nhập Mật Khẩu',
                                 'type' => 'password',
+                                'required' => true,
                             ])
                             @include('client.components.forms.input', [
                                 'icon' => 'lock',
@@ -303,12 +307,13 @@
                                 'name' => 'password_confirmation',
                                 'placeholder' => 'Vui Lòng Nhập Lại Mật Khẩu',
                                 'type' => 'password',
+                                'required' => true,
                             ])
                         </form>
                     </div>
 
                     <div class="flex flex-col justify-center space-y-4">
-                        <div class="w-full md:w-1/2">
+                        <div class="w-full">
                             <img class="w-full object-contain max-h-64" src="{{ asset('images/register.png') }}"
                                 alt="Hình minh họa trang đăng ký">
                         </div>

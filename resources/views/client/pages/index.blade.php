@@ -1,5 +1,7 @@
 @extends('client.layouts.master')
 
+@section('title', 'Quản Lý Chi Tiêu')
+
 @section('content')
     <div class="w-full px-4">
         <h1 class="text-3xl font-bold mb-6 text-teal-600 text-center">Chào mừng bạn đến với MyExpenseVN</h1>
