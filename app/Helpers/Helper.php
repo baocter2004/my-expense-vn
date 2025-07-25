@@ -48,4 +48,14 @@ class Helper
 
         return $greetings[array_rand($greetings)];
     }
+
+    public static function getMenuItems(): array
+    {
+        return [
+            [
+                'label' => 'Danh Mục',
+                'route' => 'client.categories.index',
+            ]
+        ];
+    }
 }
