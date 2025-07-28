@@ -5,7 +5,7 @@
     <button id="close-offcanvas" class="self-end text-gray-600 hover:text-black mb-2 text-lg md:text-xl">✕</button>
 
     @php
-        $publicLinks = [['/', 'Trang chủ'], ['/about', 'Giới thiệu'], ['/contact', 'Liên hệ']];
+        $publicLinks = [['/', 'Trang chủ'], ['/introduce', 'Giới thiệu'], ['/contact', 'Liên hệ']];
     @endphp
 
     @foreach ($publicLinks as [$url, $label])

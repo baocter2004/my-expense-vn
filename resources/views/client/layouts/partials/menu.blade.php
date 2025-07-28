@@ -8,7 +8,7 @@
     </a>
 
     <ul class="hidden md:flex space-x-6">
-        @foreach ([['/', 'Trang chủ'], ['/about', 'Giới thiệu'], ['/contact', 'Liên hệ']] as [$url, $label])
+        @foreach ([['/', 'Trang chủ'], ['/introduce', 'Giới thiệu'], ['/contact', 'Liên hệ']] as [$url, $label])
             @php
                 $isActive = request()->is(trim($url, '/')) || (request()->is('/') && $url === '/');
             @endphp

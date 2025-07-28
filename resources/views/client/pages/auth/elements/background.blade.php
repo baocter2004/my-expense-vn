@@ -15,15 +15,3 @@
         class="absolute w-44 h-44 bg-teal-400 opacity-15 blur-3xl rounded-full bottom-1/3 right-1/3 animate-float-reverse">
     </div>
 </div>
-
-<div class="fixed top-0 left-0 w-full bg-white shadow z-10">
-    <div class="flex items-center px-5 py-4 shadow-md relative">
-        <a href="{{ route('client.index') }}" class="relative inline-block">
-            <h1
-                class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-cyan-400 flex items-center gap-x-2 pb-1">
-                <i class="fa-solid fa-wallet"></i> MyExpenseVn
-            </h1>
-            <span class="absolute left-0 w-full h-1 bg-gradient-to-r from-teal-500 to-cyan-400"></span>
-        </a>
-    </div>
-</div>

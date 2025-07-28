@@ -31,7 +31,7 @@
             </h3>
         </div>
 
-        <div class="w-full grid grid-cols-1 md:grid-cols-3 mb-6 gap-6">
+        <div class="w-full grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 mb-6">
             <div class="md:col-span-2">
                 <form method="GET" action="{{ route('client.categories.index') }}" class="w-full">
                     <div
@@ -46,27 +46,21 @@
                 </form>
             </div>
 
-            <div class="flex items-center justify-end gap-2">
+            <div class="flex flex-wrap lg:flex-nowrap items-center justify-start lg:justify-end gap-2 mt-2 lg:mt-0">
                 <a href="#" id="reset-search"
-                    class="inline-flex items-center gap-2 text-sm md:text-base font-medium
-    px-4 py-2 border border-gray-400 text-gray-700 rounded-full
-    hover:bg-gray-100 transition">
+                    class="inline-flex items-center gap-2 text-sm md:text-base font-medium px-4 py-2 border border-gray-400 text-gray-700 rounded-full hover:bg-gray-100 transition">
                     <i class="fa-solid fa-rotate-left"></i>
                     <span class="hidden md:inline">Xóa Sạch</span>
                 </a>
 
                 <a href="{{ route('client.categories.trash') }}"
-                    class="inline-flex items-center gap-2 text-sm md:text-base font-medium
-    px-4 py-2 border border-red-500 text-red-600 rounded-full
-    hover:bg-red-50 transition">
+                    class="inline-flex items-center gap-2 text-sm md:text-base font-medium px-4 py-2 border border-red-500 text-red-600 rounded-full hover:bg-red-50 transition">
                     <i class="fa-solid fa-trash"></i>
                     <span class="hidden md:inline">Thùng Rác</span>
                 </a>
 
                 <a href="{{ route('client.categories.create') }}"
-                    class="inline-flex items-center gap-2 text-sm md:text-base font-medium
-    px-4 py-2 border border-teal-300 text-teal-600 rounded-full
-    hover:bg-teal-50 transition">
+                    class="inline-flex items-center gap-2 text-sm md:text-base font-medium px-4 py-2 border border-teal-300 text-teal-600 rounded-full hover:bg-teal-50 transition">
                     <i class="fa-solid fa-plus"></i>
                     <span class="hidden md:inline">Thêm Mới</span>
                 </a>

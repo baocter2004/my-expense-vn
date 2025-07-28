@@ -11,8 +11,9 @@ use Illuminate\Support\Facades\Route;
 Route::name('client.')
     ->group(function () {
         Route::get('/', [HomeController::class, 'index'])->name('index');
-        Route::get('/contact', [ContactController::class, 'showFormContact'])->name('shoFormContact');
-        Route::post('/contact', [ContactController::class, 'store'])->name('contact');
+        Route::get('/introduce', [HomeController::class,'introduce'])->name('introduce');
+        Route::get('/contact', [ContactController::class, 'showFormContact'])->name('showFormContact');
+        Route::post('/contact', [ContactController::class, 'submit'])->name('submit');
 
         Route::middleware(['auth:user'])
             ->group(function () {

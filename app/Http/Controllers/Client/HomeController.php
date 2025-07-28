@@ -15,4 +15,8 @@ class HomeController extends Controller
         }
         return view('client.pages.landing-page');
     }
+
+    public function introduce() {
+        return view('client.pages.introduce');
+    }
 }

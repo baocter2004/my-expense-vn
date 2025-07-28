@@ -5,6 +5,7 @@
     'value' => '',
     'placeholder' => '',
     'rows' => 4,
+    'required' => false
 ])
 
 @php

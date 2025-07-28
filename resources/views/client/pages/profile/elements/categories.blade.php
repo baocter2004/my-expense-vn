@@ -25,7 +25,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             @foreach ($categories as $category)
                 <div
-                    class="bg-white border border-gray-200 rounded-xl shadow hover:shadow-md transition-shadow duration-300 p-4 flex justify-between md:justify-center items-center gap-3 hover:bg-teal-50">
+                    class="bg-white border border-gray-200 rounded-xl shadow hover:shadow-md transition-shadow duration-300 p-4 flex justify-between items-center gap-3 hover:bg-teal-50">
                     <div class="flex items-center gap-3">
                         <i class="fa-solid fa-tag text-teal-500 text-lg"></i>
                         <span class="font-semibold text-gray-800">{{ $category->name }}</span>
