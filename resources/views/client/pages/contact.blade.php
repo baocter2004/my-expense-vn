@@ -15,20 +15,20 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                        <form id="feedback-form" action="{{ route('client.contact') }}" method="POST" class="space-y-5">
+                        <form id="feedback-form" action="{{ route('client.submit') }}" method="POST" class="space-y-5">
                             @csrf
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 @include('client.components.forms.input', [
                                     'icon' => 'user',
                                     'label' => 'Họ',
-                                    'name' => 'full_name',
+                                    'name' => 'last_name',
                                     'placeholder' => 'vui lòng nhập họ',
                                     'required' => true,
                                 ])
                                 @include('client.components.forms.input', [
                                     'icon' => 'user',
                                     'label' => 'Tên',
-                                    'name' => 'full_name',
+                                    'name' => 'first_name',
                                     'placeholder' => 'vui lòng nhập tên',
                                     'required' => true,
                                 ])
@@ -40,6 +40,14 @@
                                 'placeholder' => 'Email của bạn',
                                 'required' => true,
                             ])
+                            @include('client.components.forms.select', [
+                                'icon' => 'list-alt',
+                                'label' => 'Chủ Đề',
+                                'name' => 'subject',
+                                'options' => $contacts,
+                                'placeholder' => 'Chủ đề muốn góp ý ',
+                                'required' => true,
+                            ])
                             @include('client.components.forms.text-area', [
                                 'icon' => 'comment',
                                 'label' => 'Nội dung đánh giá',
@@ -48,6 +56,15 @@
                                 'rows' => 5,
                                 'required' => true,
                             ])
+                            <div class="flex items-center gap-2 mt-4">
+                                <input type="checkbox" name="subscribe" id="subscribe" value="1"
+                                    {{ old('subscribe') ? 'checked' : '' }}
+                                    class="h-4 w-4 text-teal-500 border-gray-300 rounded">
+                                <label for="subscribe" class="text-sm text-gray-700">
+                                    Tôi muốn nhận bản tin qua email
+                                </label>
+                            </div>
+
                         </form>
                     </div>
 
