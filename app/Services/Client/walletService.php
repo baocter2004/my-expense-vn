@@ -25,11 +25,43 @@ class WalletService extends BaseCRUDService
         $order      = Arr::get($params, 'order', 'desc');
         $relates    = Arr::get($params, 'relates', []);
 
+        $relates = [
+            'user'
+        ];
+
+        if (!empty($params['keyword'])) {
+            $keyword = $params['keyword'];
+
+            $wheres[] = [
+                function ($query) use ($keyword) {
+                    $query->where('wallets.id', $keyword)
+                        ->orWhere('wallets.name', 'like', '%' . $keyword . '%')
+                        ->orWhere('wallets.balance', $keyword)
+                        ->orWhere('wallets.currency', $keyword);
+                }
+            ];
+        }
+
+
         return [
             'wheres' => $wheres,
             'likes'  => $whereLikes,
             'sort'   => $sort . ':' . $order,
             'relates' => $relates,
+        ];
+    }
+
+    public function getList(int|string $id, array $params, $limit = 6)
+    {
+        if (!empty($params['limit'])) {
+            $limit = $params['limit'];
+        }
+
+        $params['wheres'][] = ['user_id', '=', $id];
+
+        $items = $this->filter($params)->paginate($limit)->appends(request()->query());
+        return [
+            'items' => $items
         ];
     }
 }

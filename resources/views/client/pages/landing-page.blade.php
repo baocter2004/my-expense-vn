@@ -169,7 +169,7 @@
                     liên
                     hệ đội ngũ của chúng tôi.
                 </p>
-                <ul class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl text-teal-500 font-medium">
+                <ul class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl text-teal-500 font-medium items-start">
                     <li class="flex flex-col p-3 rounded-lg border border-teal-200 hover:bg-teal-50 transition shadow-sm cursor-pointer"
                         id="no-fee">
                         <div class="flex items-center gap-x-2 w-full">

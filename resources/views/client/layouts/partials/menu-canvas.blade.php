@@ -23,6 +23,7 @@
         @foreach (App\Helpers\Helper::getMenuItems() as $item)
             @php
                 $url = route($item['route']);
+                $label = $item['label'];
                 $routePath = trim(parse_url($url, PHP_URL_PATH), '/');
                 $isActive = request()->is($routePath);
             @endphp

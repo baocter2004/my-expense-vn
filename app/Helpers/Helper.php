@@ -55,7 +55,20 @@ class Helper
             [
                 'label' => 'Danh Mục',
                 'route' => 'client.categories.index',
+            ],
+            [
+                'label' => 'Ví',
+                'route' => 'client.wallets.index'
             ]
         ];
+    }
+
+    public static function formatPrice($amount, string $suffix = 'VND'): string
+    {
+        if (!is_numeric($amount)) {
+            return '0' . $suffix;
+        }
+
+        return number_format($amount, 0, ',', '.') . $suffix;
     }
 }

@@ -62,12 +62,13 @@
             </div>
 
             <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-10">
-                <img class="w-full object-contain max-h-64" src="{{ asset('images/faq-1.png') }}"
-                        alt="FAQ 1">
-                    <img class="w-full object-contain max-h-64" src="{{ asset('images/faq.png') }}"
-                        alt="FAQ 2">
-                    <img class="w-full object-contain max-h-64" src="{{ asset('images/faq-2.png') }}"
-                        alt="FAQ 3">
+                @foreach (['faq-1.png', 'faq.png', 'faq-2.png'] as $index => $image)
+                    <div class="w-full flex justify-center items-center bg-white rounded-2xl shadow-sm p-4 hover:shadow-md transition"
+                        data-aos="fade-up" data-aos-delay="{{ $index * 100 }}" data-aos-duration="600">
+                        <img class="w-full max-w-xs h-auto object-contain aspect-square" loading="lazy"
+                            src="{{ asset('images/' . $image) }}" alt="FAQ {{ $index + 1 }}">
+                    </div>
+                @endforeach
             </div>
         </div>
 

@@ -4,6 +4,7 @@ use App\Http\Controllers\Client\CategoryController;
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\UserController;
+use App\Http\Controllers\Client\WalletController;
 use Illuminate\Support\Facades\Route;
 
 // ========================== CLIENT ==============================
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 Route::name('client.')
     ->group(function () {
         Route::get('/', [HomeController::class, 'index'])->name('index');
-        Route::get('/introduce', [HomeController::class,'introduce'])->name('introduce');
+        Route::get('/introduce', [HomeController::class, 'introduce'])->name('introduce');
         Route::get('/contact', [ContactController::class, 'showFormContact'])->name('showFormContact');
         Route::post('/contact', [ContactController::class, 'submit'])->name('submit');
 
@@ -34,6 +35,13 @@ Route::name('client.')
                         Route::post('/create', [CategoryController::class, 'store'])->name('store');
                         Route::get('/trash', [CategoryController::class, 'trash'])->name('trash');
                         Route::post('/{id}/restore', [CategoryController::class, 'restore'])->name('restore');
+                    });
+
+                // WALLETS
+                Route::prefix('/wallets')
+                    ->name('wallets.')
+                    ->group(function () {
+                        Route::get('/', [WalletController::class, 'index'])->name('index');
                     });
             });
     });

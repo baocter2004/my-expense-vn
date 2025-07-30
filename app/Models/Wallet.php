@@ -13,7 +13,14 @@ class Wallet extends Model
         'user_id',
         'name',
         'balance',
-        'curency',
+        'currency',
+        'note',
+        'is_default'
+    ];
+
+    protected $casts = [
+        'balance' => 'float',
+        'currency' => 'integer',
     ];
 
     // =========================== Relation ============================
