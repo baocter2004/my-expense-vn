@@ -2,9 +2,14 @@
 
 namespace App\Services\Client;
 
+use App\Consts\GlobalConst;
+use App\Models\Wallet;
 use App\Repositories\WalletRepository;
 use App\Services\BaseCRUDService;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class WalletService extends BaseCRUDService
 {
@@ -25,11 +30,94 @@ class WalletService extends BaseCRUDService
         $order      = Arr::get($params, 'order', 'desc');
         $relates    = Arr::get($params, 'relates', []);
 
+        $relates = [
+            'user',
+            'transactions'
+        ];
+
+        if (!empty($params['keyword'])) {
+            $keyword = $params['keyword'];
+
+            $wheres[] = [
+                function ($query) use ($keyword) {
+                    $query->where('wallets.id', $keyword)
+                        ->orWhere('wallets.name', 'like', '%' . $keyword . '%')
+                        ->orWhere('wallets.note', 'like', '%' . $keyword . '%')
+                        ->orWhere('wallets.balance', $keyword)
+                        ->orWhere('wallets.currency', $keyword);
+                }
+            ];
+        }
+
         return [
             'wheres' => $wheres,
             'likes'  => $whereLikes,
             'sort'   => $sort . ':' . $order,
             'relates' => $relates,
         ];
+    }
+
+    public function getList(int|string $id, array $params, $limit = 6)
+    {
+        if (!empty($params['limit'])) {
+            $limit = $params['limit'];
+        }
+
+        $params['wheres'][] = ['wallets.user_id', '=', $id];
+
+        $query = $this->filter($params);
+
+        $query->leftJoin('transactions as t', function (JoinClause $join) {
+            $join->on('t.wallet_id', '=', 'wallets.id')
+                ->whereDate('t.created_at', now()->toDateString());
+        });
+        $query->select([
+            'wallets.*',
+            DB::raw('COUNT(t.id) as total_transactions'),
+        ])
+            ->groupBy('wallets.id');
+
+        return $query->paginate($limit)->appends(request()->query());
+    }
+
+    public function update(int|string $id, array $params = []): Wallet
+    {
+        try {
+            DB::beginTransaction();
+
+            $wallet      = $this->repository->with([], $id);
+            $oldCurrency = $wallet->currency;
+            $oldBalance  = $wallet->balance;
+
+            $params['is_default'] = !empty($params['is_default']) ? 1 : 0;
+            if ($params['is_default']) {
+                $this->repository->getModel()
+                    ->where('user_id', $wallet->user_id)
+                    ->where('id', '!=', $wallet->id)
+                    ->update(['is_default' => 0]);
+            }
+
+            if (isset($params['currency']) && $params['currency'] != $oldCurrency) {
+                $newCurrency = $params['currency'];
+                $rates = GlobalConst::EXCHANGE_RATES_TO_VND;
+                $balanceInVnd = $oldBalance * ($rates[$oldCurrency] ?? 1);
+                $newRate      = $rates[$newCurrency] ?? 1;
+                $newBalance   = round($balanceInVnd / $newRate, 2);
+                $params['balance']  = $newBalance;
+            }
+
+            $wallet->update($params);
+
+            DB::commit();
+            return $wallet;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error('Error in ' . __CLASS__ . '::' . __FUNCTION__ . ' => ' . $th->getMessage(), [
+                'file' => $th->getFile(),
+                'line' => $th->getLine(),
+                'trace' => $th->getTraceAsString(),
+            ]);
+            throw $th;
+        }
     }
 }

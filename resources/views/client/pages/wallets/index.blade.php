@@ -5,13 +5,13 @@
 @endpush
 
 @section('title')
-    Trang Danh Mục
+    Trang Ví Cá Nhân
 @endsection
 
 @php
     $breadcrumb = [
         ['label' => 'Trang chủ', 'url' => route('client.index'), 'icon' => 'fa-home'],
-        ['label' => 'Danh Mục Chi Tiêu'],
+        ['label' => 'Ví Của Bạn'],
     ];
 @endphp
 
@@ -25,19 +25,18 @@
             <div class="my-2 flex justify-center">
                 <div class="w-20 h-1 rounded-full bg-gradient-to-r from-teal-500 to-cyan-400 opacity-50"></div>
             </div>
-            <h2 class="text-lg md:text-xl font-medium text-center text-gray-600 tracking-wide">Danh Mục</h2>
+            <h2 class="text-lg md:text-xl font-medium text-center text-gray-600 tracking-wide">Ví Cá Nhân</h2>
             <h3 class="text-lg md:text-xl font-medium text-center text-gray-600 tracking-wide">
-                Khám phá và quản lý các mục chi tiêu của bạn một cách dễ dàng.
+                Khám phá và quản lý các khoản chi tiêu của bạn một cách dễ dàng.
             </h3>
         </div>
 
         <div class="w-full grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-3 mb-6">
             <div class="md:col-span-2">
-                <form method="GET" action="{{ route('client.categories.index') }}" class="w-full">
+                <form method="GET" action="{{ route('client.wallets.index') }}" class="w-full">
                     <div
                         class="flex i max-w-[500px] items-center border border-gray-300 rounded-full px-4 py-2 focus-within:border-teal-500 transition">
-                        <input type="text" name="keyword" value="{{ request('keyword') }}"
-                            placeholder="Tìm kiếm danh mục..."
+                        <input type="text" name="keyword" value="{{ request('keyword') }}" placeholder="Tìm kiếm ví..."
                             class="w-full outline-none bg-transparent text-sm md:text-base placeholder-gray-400">
                         <button type="submit" class="text-teal-600 hover:text-teal-800 transition">
                             <i class="fa-solid fa-magnifying-glass"></i>
@@ -73,62 +72,102 @@
                     class="bg-white border border-teal-400 rounded-2xl shadow-sm p-3 flex flex-col justify-between hover:shadow-md transition relative">
 
                     <div class="view-mode" id="view-mode-{{ $item->id }}">
-                        <div class="space-y-1 mb-2">
-                            <h3 class="text-lg font-semibold text-teal-600 mb-2">{{ $item?->name }}</h3>
-                            <p class="text-gray-600 text-sm">{{ $item?->descriptions }}</p>
-                            <div class="text-sm text-gray-500 flex items-center space-x-1">
-                                <i class="fa-solid fa-calendar"></i>
+                        <div class="space-y-3 mb-4">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-semibold text-teal-600">
+                                    {{ $item?->name }}
+                                </h3>
+                                @if ($item->is_default)
+                                    <span class="text-xs text-white bg-teal-500 px-2 py-1 rounded-full">Mặc định</span>
+                                @endif
+                            </div>
+
+                            <div class="text-sm text-gray-500">
+                                <i class="fa-solid fa-clock mr-1"></i>
+                                Giao dịch hôm nay: <strong>{{ $item->transactions_today_count ?? 0 }}</strong>
+                            </div>
+
+                            <div class="flex items-center text-gray-600 text-sm">
+                                <i class="fas fa-wallet text-teal-500 mr-2"></i>
+                                {{ \App\Helpers\Helper::formatPrice(
+                                    $item->balance,
+                                    \App\Consts\GlobalConst::CURRENCIES[$item->currency] ?? 'VND',
+                                    2,
+                                ) }}
+                            </div>
+
+                            <div class="flex items-center text-gray-500 text-sm">
+                                <i class="fa-solid fa-calendar mr-2"></i>
                                 <span>{{ $item->created_at?->format('d/m/Y H:i') }}</span>
                             </div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <label class="inline-flex relative items-center cursor-pointer">
-                                <input type="checkbox" class="sr-only peer toggle-status" data-id="{{ $item->id }}"
-                                    data-url="{{ route('client.update-status', ['id' => $item->id]) }}"
-                                    @if ($item?->is_active) checked @endif>
 
-                                <div
-                                    class="w-10 h-5 bg-gray-200 peer-focus:ring-2 peer-focus:ring-teal-300 rounded-full peer-checked:bg-teal-500 transition-all">
+                            @if (!empty($item->note))
+                                <div class="text-gray-500 text-sm italic">
+                                    <i class="fa-solid fa-note-sticky mr-2 text-yellow-400"></i>
+                                    {{ $item->note }}
                                 </div>
+                            @endif
+                        </div>
 
-                                <span
-                                    class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full peer-checked:translate-x-5 transition-transform"></span>
-                            </label>
-                            <div class="space-x-2">
-                                <button
-                                    class="btn-edit px-4 py-2 text-sm text-white bg-teal-500 rounded-lg hover:bg-teal-600 transition"
-                                    data-id="{{ $item->id }}">
-                                    Sửa
-                                </button>
-                                <button
-                                    class="open-delete-modal px-4 py-2 text-sm text-white bg-red-500 rounded-lg hover:bg-red-600 transition"
-                                    data-action="{{ route('client.categories.soft-delete', $item->id) }}"
-                                    data-title="Xoá {{ $item->name }}"
-                                    data-message="Bạn có chắc chắn muốn xoá '{{ $item->name }}'?">
-                                    Xoá
-                                </button>
-                            </div>
+                        <div class="flex justify-end gap-2">
+                            <button
+                                class="btn-edit px-4 py-2 text-sm text-white bg-teal-500 rounded-lg hover:bg-teal-600 transition"
+                                data-id="{{ $item->id }}">
+                                Sửa
+                            </button>
+
+                            <button
+                                class="open-delete-modal px-4 py-2 text-sm text-white bg-red-500 rounded-lg hover:bg-red-600 transition"
+                                data-action="{{ route('client.categories.soft-delete', $item->id) }}"
+                                data-title="Xoá {{ $item->name }}"
+                                data-message="Bạn có chắc chắn muốn xoá '{{ $item->name }}'?">
+                                Xoá
+                            </button>
                         </div>
                     </div>
 
                     <div class="edit-mode hidden" id="edit-mode-{{ $item->id }}">
-                        <form method="POST" action="{{ route('client.categories.update') }}" class="space-y-4">
+                        <form method="POST" action="{{ route('client.wallets.update', $item->id) }}" class="space-y-4">
                             @csrf
-                            @method('PATCH')
+                            @method('PUT')
                             <input type="hidden" name="id" value="{{ $item->id }}">
+
                             @include('client.components.forms.input', [
                                 'name' => 'name',
-                                'label' => trans('categories.name'),
+                                'label' => trans('wallets.name'),
                                 'value' => $item->name,
-                                'placeholder' => 'Vui Lòng Nhập Tên Danh Mục',
+                                'placeholder' => 'Nhập tên ví',
+                            ])
+
+                            @include('client.components.forms.input', [
+                                'name' => 'balance',
+                                'label' => trans('wallets.balance'),
+                                'type' => 'number',
+                                'value' => $item->balance,
+                                'placeholder' => 'Nhập số dư',
+                                'disabled' => true,
+                            ])
+
+                            @include('client.components.forms.select', [
+                                'name' => 'currency',
+                                'label' => trans('wallets.currency'),
+                                'options' => \App\Consts\GlobalConst::CURRENCIES,
+                                'value' => $item->currency,
+                            ])
+
+                            @include('client.components.forms.checkbox', [
+                                'name' => 'is_default',
+                                'checked' => $item->is_default,
+                                'label' => trans('wallets.is_default'),
                             ])
 
                             @include('client.components.forms.text-area', [
-                                'name' => 'descriptions',
-                                'label' => trans('categories.descriptions'),
-                                'value' => $item->descriptions,
-                                'placeholder' => 'Vui Lòng Nhập Mô Tả Danh Mục',
+                                'name' => 'note',
+                                'label' => trans('wallets.note'),
+                                'value' => $item->note,
+                                'placeholder' => 'Thêm ghi chú nếu có',
                             ])
+
                             <div class="flex justify-end space-x-2">
                                 <button type="button"
                                     class="btn-cancel-edit px-4 py-2 text-sm text-gray-700 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 transition"
@@ -159,9 +198,8 @@
 
 @push('js')
     @include('client.components.scripts.reset', [
-        'route' => route('client.categories.index'),
+        'route' => route('client.wallets.index'),
     ])
-    @include('client.components.scripts.update-status')
     <script>
         $(document).ready(function() {
             $('.btn-edit').on('click', function() {

@@ -20,7 +20,7 @@
     </a>
 </div>
 
-<div class="w-full bg-gray-50 p-2 md:p-6 rounded-lg border border-gray-100">
+<div class="w-full bg-gray-50 p-2 md:p-3 rounded-lg border border-gray-100">
     @if ($categories->count())
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             @foreach ($categories as $category)
@@ -48,7 +48,7 @@
 
 <div id="editCategoryModal"
     class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm">
-    <div class="bg-white rounded-lg p-6 w-full max-w-sm shadow relative animate-fade-in">
+    <div class="bg-white rounded-lg p-3 w-full max-w-sm shadow relative animate-fade-in">
         <h3 class="text-lg text-teal-500 font-bold mb-4">Chỉnh sửa danh mục</h3>
         <form id="editCategoryForm" method="POST" action="{{ route('client.categories.update') }}">
             @csrf

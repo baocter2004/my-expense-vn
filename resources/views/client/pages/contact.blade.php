@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="w-full space-y-10">
-        <div class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-6 rounded-custom-sides"
+        <div class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-3 rounded-custom-sides"
             data-aos="fade-down">
 
             <div class="w-full flex flex-col justify-center items-center p-8 space-y-6">

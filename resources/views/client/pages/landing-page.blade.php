@@ -5,7 +5,7 @@
 @section('content')
     <div class="w-full space-y-10">
         <div
-            class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-6 rounded-custom-sides">
+            class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-3 rounded-custom-sides">
             <div class="text-center mb-8">
                 <h1
                     class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-cyan-400 flex items-center justify-center gap-x-2">
@@ -66,10 +66,10 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 max-w-3xl text-center mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-4 max-w-3xl text-center mb-8">
                 @foreach ([['icon' => 'fa-chart-line', 'title' => 'Thống kê thông minh'], ['icon' => 'fa-lock', 'title' => 'Bảo mật tuyệt đối'], ['icon' => 'fa-wallet', 'title' => 'Quản lý dễ dàng']] as $feature)
                     <div
-                        class="bg-white p-6 shadow hover:shadow-xl transform hover:scale-105 border border-teal-500 transition [border-radius:30px_0_30px_0]">
+                        class="bg-white p-3 shadow hover:shadow-xl transform hover:scale-105 border border-teal-500 transition [border-radius:30px_0_30px_0]">
                         <i class="fa-solid {{ $feature['icon'] }} text-3xl text-teal-500 mb-3"></i>
                         <h3 class="font-medium">{{ $feature['title'] }}</h3>
                     </div>
@@ -78,7 +78,7 @@
         </div>
 
         <div
-            class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-6 rounded-custom-sides">
+            class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-3 rounded-custom-sides">
 
             <div class="text-center mb-8">
                 <h2
@@ -88,7 +88,7 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full max-w-6xl">
-                <div class="bg-gradient-to-br from-white to-teal-50 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition transform hover:scale-[1.02] duration-200 space-y-6 border border-teal-100"
+                <div class="bg-gradient-to-br from-white to-teal-50 p-4 rounded-2xl shadow-xl hover:shadow-2xl transition transform hover:scale-[1.02] duration-200 space-y-6 border border-teal-100"
                     data-aos="fade-right">
                     <h3 class="text-2xl font-extrabold text-teal-500 flex items-center gap-x-3">
                         <i class="fa-solid fa-lightbulb text-3xl text-teal-500 hover:rotate-12 transition"></i>
@@ -121,7 +121,7 @@
                     </ul>
                 </div>
 
-                <div class="bg-gradient-to-br from-white to-cyan-50 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition transform hover:scale-[1.02] duration-200 space-y-6 border border-cyan-100"
+                <div class="bg-gradient-to-br from-white to-cyan-50 p-4 rounded-2xl shadow-xl hover:shadow-2xl transition transform hover:scale-[1.02] duration-200 space-y-6 border border-cyan-100"
                     data-aos="fade-left">
                     <h3 class="text-2xl font-extrabold text-teal-500 flex items-center gap-x-3">
                         <i class="fa-solid fa-cogs text-3xl text-teal-500 hover:rotate-12 transition"></i>
@@ -160,16 +160,16 @@
             </div>
         </div>
 
-        <div class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-6 rounded-custom-sides"
+        <div class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-3 rounded-custom-sides"
             data-aos="zoom-in">
-            <div class="w-full flex flex-col justify-center items-center p-8 space-y-6">
+            <div class="w-full flex flex-col justify-center items-center p-4 space-y-6">
                 <h2 class="text-3xl font-extrabold text-teal-500">Câu hỏi thường gặp</h2>
                 <p class="text-base text-gray-600 max-w-lg leading-relaxed text-center">
                     Bạn có thể tìm thấy câu trả lời cho các câu hỏi thường gặp bên dưới. Nếu bạn cần thêm hỗ trợ, vui lòng
                     liên
                     hệ đội ngũ của chúng tôi.
                 </p>
-                <ul class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl text-teal-500 font-medium">
+                <ul class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl text-teal-500 font-medium items-start">
                     <li class="flex flex-col p-3 rounded-lg border border-teal-200 hover:bg-teal-50 transition shadow-sm cursor-pointer"
                         id="no-fee">
                         <div class="flex items-center gap-x-2 w-full">
@@ -260,9 +260,9 @@
             </div>
         </div>
 
-        <div class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-6 rounded-custom-sides"
+        <div class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-3 rounded-custom-sides"
             data-aos="fade-down">
-            <div class="w-full flex flex-col justify-center items-center p-8 space-y-6">
+            <div class="w-full flex flex-col justify-center items-center p-4 space-y-6">
                 <h2 class="text-3xl font-extrabold text-teal-500">Đăng Ký Ngay</h2>
                 <p class="text-base text-gray-600 max-w-lg leading-relaxed text-center">
                     Đăng ký thành viên của MyExpenseVn để trải nghiệm những tính năng mới nhất từ chúng tôi

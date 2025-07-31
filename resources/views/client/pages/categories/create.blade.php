@@ -32,7 +32,7 @@
                 Khám phá và quản lý các mục chi tiêu của bạn một cách dễ dàng.
             </h3>
         </div>
-        <div class="w-full mx-auto max-w-2xl rounded-xl bg-white border border-gray-200 shadow-lg p-6 relative">
+        <div class="w-full mx-auto max-w-2xl rounded-xl bg-white border border-gray-200 shadow-lg p-3 relative">
             <a href="{{ route('client.categories.index') }}"
                 class="absolute top-4 right-4 border border-teal-300 text-teal-600
                 hover:bg-teal-50 font-semibold py-2 px-4 rounded-full

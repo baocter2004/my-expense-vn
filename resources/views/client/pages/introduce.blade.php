@@ -5,7 +5,7 @@
 @section('content')
     <div class="w-full space-y-10">
         <div
-            class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-6 rounded-custom-sides">
+            class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-3 rounded-custom-sides">
             <div class="text-center mb-8">
                 <h1 class="text-3xl font-extrabold text-cyan-500">Giới Thiệu MyExpenseVn</h1>
                 <div class="my-2 flex justify-center">
@@ -62,17 +62,18 @@
             </div>
 
             <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-10">
-                <img class="w-full object-contain max-h-64" src="{{ asset('images/faq-1.png') }}"
-                        alt="FAQ 1">
-                    <img class="w-full object-contain max-h-64" src="{{ asset('images/faq.png') }}"
-                        alt="FAQ 2">
-                    <img class="w-full object-contain max-h-64" src="{{ asset('images/faq-2.png') }}"
-                        alt="FAQ 3">
+                @foreach (['faq-1.png', 'faq.png', 'faq-2.png'] as $index => $image)
+                    <div class="w-full flex justify-center items-center bg-white rounded-2xl shadow-sm p-4 hover:shadow-md transition"
+                        data-aos="fade-up" data-aos-delay="{{ $index * 100 }}" data-aos-duration="600">
+                        <img class="w-full max-w-xs h-auto object-contain aspect-square" loading="lazy"
+                            src="{{ asset('images/' . $image) }}" alt="FAQ {{ $index + 1 }}">
+                    </div>
+                @endforeach
             </div>
         </div>
 
         <div
-            class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-6 rounded-custom-sides">
+            class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-3 rounded-custom-sides">
 
             <div class="text-center mb-8">
                 <h2

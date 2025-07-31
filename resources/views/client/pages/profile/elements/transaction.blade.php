@@ -18,7 +18,7 @@
 </div>
 
 
-<div class="w-full bg-gray-50 p-3 md:p-6 rounded-lg border border-gray-100">
+<div class="w-full bg-gray-50 p-3 md:p-3 rounded-lg border border-gray-100">
     @if ($transactions->count())
         <ul class="space-y-3">
             @foreach ($transactions as $tx)

@@ -37,7 +37,7 @@
 
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8 max-w-5xl w-full">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 md:gap-8 max-w-5xl w-full">
             <div class="flex flex-col items-center p-4 bg-white shadow-md rounded-xl">
                 <form id="avatarForm" action="{{ route('client.update-avatar') }}" method="POST"
                     enctype="multipart/form-data">
@@ -95,7 +95,7 @@
             </div>
 
             <div
-                class="md:col-span-3 relative flex flex-col justify-center p-2 md:p-6 bg-white shadow-md rounded-xl space-y-8">
+                class="md:col-span-3 relative flex flex-col justify-center p-2 md:p-3 bg-white shadow-md rounded-xl space-y-8">
                 <div id="tab-loader"
                     class="hidden absolute inset-0 bg-white/60 backdrop-blur-sm z-20 flex items-center justify-center rounded-xl">
                     <div class="w-12 h-12 border-4 border-dashed border-teal-500 rounded-full animate-spin"></div>
