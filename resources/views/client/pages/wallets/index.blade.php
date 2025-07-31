@@ -31,7 +31,7 @@
             </h3>
         </div>
 
-        <div class="w-full grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 mb-6">
+        <div class="w-full grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-3 mb-6">
             <div class="md:col-span-2">
                 <form method="GET" action="{{ route('client.wallets.index') }}" class="w-full">
                     <div
@@ -66,10 +66,10 @@
             </div>
         </div>
 
-        <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+        <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 items-start">
             @forelse ($items as $item)
                 <div
-                    class="bg-white border border-teal-400 rounded-2xl shadow-sm p-6 flex flex-col justify-between hover:shadow-md transition relative">
+                    class="bg-white border border-teal-400 rounded-2xl shadow-sm p-3 flex flex-col justify-between hover:shadow-md transition relative">
 
                     <div class="view-mode" id="view-mode-{{ $item->id }}">
                         <div class="space-y-3 mb-4">
@@ -82,11 +82,17 @@
                                 @endif
                             </div>
 
+                            <div class="text-sm text-gray-500">
+                                <i class="fa-solid fa-clock mr-1"></i>
+                                Giao dịch hôm nay: <strong>{{ $item->transactions_today_count ?? 0 }}</strong>
+                            </div>
+
                             <div class="flex items-center text-gray-600 text-sm">
                                 <i class="fas fa-wallet text-teal-500 mr-2"></i>
                                 {{ \App\Helpers\Helper::formatPrice(
                                     $item->balance,
                                     \App\Consts\GlobalConst::CURRENCIES[$item->currency] ?? 'VND',
+                                    2,
                                 ) }}
                             </div>
 
@@ -121,9 +127,9 @@
                     </div>
 
                     <div class="edit-mode hidden" id="edit-mode-{{ $item->id }}">
-                        <form method="POST" action="" class="space-y-4">
+                        <form method="POST" action="{{ route('client.wallets.update', $item->id) }}" class="space-y-4">
                             @csrf
-                            @method('PATCH')
+                            @method('PUT')
                             <input type="hidden" name="id" value="{{ $item->id }}">
 
                             @include('client.components.forms.input', [
@@ -139,13 +145,14 @@
                                 'type' => 'number',
                                 'value' => $item->balance,
                                 'placeholder' => 'Nhập số dư',
+                                'disabled' => true,
                             ])
 
                             @include('client.components.forms.select', [
                                 'name' => 'currency',
                                 'label' => trans('wallets.currency'),
                                 'options' => \App\Consts\GlobalConst::CURRENCIES,
-                                'selected' => $item->currency,
+                                'value' => $item->currency,
                             ])
 
                             @include('client.components.forms.checkbox', [
@@ -177,7 +184,7 @@
                 </div>
             @empty
                 <div
-                    class="w-full col-span-full bg-white border border-teal-400 rounded-2xl shadow-sm p-6 flex flex-col justify-center items-center hover:shadow-md transition">
+                    class="w-full col-span-full bg-white border border-teal-400 rounded-2xl shadow-sm p-3 flex flex-col justify-center items-center hover:shadow-md transition">
                     Không có dữ liệu.
                 </div>
             @endforelse

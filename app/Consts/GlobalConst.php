@@ -22,5 +22,11 @@ class GlobalConst
         self::CURRENCY_EUR => 'EUR',
     ];
 
+    const EXCHANGE_RATES_TO_VND = [
+        self::CURRENCY_VND => 1,      // 1 VND = 1 VND
+        self::CURRENCY_USD => 24000,  // 1 USD = 24,000 VND
+        self::CURRENCY_EUR => 27000,  // 1 EUR = 27,000 VND
+    ];
+
     const DEFAULT_LIMIT = 10;
 }

@@ -5,7 +5,7 @@
 @section('content')
     <div class="w-full space-y-10">
         <div
-            class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-6 rounded-custom-sides">
+            class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-3 rounded-custom-sides">
             <div class="text-center mb-8">
                 <h1 class="text-3xl font-extrabold text-cyan-500">Giới Thiệu MyExpenseVn</h1>
                 <div class="my-2 flex justify-center">
@@ -73,7 +73,7 @@
         </div>
 
         <div
-            class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-6 rounded-custom-sides">
+            class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-3 rounded-custom-sides">
 
             <div class="text-center mb-8">
                 <h2

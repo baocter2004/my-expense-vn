@@ -15,10 +15,25 @@ class WalletController extends Controller
     {
         $id = Auth::id();
         $items = $this->walletService->getList($id, $getWalletRequest->validated());
-        return view('client.pages.wallets.index', $items);
+        return view('client.pages.wallets.index', compact('items'));
     }
 
-    public function update(PostWalletRequest $postWalletRequest) {
+    public function update($id, PostWalletRequest $postWalletRequest)
+    {
+        $userId = Auth::id();
 
+        if (!$userId) {
+            return redirect()->route('auth.client.showFormLogin')->with('error', 'Bạn không có quyền truy cập !');
+        }
+
+        $params = $postWalletRequest->all();
+        $params['user_id'] = $userId;
+
+        $result = $this->walletService->update($id, $params);
+        if ($result) {
+            return redirect()->route('client.wallets.index')->with('success', 'Thay đổi thông tin thành công!');
+        } else {
+            return back()->with('error', 'Có lỗi xảy xa , Vui lòng thử lại !!!');
+        }
     }
 }

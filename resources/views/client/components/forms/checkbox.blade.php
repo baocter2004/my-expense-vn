@@ -24,7 +24,7 @@
 
     <label class="inline-flex relative items-center cursor-pointer">
         <input type="checkbox" name="{{ $name }}" id="{{ $id }}" class="sr-only peer toggle-status"
-            data-id="{{ $dataId }}" data-url="{{ $url }}" {{ $checked ? 'checked' : '' }}>
+            data-id="{{ $dataId }}" data-url="{{ $url }}" {{ $checked ? 'checked' : '' }} value="1">
 
         <div
             class="w-10 h-5 bg-gray-200 peer-focus:ring-2 peer-focus:ring-teal-300 rounded-full peer-checked:bg-teal-500 transition-all">

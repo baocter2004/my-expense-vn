@@ -5,7 +5,7 @@
 @section('content')
     <div class="w-full px-4">
         <h1 class="text-3xl font-bold mb-6 text-teal-600 text-center">Chào mừng bạn đến với MyExpenseVN</h1>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
             <div class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition flex items-center space-x-3">
                 <i class="fa-solid fa-wallet text-3xl text-teal-500"></i>
                 <div>
@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-8">
             <div class="bg-white p-4 rounded-xl shadow">
                 <h2 class="text-lg font-semibold mb-4">Thu chi hàng tháng</h2>
                 <div class="h-64 bg-gray-100 flex justify-center items-center text-gray-400">
@@ -52,7 +52,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
             <div class="bg-white p-4 rounded-xl shadow">
                 <h2 class="text-lg font-semibold mb-4">Danh mục</h2>
                 <ul class="space-y-2">

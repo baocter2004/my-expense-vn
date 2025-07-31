@@ -13,7 +13,7 @@
 
 
 <form action="{{ route('client.update-password') }}" method="POST"
-    class="w-full bg-gray-50 p-2 md:p-6 rounded-lg border border-gray-100">
+    class="w-full bg-gray-50 p-2 md:p-3 rounded-lg border border-gray-100">
     @csrf
     @method('PATCH')
 

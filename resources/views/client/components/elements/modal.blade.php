@@ -7,7 +7,7 @@
 
 <div id="deleteModal"
     class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm">
-    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 sm:mx-auto p-6 relative animate-fade-in">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 sm:mx-auto p-3 relative animate-fade-in">
         <button type="button" onclick="closeDeleteModal()"
             class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

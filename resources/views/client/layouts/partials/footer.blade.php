@@ -1,5 +1,5 @@
 <div class="bg-white border-t border-gray-200 mt-5">
-    <div class="px-5 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-sm text-gray-700">
+    <div class="px-5 py-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-sm text-gray-700">
         <div>
             <h3 class="font-semibold text-teal-600 mb-3">Về MyExpenseVN</h3>
             <p class="text-gray-600 leading-relaxed">

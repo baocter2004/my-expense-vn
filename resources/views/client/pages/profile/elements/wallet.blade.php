@@ -10,7 +10,7 @@
     </div>
 </div>
 
-<div class="w-full bg-gray-50 p-2 md:p-6 rounded-lg border border-gray-100">
+<div class="w-full bg-gray-50 p-2 md:p-3 rounded-lg border border-gray-100">
     @if ($wallets->count())
         <ul class="divide-y divide-gray-200 border border-gray-100 rounded-lg overflow-hidden">
             @foreach ($wallets as $wallet)

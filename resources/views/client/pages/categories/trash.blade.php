@@ -32,7 +32,7 @@
             </h3>
         </div>
 
-        <div class="w-full grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 mb-6">
+        <div class="w-full grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-3 mb-6">
             <div class="md:col-span-2">
                 <form method="GET" action="{{ route('client.categories.index') }}" class="w-full">
                     <div
@@ -68,10 +68,10 @@
             </div>
         </div>
 
-        <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             @forelse ($items as $item)
                 <div
-                    class="bg-white border border-teal-400 rounded-2xl shadow-sm p-6 flex flex-col justify-between hover:shadow-md transition relative">
+                    class="bg-white border border-teal-400 rounded-2xl shadow-sm p-3 flex flex-col justify-between hover:shadow-md transition relative">
 
                     <div class="view-mode" id="view-mode-{{ $item->id }}">
                         <div class="space-y-1 mb-2">
@@ -109,7 +109,7 @@
                 </div>
             @empty
                 <div
-                    class="w-full col-span-full bg-white border border-teal-400 rounded-2xl shadow-sm p-6 flex flex-col justify-center items-center hover:shadow-md transition">
+                    class="w-full col-span-full bg-white border border-teal-400 rounded-2xl shadow-sm p-3 flex flex-col justify-center items-center hover:shadow-md transition">
                     Không có dữ liệu.
                 </div>
             @endforelse
