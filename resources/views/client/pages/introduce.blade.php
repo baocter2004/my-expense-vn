@@ -18,7 +18,7 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl w-full mx-auto">
-                <div class="bg-gradient-to-br from-white to-teal-50 p-8 rounded-2xl shadow-lg space-y-5 border border-teal-100"
+                <div class="bg-gradient-to-br from-white to-teal-50 p-4 rounded-2xl shadow-lg space-y-5 border border-teal-100"
                     data-aos="fade-right">
                     <h2 class="text-2xl font-bold text-teal-600 flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-teal-500" fill="none"
@@ -36,7 +36,7 @@
                     </p>
                 </div>
 
-                <div class="bg-gradient-to-br from-white to-teal-50 p-8 rounded-2xl shadow-lg space-y-5 border border-teal-100"
+                <div class="bg-gradient-to-br from-white to-teal-50 p-4 rounded-2xl shadow-lg space-y-5 border border-teal-100"
                     data-aos="fade-left">
                     <h2 class="text-2xl font-bold text-teal-600 flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-teal-500" fill="none"
@@ -83,7 +83,7 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full max-w-6xl">
-                <div class="bg-gradient-to-br from-white to-teal-50 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition transform hover:scale-[1.02] duration-200 space-y-6 border border-teal-100"
+                <div class="bg-gradient-to-br from-white to-teal-50 p-4 rounded-2xl shadow-xl hover:shadow-2xl transition transform hover:scale-[1.02] duration-200 space-y-6 border border-teal-100"
                     data-aos="fade-right">
                     <h3 class="text-2xl font-extrabold text-teal-500 flex items-center gap-x-3">
                         <i class="fa-solid fa-lightbulb text-3xl text-teal-500 hover:rotate-12 transition"></i>
@@ -116,7 +116,7 @@
                     </ul>
                 </div>
 
-                <div class="bg-gradient-to-br from-white to-cyan-50 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition transform hover:scale-[1.02] duration-200 space-y-6 border border-cyan-100"
+                <div class="bg-gradient-to-br from-white to-cyan-50 p-4 rounded-2xl shadow-xl hover:shadow-2xl transition transform hover:scale-[1.02] duration-200 space-y-6 border border-cyan-100"
                     data-aos="fade-left">
                     <h3 class="text-2xl font-extrabold text-teal-500 flex items-center gap-x-3">
                         <i class="fa-solid fa-cogs text-3xl text-teal-500 hover:rotate-12 transition"></i>
