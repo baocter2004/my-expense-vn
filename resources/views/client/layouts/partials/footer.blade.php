@@ -49,6 +49,21 @@
     </div>
 </div>
 
+<div class="ai-watcher" id="aiWatcher">
+    <div class="ai-face">
+        <div class="ai-eyes">
+            <div class="ai-eye blink">
+                <div class="ai-pupil" id="leftPupil"></div>
+            </div>
+            <div class="ai-eye blink">
+                <div class="ai-pupil" id="rightPupil"></div>
+            </div>
+        </div>
+        <div class="ai-mouth" id="aiMouth"></div>
+    </div>
+    <div class="ai-speech-bubble" id="speechBubble">Chào bạn! Tôi đang theo dõi nhé 👀</div>
+</div>
+
 <button id="scrollToTop"
     class="fixed bottom-6 right-6 p-3 w-[50px] h-[50px] rounded bg-teal-500 text-white shadow-lg hover:bg-teal-600 transition opacity-0 pointer-events-none">
     <i class="fa-solid fa-arrow-up"></i>

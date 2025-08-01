@@ -5,7 +5,7 @@
     'value' => '',
     'placeholder' => '',
     'rows' => 4,
-    'required' => false
+    'required' => false,
 ])
 
 @php
@@ -20,14 +20,14 @@
             @endif
             {{ $label }}
             @if ($required)
-            <span class="text-red-500 text-base leading-none">*</span>
-        @endif
+                <span class="text-red-500 text-base leading-none">*</span>
+            @endif
         </label>
     @endif
 
     <div class="relative">
         <textarea id="{{ $name }}" name="{{ $name }}" rows="{{ $rows }}" placeholder="{{ $placeholder }}"
-            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500 {{ $hasError ? 'is-valid' : '' }}">{{ old($name, $value) }}</textarea>
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500 {{ $hasError ? 'is-valid' : '' }}">{{ old($name, request($name, $value)) }}</textarea>
     </div>
 
     @error($name)

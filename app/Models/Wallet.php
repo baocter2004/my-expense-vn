@@ -14,6 +14,7 @@ class Wallet extends Model
         'user_id',
         'name',
         'balance',
+        'balance_vnd',
         'currency',
         'note',
         'is_default'

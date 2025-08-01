@@ -28,5 +28,11 @@ class GlobalConst
         self::CURRENCY_EUR => 27000,  // 1 EUR = 27,000 VND
     ];
 
+    const SORT_OPTIONS = [
+        '' => 'Mặc định',
+        'desc' => 'Mới nhất',
+        'asc' => 'Cũ nhất',
+    ];
+
     const DEFAULT_LIMIT = 10;
 }
