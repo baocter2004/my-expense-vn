@@ -28,8 +28,7 @@ $(function () {
 
         pupils.css(
             "transform",
-            `translate(calc(-50% + ${
-                Math.cos(angle) * distance
+            `translate(calc(-50% + ${Math.cos(angle) * distance
             }px), calc(-50% + ${Math.sin(angle) * distance}px))`
         );
     });
@@ -39,6 +38,15 @@ $(function () {
             randomMessages[Math.floor(Math.random() * randomMessages.length)];
         showMessage(msg);
     }, 10000);
+
+    speechBubble.on("click", (e) => {
+        if (speechBubble.hasClass("show")) {
+            chatModal.removeClass("hidden");
+        }
+
+        e.stopPropagation();
+    });
+
 
     aiWatcher.on("click", () => {
         chatModal.removeClass("hidden");
