@@ -73,9 +73,11 @@ class WalletService extends BaseCRUDService
         });
         $query->select([
             'wallets.*',
-            DB::raw('COUNT(t.id) as total_transactions'),
-        ])
-            ->groupBy('wallets.id');
+            DB::raw('(SELECT COUNT(*) 
+              FROM transactions t 
+              WHERE t.wallet_id = wallets.id 
+              AND DATE(t.created_at) = CURDATE()) as total_transactions'),
+        ]);
 
         return $query->paginate($limit)->appends(request()->query());
     }
@@ -87,7 +89,6 @@ class WalletService extends BaseCRUDService
 
             $wallet      = $this->repository->with([], $id);
             $oldCurrency = $wallet->currency;
-            $oldBalance  = $wallet->balance;
 
             $params['is_default'] = !empty($params['is_default']) ? 1 : 0;
             if ($params['is_default']) {
@@ -100,10 +101,14 @@ class WalletService extends BaseCRUDService
             if (isset($params['currency']) && $params['currency'] != $oldCurrency) {
                 $newCurrency = $params['currency'];
                 $rates = GlobalConst::EXCHANGE_RATES_TO_VND;
-                $balanceInVnd = $oldBalance * ($rates[$oldCurrency] ?? 1);
-                $newRate      = $rates[$newCurrency] ?? 1;
-                $newBalance   = round($balanceInVnd / $newRate, 2);
-                $params['balance']  = $newBalance;
+
+                if (empty($wallet->balance_vnd)) {
+                    $wallet->balance_vnd = $wallet->balance * ($rates[$oldCurrency] ?? 1);
+                    $wallet->save();
+                }
+
+                $newRate = $rates[$newCurrency] ?? 1;
+                $params['balance'] = round($wallet->balance_vnd / $newRate, 2);
             }
 
             $wallet->update($params);

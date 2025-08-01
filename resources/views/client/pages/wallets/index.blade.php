@@ -16,7 +16,7 @@
 @endphp
 
 @section('content')
-    <div class="w-full flex flex-col items-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-4 rounded-3xl">
+    <div class="w-full flex flex-col items-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-4 rounded-3xl min-h-screen">
         <div class="text-center mb-8">
             <h1
                 class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-cyan-400 flex items-center justify-center gap-x-2">
@@ -84,7 +84,7 @@
 
                             <div class="text-sm text-gray-500">
                                 <i class="fa-solid fa-clock mr-1"></i>
-                                Giao dịch hôm nay: <strong>{{ $item->transactions_today_count ?? 0 }}</strong>
+                                Giao dịch hôm nay: <strong>{{ $item->total_transactions ?? 0 }}</strong>
                             </div>
 
                             <div class="flex items-center text-gray-600 text-sm">
