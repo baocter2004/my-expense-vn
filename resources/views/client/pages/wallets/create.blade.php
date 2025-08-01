@@ -32,7 +32,7 @@
                 Theo dõi, phân loại và kiểm soát số dư các ví của bạn hiệu quả.
             </h3>
         </div>
-        <div class="w-full mx-auto max-w-2xl rounded-xl bg-white border border-gray-200 shadow-lg p-3 md:p-6 md:p-6">
+        <div class="w-full mx-auto max-w-2xl rounded-xl bg-white border border-gray-200 shadow-lg p-3 md:p-6">
             <div class="flex justify-end">
                 <a href="{{ route('client.categories.index') }}"
                     class="border border-teal-300 text-teal-600

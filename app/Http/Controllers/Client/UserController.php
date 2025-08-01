@@ -41,6 +41,7 @@ class UserController extends Controller
     {
         $id = Auth::id();
         $result = $this->userService->update($id, $updateUserRequest->validated());
+
         if ($result) {
             return redirect()->route('client.profile')->with('success', 'Thay đổi thông tin thành công!');
         } else {

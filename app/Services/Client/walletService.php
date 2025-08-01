@@ -82,6 +82,35 @@ class WalletService extends BaseCRUDService
         return $query->paginate($limit)->appends(request()->query());
     }
 
+    public function create(array $params = []): Wallet
+    {
+        try {
+            DB::beginTransaction();
+
+            $params['is_default'] = !empty($params['is_default']) ? 1 : 0;
+            $params['balance_vnd'] = str_replace('.', '', $params['balance_vnd']);
+
+            if ($params['is_default']) {
+                $this->repository->getModel()
+                    ->where('user_id', $params['user_id'] ?? auth()->guard('user')->user()?->id)
+                    ->update(['is_default' => 0]);
+            }
+
+            $wallet = $this->repository->create($params);
+            
+            DB::commit();
+            return $wallet;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error('Error in ' . __CLASS__ . '::' . __FUNCTION__ . ' => ' . $th->getMessage(), [
+                'file' => $th->getFile(),
+                'line' => $th->getLine(),
+                'trace' => $th->getTraceAsString(),
+            ]);
+            throw $th;
+        }
+    }
+
     public function update(int|string $id, array $params = []): Wallet
     {
         try {

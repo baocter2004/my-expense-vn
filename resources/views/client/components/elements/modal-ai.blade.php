@@ -33,7 +33,7 @@
                     </svg>
                 </button>
                 <button id="closeChat"
-                    class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/20 transition-all duration-200 hover:rotate-90">
+                    class="w-8 h-8 flex items-center justify-center rounded-full">
                     ✖
                 </button>
             </div>

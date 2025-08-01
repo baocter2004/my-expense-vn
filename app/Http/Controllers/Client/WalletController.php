@@ -25,15 +25,20 @@ class WalletController extends Controller
     public function store(PostWalletRequest $postWalletRequest)
     {
         $params = $this->prepareParams($postWalletRequest);
+        $result = $this->walletService->create($params);
 
-        dd($params);
+        if ($result) {
+            return redirect()->route('client.wallets.index')->with('success', 'Thêm mới thông tin thành công!');
+        } else {
+            return back()->with('error', 'Có lỗi xảy xa , Vui lòng thử lại !!!');
+        }
     }
 
     public function update($id, PostWalletRequest $postWalletRequest)
     {
         $params = $this->prepareParams($postWalletRequest);
-
         $result = $this->walletService->update($id, $params);
+        
         if ($result) {
             return redirect()->route('client.wallets.index')->with('success', 'Thay đổi thông tin thành công!');
         } else {

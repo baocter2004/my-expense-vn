@@ -11,185 +11,129 @@
 @php
     $breadcrumb = [
         ['label' => 'Trang chủ', 'url' => route('client.index'), 'icon' => 'fa-home'],
-        ['label' => 'Danh Mục Chi Tiêu'],
+        ['label' => 'Danh Sách'],
     ];
 @endphp
 
 @section('content')
     <div
         class="w-full flex flex-col items-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-4 rounded-3xl min-h-screen">
-        <div class="text-center mb-8">
-            <h1
-                class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-cyan-400 flex items-center justify-center gap-x-2">
-                <i class="fa-solid fa-wallet"></i> MyExpenseVn
-            </h1>
-            <div class="my-2 flex justify-center">
-                <div class="w-20 h-1 rounded-full bg-gradient-to-r from-teal-500 to-cyan-400 opacity-50"></div>
-            </div>
-            <h2 class="text-lg md:text-xl font-medium text-center text-gray-600 tracking-wide">Danh Mục</h2>
-            <h3 class="text-lg md:text-xl font-medium text-center text-gray-600 tracking-wide">
-                Khám phá và quản lý các mục chi tiêu của bạn một cách dễ dàng.
-            </h3>
-        </div>
+        <div class="relative z-10 container mx-auto px-4 py-8">
+            @include('client.components.search.form-search', [
+                'sloganText' => 'Khám phá và quản lý các mục chi tiêu của bạn một cách dễ dàng.',
+                'icon' => 'fa-list',
+                'routeSearch' => route('client.categories.index'),
+                'routeCreate' => route('client.categories.create'),
+                'routeTrash' => route('client.categories.trash'),
+            ])
 
-        <div class="w-full grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-3 mb-6">
-            <div class="md:col-span-2">
-                <form method="GET" action="{{ route('client.categories.index') }}" class="w-full">
+            <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 items-start">
+                @forelse ($items as $item)
                     <div
-                        class="flex i max-w-[500px] items-center border border-gray-300 rounded-full px-4 py-2 focus-within:border-teal-500 transition">
-                        <input type="text" name="keyword" value="{{ request('keyword') }}"
-                            placeholder="Tìm kiếm danh mục..."
-                            class="w-full outline-none bg-transparent text-sm md:text-base placeholder-gray-400">
-                        <button type="submit" class="text-teal-600 hover:text-teal-800 transition">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="flex flex-wrap lg:flex-nowrap items-center justify-end gap-2 mt-2 lg:mt-0">
-                <a href="#" id="reset-search"
-                    class="inline-flex items-center gap-2 text-sm md:text-base font-medium px-4 py-2 border border-gray-400 text-gray-700 rounded-full hover:bg-gray-100 transition">
-                    <i class="fa-solid fa-rotate-left"></i>
-                    <span class="hidden md:inline">Xóa Sạch</span>
-                </a>
-
-                <a href="{{ route('client.categories.trash') }}"
-                    class="inline-flex items-center gap-2 text-sm md:text-base font-medium px-4 py-2 border border-red-500 text-red-600 rounded-full hover:bg-red-50 transition">
-                    <i class="fa-solid fa-trash"></i>
-                    <span class="hidden md:inline">Thùng Rác</span>
-                </a>
-
-                <a href="{{ route('client.categories.create') }}"
-                    class="inline-flex items-center gap-2 text-sm md:text-base font-medium px-4 py-2 border border-teal-300 text-teal-600 rounded-full hover:bg-teal-50 transition">
-                    <i class="fa-solid fa-plus"></i>
-                    <span class="hidden md:inline">Thêm Mới</span>
-                </a>
-            </div>
-        </div>
-
-        <div class="w-full flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-            <div id="guide-banner"
-                class="flex items-center gap-3 bg-gradient-to-r from-teal-50 via-white to-white border-l-4 border-teal-400 text-teal-700 p-4 rounded-lg shadow-md transition-all duration-500">
-                <div class="flex-shrink-0">
-                    <i class="fa-solid fa-lightbulb text-yellow-500 text-xl"></i>
-                </div>
-                <p class="text-sm md:text-base leading-relaxed">
-                    <strong class="text-teal-600">Tìm kiếm chuyên sâu:</strong>
-                    Lọc theo <em>ngày tạo</em> và <em>sắp xếp</em> để quản lý danh mục dễ dàng hơn.
-                </p>
-            </div>
-            <form method="GET" action="{{ route('client.categories.index') }}"
-                class="w-full md:w-auto bg-white border border-gray-200 rounded-xl shadow p-3 flex flex-wrap md:flex-nowrap items-end gap-3 md:ml-auto">
-
-                @include('client.components.forms.date', [
-                    'name' => 'created_from',
-                    'label' => 'Từ Ngày',
-                ])
-
-                @include('client.components.forms.date', [
-                    'name' => 'created_to',
-                    'label' => 'Đến Ngày',
-                ])
-
-                @include('client.components.forms.select', [
-                    'icon' => 'sort',
-                    'label' => 'Sắp xếp',
-                    'name' => 'sort',
-                    'options' => \App\Consts\GlobalConst::SORT_OPTIONS,
-                ])
-
-                <button type="submit" class="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition">
-                    Lọc
-                </button>
-            </form>
-        </div>
-
-        <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 items-start">
-            @forelse ($items as $item)
-                <div
-                    class="bg-white border border-teal-400 rounded-2xl shadow-sm p-3 flex flex-col justify-between hover:shadow-md transition relative">
-
-                    <div class="view-mode" id="view-mode-{{ $item->id }}">
-                        <div class="space-y-1 mb-2">
-                            <h3 class="text-lg font-semibold text-teal-600 mb-2">{{ $item?->name }}</h3>
-                            <p class="text-gray-600 text-sm">{{ $item?->descriptions }}</p>
-                            <div class="text-sm text-gray-500 flex items-center space-x-1">
-                                <i class="fa-solid fa-calendar"></i>
-                                <span>{{ $item->created_at?->format('d/m/Y H:i') }}</span>
-                            </div>
+                        class="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-teal-400 to-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         </div>
-                        <div class="flex items-center justify-between">
-                            <label class="inline-flex relative items-center cursor-pointer">
-                                <input type="checkbox" class="sr-only peer toggle-status" data-id="{{ $item->id }}"
-                                    data-url="{{ route('client.update-status', ['id' => $item->id]) }}"
-                                    @if ($item?->is_active) checked @endif>
 
-                                <div
-                                    class="w-10 h-5 bg-gray-200 peer-focus:ring-2 peer-focus:ring-teal-300 rounded-full peer-checked:bg-teal-500 transition-all">
+                        <div class="relative bg-white m-[2px] rounded-2xl p-6">
+                            <div class="view-mode" id="view-mode-{{ $item->id }}">
+                                <div class="flex items-start justify-between mb-4">
+                                    <div>
+                                        <h3 class="text-xl font-bold text-gray-800 mb-1">{{ $item->name }}</h3>
+                                        <p class="text-sm text-gray-600">{{ $item->descriptions }}</p>
+                                        <div class="flex items-center gap-2 mt-2 text-sm text-gray-500">
+                                            <i class="fa-solid fa-calendar-alt text-teal-500"></i>
+                                            <span>{{ $item->created_at?->format('d/m/Y H:i') }}</span>
+                                        </div>
+                                    </div>
+
+                                    <label class="inline-flex relative items-center cursor-pointer">
+                                        <input type="checkbox" class="sr-only peer toggle-status"
+                                            data-id="{{ $item->id }}"
+                                            data-url="{{ route('client.update-status', ['id' => $item->id]) }}"
+                                            @if ($item?->is_active) checked @endif>
+                                        <div
+                                            class="w-10 h-5 bg-gray-200 peer-focus:ring-2 peer-focus:ring-teal-300 rounded-full peer-checked:bg-teal-500 transition-all">
+                                        </div>
+                                        <span
+                                            class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full peer-checked:translate-x-5 transition-transform"></span>
+                                    </label>
                                 </div>
 
-                                <span
-                                    class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full peer-checked:translate-x-5 transition-transform"></span>
-                            </label>
-                            <div class="space-x-2">
-                                <button
-                                    class="btn-edit px-4 py-2 text-sm text-white bg-teal-500 rounded-lg hover:bg-teal-600 transition"
-                                    data-id="{{ $item->id }}">
-                                    Sửa
-                                </button>
-                                <button
-                                    class="open-delete-modal px-4 py-2 text-sm text-white bg-red-500 rounded-lg hover:bg-red-600 transition"
-                                    data-action="{{ route('client.categories.soft-delete', $item->id) }}"
-                                    data-title="Xoá {{ $item->name }}"
-                                    data-message="Bạn có chắc chắn muốn xoá '{{ $item->name }}'?">
-                                    Xoá
-                                </button>
+                                <div class="flex gap-2">
+                                    <button
+                                        class="btn-edit flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-300"
+                                        data-id="{{ $item->id }}">
+                                        <i class="fa-solid fa-edit mr-2"></i>
+                                        Chỉnh sửa
+                                    </button>
+
+                                    <button
+                                        class="open-delete-modal px-4 py-2 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-all duration-300"
+                                        data-action="{{ route('client.categories.soft-delete', $item->id) }}"
+                                        data-title="Xoá {{ $item->name }}"
+                                        data-message="Bạn có chắc chắn muốn xoá '{{ $item->name }}'?">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="edit-mode hidden" id="edit-mode-{{ $item->id }}">
+                                <form method="POST" action="{{ route('client.categories.update') }}" class="space-y-4">
+                                    @csrf
+                                    @method('PATCH')
+                                    <input type="hidden" name="id" value="{{ $item->id }}">
+
+                                    <h3 class="text-lg font-bold text-gray-800 mb-4">Chỉnh sửa danh mục</h3>
+
+                                    @include('client.components.forms.input', [
+                                        'name' => 'name',
+                                        'label' => trans('categories.name'),
+                                        'value' => $item->name,
+                                        'placeholder' => 'Vui Lòng Nhập Tên Danh Mục',
+                                    ])
+
+                                    @include('client.components.forms.text-area', [
+                                        'name' => 'descriptions',
+                                        'label' => trans('categories.descriptions'),
+                                        'value' => $item->descriptions,
+                                        'placeholder' => 'Vui Lòng Nhập Mô Tả Danh Mục',
+                                    ])
+
+                                    <div class="flex gap-2 pt-4">
+                                        <button type="button"
+                                            class="btn-cancel-edit flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-300"
+                                            data-id="{{ $item->id }}">
+                                            Huỷ
+                                        </button>
+                                        <button type="submit"
+                                            class="flex-1 px-4 py-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all duration-300">
+                                            Lưu thay đổi
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
-
-                    <div class="edit-mode hidden" id="edit-mode-{{ $item->id }}">
-                        <form method="POST" action="{{ route('client.categories.update') }}" class="space-y-4">
-                            @csrf
-                            @method('PATCH')
-                            <input type="hidden" name="id" value="{{ $item->id }}">
-                            @include('client.components.forms.input', [
-                                'name' => 'name',
-                                'label' => trans('categories.name'),
-                                'value' => $item->name,
-                                'placeholder' => 'Vui Lòng Nhập Tên Danh Mục',
-                            ])
-
-                            @include('client.components.forms.text-area', [
-                                'name' => 'descriptions',
-                                'label' => trans('categories.descriptions'),
-                                'value' => $item->descriptions,
-                                'placeholder' => 'Vui Lòng Nhập Mô Tả Danh Mục',
-                            ])
-                            <div class="flex justify-end space-x-2">
-                                <button type="button"
-                                    class="btn-cancel-edit px-4 py-2 text-sm text-gray-700 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 transition"
-                                    data-id="{{ $item->id }}">
-                                    Huỷ
-                                </button>
-                                <button type="submit"
-                                    class="px-4 py-2 text-sm text-white bg-teal-500 rounded-lg hover:bg-teal-600 transition">
-                                    Lưu
-                                </button>
-                            </div>
-                        </form>
+                @empty
+                    <div
+                        class="w-full col-span-full bg-white border border-teal-400 rounded-2xl shadow-sm p-12 text-center">
+                        <div class="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-4">
+                            <i class="fa-solid fa-list text-gray-400 text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Chưa có danh mục nào</h3>
+                        <p class="text-gray-600 mb-6">Hãy tạo danh mục đầu tiên để bắt đầu phân loại chi tiêu của bạn</p>
+                        <a href="{{ route('client.categories.create') }}"
+                            class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all duration-300">
+                            <i class="fa-solid fa-plus"></i>
+                            Tạo danh mục mới
+                        </a>
                     </div>
-                </div>
-            @empty
-                <div
-                    class="w-full col-span-full bg-white border border-teal-400 rounded-2xl shadow-sm p-3 flex flex-col justify-center items-center hover:shadow-md transition">
-                    Không có dữ liệu.
-                </div>
-            @endforelse
-        </div>
-        <div class="w-full flex justify-end items-center">
-            {{ $items->onEachSide(1)->links('client.components.elements.paginate') }}
+                @endforelse
+            </div>
+            <div class="w-full flex justify-end items-center">
+                {{ $items->onEachSide(1)->links('client.components.elements.paginate') }}
+            </div>
         </div>
     </div>
     @include('client.components.elements.modal')

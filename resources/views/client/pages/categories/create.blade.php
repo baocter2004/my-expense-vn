@@ -5,14 +5,14 @@
 @endpush
 
 @section('title')
-    Trang Danh Mục
+    Trang Thêm Mới Danh Mục
 @endsection
 
 @php
     $breadcrumb = [
         ['label' => 'Trang chủ', 'url' => route('client.index'), 'icon' => 'fa-home'],
         ['label' => 'Danh Sách', 'url' => route('client.categories.index'), 'icon' => 'fa-list'],
-        ['label' => 'Thêm Mới Danh Mục'],
+        ['label' => 'Thêm Mới'],
     ];
 @endphp
 
