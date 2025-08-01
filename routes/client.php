@@ -42,6 +42,8 @@ Route::name('client.')
                     ->name('wallets.')
                     ->group(function () {
                         Route::get('/', [WalletController::class, 'index'])->name('index');
+                        Route::get('/create', [WalletController::class, 'create'])->name('create');
+                        Route::post('/create', [WalletController::class, 'store'])->name('store');
                         Route::put('/{id}',[WalletController::class,'update'])->name('update');
                     });
             });

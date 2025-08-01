@@ -47,7 +47,7 @@
                 </form>
             </div>
 
-            <div class="flex flex-wrap lg:flex-nowrap items-center justify-start lg:justify-end gap-2 mt-2 lg:mt-0">
+            <div class="flex flex-wrap lg:flex-nowrap items-center justify-end gap-2 mt-2 lg:mt-0">
                 <a href="#" id="reset-search"
                     class="inline-flex items-center gap-2 text-sm md:text-base font-medium px-4 py-2 border border-gray-400 text-gray-700 rounded-full hover:bg-gray-100 transition">
                     <i class="fa-solid fa-rotate-left"></i>
@@ -66,6 +66,43 @@
                     <span class="hidden md:inline">Thêm Mới</span>
                 </a>
             </div>
+        </div>
+
+        <div class="w-full flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+            <div id="guide-banner"
+                class="flex items-center gap-3 bg-gradient-to-r from-teal-50 via-white to-white border-l-4 border-teal-400 text-teal-700 p-4 rounded-lg shadow-md transition-all duration-500">
+                <div class="flex-shrink-0">
+                    <i class="fa-solid fa-lightbulb text-yellow-500 text-xl"></i>
+                </div>
+                <p class="text-sm md:text-base leading-relaxed">
+                    <strong class="text-teal-600">Tìm kiếm chuyên sâu:</strong>
+                    Lọc theo <em>ngày tạo</em> và <em>sắp xếp</em> để quản lý danh mục dễ dàng hơn.
+                </p>
+            </div>
+            <form method="GET" action="{{ route('client.categories.index') }}"
+                class="w-full md:w-auto bg-white border border-gray-200 rounded-xl shadow p-3 flex flex-wrap md:flex-nowrap items-end gap-3 md:ml-auto">
+
+                @include('client.components.forms.date', [
+                    'name' => 'created_from',
+                    'label' => 'Từ Ngày',
+                ])
+
+                @include('client.components.forms.date', [
+                    'name' => 'created_to',
+                    'label' => 'Đến Ngày',
+                ])
+
+                @include('client.components.forms.select', [
+                    'icon' => 'sort',
+                    'label' => 'Sắp xếp',
+                    'name' => 'sort',
+                    'options' => \App\Consts\GlobalConst::SORT_OPTIONS,
+                ])
+
+                <button type="submit" class="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition">
+                    Lọc
+                </button>
+            </form>
         </div>
 
         <div class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 items-start">
@@ -157,6 +194,10 @@
     </div>
     @include('client.components.elements.modal')
 @endsection
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+@endpush
 
 @push('js')
     @include('client.components.scripts.reset', [

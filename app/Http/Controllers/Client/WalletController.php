@@ -18,16 +18,20 @@ class WalletController extends Controller
         return view('client.pages.wallets.index', compact('items'));
     }
 
+    public function create() {
+        return view('client.pages.wallets.create');
+    }
+
+    public function store(PostWalletRequest $postWalletRequest)
+    {
+        $params = $this->prepareParams($postWalletRequest);
+
+        dd($params);
+    }
+
     public function update($id, PostWalletRequest $postWalletRequest)
     {
-        $userId = Auth::id();
-
-        if (!$userId) {
-            return redirect()->route('auth.client.showFormLogin')->with('error', 'Bạn không có quyền truy cập !');
-        }
-
-        $params = $postWalletRequest->all();
-        $params['user_id'] = $userId;
+        $params = $this->prepareParams($postWalletRequest);
 
         $result = $this->walletService->update($id, $params);
         if ($result) {
@@ -35,5 +39,12 @@ class WalletController extends Controller
         } else {
             return back()->with('error', 'Có lỗi xảy xa , Vui lòng thử lại !!!');
         }
+    }
+
+    private function prepareParams($request): array
+    {
+        $params = $request->all();
+        $params['user_id'] = Auth::id();
+        return $params;
     }
 }

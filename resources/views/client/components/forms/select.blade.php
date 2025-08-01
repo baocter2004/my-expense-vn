@@ -4,7 +4,7 @@
     'options' => [],
     'value' => '',
     'placeholder' => '',
-    'icon' => ''
+    'icon' => '',
 ])
 
 @php
@@ -28,7 +28,7 @@
         @endif
         @foreach ($options as $optValue => $optLabel)
             <option value="{{ $optValue }}"
-                {{ (string) old($name, $value) === (string) $optValue ? 'selected' : '' }}>
+                {{ (string) old($name, request($name, $value)) === (string) $optValue ? 'selected' : '' }}>
                 {{ $optLabel }}
             </option>
         @endforeach

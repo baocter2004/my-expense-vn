@@ -6,7 +6,7 @@
     'value' => '',
     'placeholder' => '',
     'required' => false,
-    'disabled' => false
+    'disabled' => false,
 ])
 
 @php
@@ -26,10 +26,8 @@
 
     <div class="relative">
         <input id="{{ $name }}" name="{{ $name }}" type="{{ $type }}"
-            @if ($disabled)
-                disabled
-            @endif
-            value="{{ old($name, $value) }}" placeholder="{{ $placeholder }}"
+            @if ($disabled) disabled @endif value="{{ old($name, request($name, $value)) }}"
+            placeholder="{{ $placeholder }}"
             class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500 {{ $hasError ? 'is-valid' : '' }} {{ $type === 'password' ? 'pr-10' : 'pr-4' }}">
         @if ($type === 'password')
             <button type="button"

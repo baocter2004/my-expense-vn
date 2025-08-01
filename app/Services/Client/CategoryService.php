@@ -31,11 +31,19 @@ class CategoryService extends BaseCRUDService
     {
         $wheres     = Arr::get($params, 'wheres', []);
         $whereLikes = Arr::get($params, 'likes', []);
-        $sort       = Arr::get($params, 'sort', 'created_at');
-        $order      = Arr::get($params, 'order', 'desc');
+        $order = Arr::get($params, 'sort') ?: 'desc';
+        $sort  = 'created_at';
         $relates    = Arr::get($params, 'relates', []);
 
         $relates = ['transactions'];
+
+        if (!empty($params['created_from'])) {
+            $wheres[] = ['categories.created_at', '>=', $params['created_from']];
+        }
+
+        if (!empty($params['created_to'])) {
+            $wheres[] = ['categories.created_at', '<=', $params['created_to']];
+        }
 
         if (!empty($params['keyword'])) {
             $wheres[] = [

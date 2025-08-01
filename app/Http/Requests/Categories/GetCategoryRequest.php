@@ -32,6 +32,25 @@ class GetCategoryRequest extends FormRequest
                 Rule::in(GlobalConst::STATUS)
             ],
             'keyword' => 'nullable|string|max:255',
+            'created_from' => 'nullable|date',
+            'created_to' => 'nullable|date',
+            'sort' => [
+                'nullable',
+                Rule::in(array_keys(GlobalConst::SORT_OPTIONS))
+            ]
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'name' => 'Tên danh mục',
+            'descriptions' => 'Mô tả',
+            'is_active' => 'Trạng thái',
+            'keyword' => 'Từ khóa tìm kiếm',
+            'created_from' => 'Ngày bắt đầu',
+            'created_to' => 'Ngày kết thúc',
+            'sort' => 'Sắp xếp',
         ];
     }
 }

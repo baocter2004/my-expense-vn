@@ -21,6 +21,7 @@
             <div class="w-12 h-12 border-4 border-dashed border-teal-500 rounded-full animate-spin"></div>
         </div>
     </div>
+    @include('client.components.elements.modal-ai')
     <footer>
         @include('client.layouts.partials.footer')
     </footer>
