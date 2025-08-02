@@ -18,7 +18,7 @@
     </p>
 </div>
 
-<div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 mb-8">
+<div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-3 md:p-6 mb-8">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="w-full max-w-2xl mx-auto">
             <form method="GET" action="{{ $routeSearch }}"
@@ -45,7 +45,7 @@
                 <span class="hidden sm:inline">Làm mới</span>
             </a>
 
-             @if ($routeIndex)
+            @if ($routeIndex)
                 <a href="{{ $routeIndex }}"
                     class="group flex items-center gap-2 px-4 py-2.5 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-300">
                     <i class="fa-solid fa-list group-hover:scale-110 transition-transform"></i>
@@ -72,7 +72,7 @@
     </div>
 </div>
 
-<div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 mb-8">
+<div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-3 md:p-6 mb-8">
     <div class="bg-gradient-to-r from-teal-50 to-yellow-50 border-l-4 border-teal-400 p-4 rounded-lg mb-6">
         <div class="flex items-start gap-3">
             <i class="fa-solid fa-lightbulb text-teal-500 text-xl mt-0.5"></i>
@@ -116,4 +116,15 @@
             Áp dụng
         </button>
     </form>
+</div>
+<div class="flex items-center justify-center mb-8">
+    <div class="group relative">
+        <div class="absolute inset-0 bg-emerald-400/10 rounded-2xl blur-md group-hover:bg-emerald-400/20 transition-all duration-500"></div>
+        <div class="relative inline-flex items-center gap-3 px-8 py-3.5 bg-gradient-to-r from-slate-900 to-gray-900 border border-emerald-400/40 rounded-2xl hover:border-emerald-400/60 transition-all duration-300 hover:scale-105">
+            <div class="w-2 h-2 bg-emerald-400 rounded-full animate-ping opacity-75"></div>
+            <i class="fa-solid fa-list-check text-emerald-400 text-base"></i>
+            <span class="font-semibold text-emerald-300 tracking-wide">Danh sách</span>
+            <div class="w-2 h-2 bg-emerald-400/60 rounded-full"></div>
+        </div>
+    </div>
 </div>

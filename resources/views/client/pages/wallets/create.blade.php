@@ -12,7 +12,7 @@
     $breadcrumb = [
         ['label' => 'Trang chủ', 'url' => route('client.index'), 'icon' => 'fa-home'],
         ['label' => 'Danh Sách', 'url' => route('client.wallets.index'), 'icon' => 'fa-list'],
-        ['label' => 'Thêm Mới Ví Tiền'],
+        ['label' => 'Thêm Mới'],
     ];
 @endphp
 

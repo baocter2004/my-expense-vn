@@ -25,7 +25,7 @@
                 $url = route($item['route']);
                 $label = $item['label'];
                 $routePath = trim(parse_url($url, PHP_URL_PATH), '/');
-                $isActive = request()->is($routePath);
+                $isActive = Route::is($item['route']) || Route::is(Str::before($item['route'], '.index') . '.*');
             @endphp
             <a href="{{ $url }}"
                 class="flex items-center gap-3 px-3 py-2 rounded-md transition-colors
