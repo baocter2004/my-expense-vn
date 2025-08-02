@@ -28,21 +28,21 @@
         @auth
             @foreach (App\Helpers\Helper::getMenuItems() as $item)
                 @php
-                    $url = route($item['route']);
+                    $routeName = $item['route'];
+                    $url = route($routeName);
                     $label = $item['label'];
-                    $routePath = trim(parse_url($url, PHP_URL_PATH), '/');
-                    $isActive = request()->is($routePath);
+                    $isActive = Route::is($routeName) || Route::is(Str::before($routeName, '.index') . '.*');
                 @endphp
 
                 <li>
                     <a href="{{ $url }}"
                         class="relative group inline-block transition-colors
-                    {{ $isActive ? 'text-teal-500 font-semibold' : 'text-gray-800 hover:text-teal-500' }}">
-                        {{ $item['label'] }}
+            {{ $isActive ? 'text-teal-500 font-semibold' : 'text-gray-800 hover:text-teal-500' }}">
+                        {{ $label }}
                         <span
                             class="absolute left-0 bottom-0
-                        {{ $isActive ? 'w-full' : 'w-0 group-hover:w-full' }}
-                        h-[2px] bg-teal-500 transition-all"></span>
+                {{ $isActive ? 'w-full' : 'w-0 group-hover:w-full' }}
+                h-[2px] bg-teal-500 transition-all"></span>
                     </a>
                 </li>
             @endforeach

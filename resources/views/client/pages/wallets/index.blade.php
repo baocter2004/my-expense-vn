@@ -16,7 +16,7 @@
 @endphp
 
 @section('content')
-    <div class="w-full flex flex-col items-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-4 rounded-3xl min-h-screen">
+    <div class="w-full flex flex-col items-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-2 md:p-4 rounded-3xl min-h-screen">
         <div class="relative z-10 container mx-auto px-4 py-8">
             @include('client.components.search.form-search', [
                 'sloganText' => 'Quản lý chi tiêu thông minh - Tương lai tài chính vững vàng',
@@ -52,10 +52,10 @@
                                     @endif
                                 </div>
 
-                                <div class="bg-gradient-to-r from-teal-50 to-cyan-50 rounded-xl p-4 mb-4">
+                                <div class="bg-gradient-to-r from-teal-50 to-cyan-50 rounded-xl p-2 md:p-d mb-4">
                                     <p class="text-sm text-gray-600 mb-1">Số dư hiện tại</p>
                                     <p
-                                        class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-cyan-600">
+                                        class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-cyan-600">
                                         {{ \App\Helpers\Helper::formatPrice(
                                             $item->balance,
                                             \App\Consts\GlobalConst::CURRENCIES[$item->currency] ?? 'VND',

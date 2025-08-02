@@ -17,7 +17,7 @@
 
 @section('content')
     <div
-        class="w-full flex flex-col items-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-4 rounded-3xl min-h-screen">
+        class="w-full flex flex-col items-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-2 md:p-4 rounded-3xl min-h-screen">
         <div class="relative z-10 container mx-auto px-4 py-8">
             @include('client.components.search.form-search', [
                 'sloganText' => 'Khám phá và quản lý các mục chi tiêu của bạn một cách dễ dàng.',
