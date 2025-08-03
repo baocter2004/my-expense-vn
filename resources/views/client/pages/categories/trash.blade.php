@@ -67,8 +67,11 @@
                     </div>
                 @empty
                     <div
-                        class="w-full col-span-full bg-white border border-teal-400 rounded-2xl shadow-sm p-3 flex flex-col justify-center items-center hover:shadow-md transition">
-                        Không có dữ liệu.
+                        class="w-full col-span-full bg-white border border-teal-400 rounded-2xl shadow-sm p-12 text-center">
+                        <div class="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-4">
+                            <i class="fa-solid fa-list text-gray-400 text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Chưa có danh mục nào</h3>
                     </div>
                 @endforelse
             </div>

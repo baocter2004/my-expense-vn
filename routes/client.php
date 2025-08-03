@@ -42,9 +42,12 @@ Route::name('client.')
                     ->name('wallets.')
                     ->group(function () {
                         Route::get('/', [WalletController::class, 'index'])->name('index');
+                        Route::delete('/{id}/soft-delele', [WalletController::class, 'delete'])->name('soft-delete');
                         Route::get('/create', [WalletController::class, 'create'])->name('create');
                         Route::post('/create', [WalletController::class, 'store'])->name('store');
-                        Route::put('/{id}',[WalletController::class,'update'])->name('update');
+                        Route::put('/{id}', [WalletController::class, 'update'])->name('update');
+                        Route::get('/trash', [WalletController::class, 'trash'])->name('trash');
+                        Route::post('/{id}/restore', [WalletController::class, 'restore'])->name('restore');
                     });
             });
     });

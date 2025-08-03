@@ -16,14 +16,14 @@
 @endphp
 
 @section('content')
-    <div class="w-full flex flex-col items-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-2 md:p-4 rounded-3xl min-h-screen">
+    <div
+        class="w-full flex flex-col items-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-2 md:p-4 rounded-3xl min-h-screen">
         <div class="relative z-10 container mx-auto px-4 py-8">
             @include('client.components.search.form-search', [
                 'sloganText' => 'Quản lý chi tiêu thông minh - Tương lai tài chính vững vàng',
                 'icon' => 'fa-wallet',
-                'routeSearch' => route('client.wallets.index'),
-                'routeTrash' => route('client.wallets.trash'),
-                'routeCreate' => route('client.wallets.create'),
+                'routeSearch' => route('client.wallets.trash'),
+                'routeIndex' => route('client.wallets.index'),
             ])
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @forelse ($items as $item)
@@ -80,20 +80,13 @@
                                 </div>
 
                                 <div class="flex gap-2">
-                                    <button
-                                        class="btn-edit flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-300"
-                                        data-id="{{ $item->id }}">
-                                        <i class="fa-solid fa-edit mr-2"></i>
-                                        Chỉnh sửa
-                                    </button>
-
-                                    <button
-                                        class="open-delete-modal px-4 py-2 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-all duration-300"
-                                        data-action="{{ route('client.wallets.soft-delete', $item->id) }}"
-                                        data-title="Xoá {{ $item->name }}"
-                                        data-message="Bạn có chắc chắn muốn xoá '{{ $item->name }}'?">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
+                                    <form action="{{ route('client.wallets.restore', $item->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit"
+                                            class="px-4 py-2 text-sm text-white bg-teal-500 rounded-lg hover:bg-teal-600 transition">
+                                            Khôi phục
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
 
@@ -164,12 +157,6 @@
                                 <i class="fa-solid fa-wallet text-gray-400 text-3xl"></i>
                             </div>
                             <h3 class="text-xl font-semibold text-gray-800 mb-2">Chưa có ví nào</h3>
-                            <p class="text-gray-600 mb-6">Hãy tạo ví đầu tiên để bắt đầu quản lý chi tiêu của bạn</p>
-                            <a href="{{ route('client.wallets.create') }}"
-                                class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all duration-300">
-                                <i class="fa-solid fa-plus"></i>
-                                Tạo ví mới
-                            </a>
                         </div>
                     </div>
                 @endforelse
@@ -195,18 +182,6 @@
 
     <script>
         $(document).ready(function() {
-            $('.btn-edit').on('click', function() {
-                let id = $(this).data('id');
-                $('#view-mode-' + id).addClass('hidden');
-                $('#edit-mode-' + id).removeClass('hidden');
-            });
-
-            $('.btn-cancel-edit').on('click', function() {
-                let id = $(this).data('id');
-                $('#edit-mode-' + id).addClass('hidden');
-                $('#view-mode-' + id).removeClass('hidden');
-            });
-
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
@@ -226,28 +201,6 @@
                     confirmButtonColor: '#ef4444'
                 });
             @endif
-        });
-
-        $('.open-delete-modal').on('click', function() {
-            const action = $(this).data('action');
-            const title = $(this).data('title') || 'Xác nhận xoá';
-            const message = $(this).data('message') || 'Bạn có chắc chắn muốn xoá mục này không?';
-
-            $('#deleteModalForm').attr('action', action);
-            $('#modalTitle').text(title);
-            $('#modalMessage').text(message);
-
-            $('#deleteModal').removeClass('hidden').addClass('flex');
-        });
-
-        function closeDeleteModal() {
-            $('#deleteModal').addClass('hidden').removeClass('flex');
-        }
-
-        $(document).on('click', '#deleteModal', function(e) {
-            if (e.target.id === 'deleteModal') {
-                closeDeleteModal();
-            }
         });
     </script>
 @endpush

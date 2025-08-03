@@ -12,7 +12,7 @@
     $breadcrumb = [
         ['label' => 'Trang chủ', 'url' => route('client.index'), 'icon' => 'fa-home'],
         ['label' => 'Danh Sách', 'url' => route('client.wallets.index'), 'icon' => 'fa-list'],
-        ['label' => 'Thêm Mới Ví Tiền'],
+        ['label' => 'Thêm Mới'],
     ];
 @endphp
 
@@ -34,7 +34,7 @@
         </div>
         <div class="w-full mx-auto max-w-2xl rounded-xl bg-white border border-gray-200 shadow-lg p-3 md:p-6">
             <div class="flex justify-end">
-                <a href="{{ route('client.categories.index') }}"
+                <a href="{{ route('client.wallets.index') }}"
                     class="border border-teal-300 text-teal-600
               hover:bg-teal-50 font-semibold py-2 px-4 rounded-full
               flex items-center justify-center gap-x-2 shadow hover:shadow-lg transition">

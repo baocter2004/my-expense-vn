@@ -65,6 +65,6 @@
 </div>
 
 <button id="scrollToTop"
-    class="fixed bottom-6 right-6 p-3 w-[50px] h-[50px] rounded bg-teal-500 text-white shadow-lg hover:bg-teal-600 transition opacity-0 pointer-events-none">
+    class="fixed z-[99999] bottom-6 right-6 p-3 w-[50px] h-[50px] rounded bg-teal-500 text-white shadow-lg hover:bg-teal-600 transition opacity-0 pointer-events-none">
     <i class="fa-solid fa-arrow-up"></i>
 </button>
