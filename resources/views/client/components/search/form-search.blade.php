@@ -118,13 +118,11 @@
     </form>
 </div>
 <div class="flex items-center justify-center mb-8">
-    <div class="group relative">
-        <div class="absolute inset-0 bg-emerald-400/10 rounded-2xl blur-md group-hover:bg-emerald-400/20 transition-all duration-500"></div>
-        <div class="relative inline-flex items-center gap-3 px-8 py-3.5 bg-gradient-to-r from-slate-900 to-gray-900 border border-emerald-400/40 rounded-2xl hover:border-emerald-400/60 transition-all duration-300 hover:scale-105">
-            <div class="w-2 h-2 bg-emerald-400 rounded-full animate-ping opacity-75"></div>
-            <i class="fa-solid fa-list-check text-emerald-400 text-base"></i>
-            <span class="font-semibold text-emerald-300 tracking-wide">Danh sách</span>
-            <div class="w-2 h-2 bg-emerald-400/60 rounded-full"></div>
-        </div>
+    <div
+        class="flex items-center gap-3 px-8 py-3.5 bg-white border-2 border-emerald-400/40 rounded-2xl hover:border-emerald-400/60 transition-all duration-300 hover:scale-105">
+        <div class="w-2 h-2 bg-teal-400 rounded-full animate-ping opacity-75"></div>
+        <i class="fa-solid fa-list-check text-teal-400 text-base"></i>
+        <span class="font-semibold text-teal-300 tracking-wide">Danh sách</span>
+        <div class="w-2 h-2 bg-teal-400 rounded-full animate-ping opacity-75"></div>
     </div>
 </div>

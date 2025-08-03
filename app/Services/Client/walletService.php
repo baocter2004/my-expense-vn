@@ -8,6 +8,7 @@ use App\Repositories\WalletRepository;
 use App\Services\BaseCRUDService;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -82,6 +83,15 @@ class WalletService extends BaseCRUDService
         return $query->paginate($limit)->appends(request()->query());
     }
 
+    public function getListTrashed(int|string $id, array $params, $limit = 6)
+    {
+        $params['wheres'][] = ['user_id', '=', $id];
+
+        $query = $this->filter($params);
+
+        return $query->onlyTrashed()->paginate($limit)->appends(request()->query());
+    }
+
     public function create(array $params = []): Wallet
     {
         try {
@@ -97,7 +107,7 @@ class WalletService extends BaseCRUDService
             }
 
             $wallet = $this->repository->create($params);
-            
+
             DB::commit();
             return $wallet;
         } catch (\Throwable $th) {
@@ -146,6 +156,66 @@ class WalletService extends BaseCRUDService
             return $wallet;
         } catch (\Throwable $th) {
             DB::rollBack();
+            Log::error('Error in ' . __CLASS__ . '::' . __FUNCTION__ . ' => ' . $th->getMessage(), [
+                'file' => $th->getFile(),
+                'line' => $th->getLine(),
+                'trace' => $th->getTraceAsString(),
+            ]);
+            throw $th;
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            $wallet = $this->repository->with(['transactions'], $id);
+
+            if (! $wallet) {
+                return [
+                    'status' => false,
+                    'message' => 'ví tiền không tồn tại.',
+                ];
+            }
+
+            if ($wallet->user_id !== Auth::id()) {
+                return [
+                    'status' => false,
+                    'message' => 'Bạn không có quyền xoá ví tiền này.',
+                ];
+            }
+
+            if ($wallet->transactions->isNotEmpty()) {
+                return [
+                    'status' => false,
+                    'message' => 'Không thể xoá vì ví tiền đã có giao dịch.',
+                ];
+            }
+
+            $this->repository->delete($id);
+
+            return [
+                'status' => true,
+                'message' => 'Xoá ví tiền thành công.',
+            ];
+        } catch (\Throwable $th) {
+            Log::error('Error in ' . __CLASS__ . '::' . __FUNCTION__ . ' => ' . $th->getMessage(), [
+                'file' => $th->getFile(),
+                'line' => $th->getLine(),
+                'trace' => $th->getTraceAsString(),
+            ]);
+            return [
+                'status' => false,
+                'message' => 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.',
+            ];
+        }
+    }
+    public function restore($id)
+    {
+        try {
+            $wallet = $this->repository->restore($id);
+            $wallet = parent::find($id);
+            return $wallet;
+        } catch (\Throwable $th) {
             Log::error('Error in ' . __CLASS__ . '::' . __FUNCTION__ . ' => ' . $th->getMessage(), [
                 'file' => $th->getFile(),
                 'line' => $th->getLine(),
