@@ -89,65 +89,6 @@
                                     </form>
                                 </div>
                             </div>
-
-                            <div class="edit-mode hidden" id="edit-mode-{{ $item->id }}">
-                                <form method="POST" action="{{ route('client.wallets.update', $item->id) }}"
-                                    class="space-y-4">
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="hidden" name="id" value="{{ $item->id }}">
-
-                                    <h3 class="text-lg font-bold text-gray-800 mb-4">Chỉnh sửa ví</h3>
-
-                                    @include('client.components.forms.input', [
-                                        'name' => 'name',
-                                        'label' => trans('wallets.name'),
-                                        'value' => $item->name,
-                                        'placeholder' => 'Nhập tên ví',
-                                    ])
-
-                                    @include('client.components.forms.input', [
-                                        'name' => 'balance',
-                                        'label' => trans('wallets.balance'),
-                                        'type' => 'number',
-                                        'value' => $item->balance,
-                                        'placeholder' => 'Nhập số dư',
-                                        'disabled' => true,
-                                    ])
-
-                                    @include('client.components.forms.select', [
-                                        'name' => 'currency',
-                                        'label' => trans('wallets.currency'),
-                                        'options' => \App\Consts\GlobalConst::CURRENCIES,
-                                        'value' => $item->currency,
-                                    ])
-
-                                    @include('client.components.forms.checkbox', [
-                                        'name' => 'is_default',
-                                        'checked' => $item->is_default,
-                                        'label' => trans('wallets.is_default'),
-                                    ])
-
-                                    @include('client.components.forms.text-area', [
-                                        'name' => 'note',
-                                        'label' => trans('wallets.note'),
-                                        'value' => $item->note,
-                                        'placeholder' => 'Thêm ghi chú nếu có',
-                                    ])
-
-                                    <div class="flex gap-2 pt-4">
-                                        <button type="button"
-                                            class="btn-cancel-edit flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-300"
-                                            data-id="{{ $item->id }}">
-                                            Huỷ
-                                        </button>
-                                        <button type="submit"
-                                            class="flex-1 px-4 py-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all duration-300">
-                                            Lưu
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
                         </div>
                     </div>
                 @empty
@@ -177,7 +118,7 @@
 
 @push('js')
     @include('client.components.scripts.reset', [
-        'route' => route('client.wallets.index'),
+        'route' => route('client.wallets.trash'),
     ])
 
     <script>

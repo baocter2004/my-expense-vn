@@ -16,7 +16,8 @@
 @endphp
 
 @section('content')
-    <div class="w-full flex flex-col items-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-2 md:p-4 rounded-3xl min-h-screen">
+    <div
+        class="w-full flex flex-col items-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-2 md:p-4 rounded-3xl min-h-screen">
         <div class="relative z-10 container mx-auto px-4 py-8">
             @include('client.components.search.form-search', [
                 'sloganText' => 'Quản lý chi tiêu thông minh - Tương lai tài chính vững vàng',
@@ -25,7 +26,7 @@
                 'routeTrash' => route('client.wallets.trash'),
                 'routeCreate' => route('client.wallets.create'),
             ])
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
                 @forelse ($items as $item)
                     <div
                         class="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
@@ -158,19 +159,17 @@
                         </div>
                     </div>
                 @empty
-                    <div class="col-span-full">
-                        <div class="bg-white rounded-2xl shadow-lg p-12 text-center">
-                            <div class="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-4">
-                                <i class="fa-solid fa-wallet text-gray-400 text-3xl"></i>
-                            </div>
-                            <h3 class="text-xl font-semibold text-gray-800 mb-2">Chưa có ví nào</h3>
-                            <p class="text-gray-600 mb-6">Hãy tạo ví đầu tiên để bắt đầu quản lý chi tiêu của bạn</p>
-                            <a href="{{ route('client.wallets.create') }}"
-                                class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all duration-300">
-                                <i class="fa-solid fa-plus"></i>
-                                Tạo ví mới
-                            </a>
+                    <div class="w-full col-span-full bg-white border border-teal-400 rounded-2xl shadow-sm p-12 text-center">
+                        <div class="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-4">
+                            <i class="fa-solid fa-wallet text-gray-400 text-3xl"></i>
                         </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Chưa có ví nào</h3>
+                        <p class="text-gray-600 mb-6">Hãy tạo ví đầu tiên để bắt đầu quản lý chi tiêu của bạn</p>
+                        <a href="{{ route('client.wallets.create') }}"
+                            class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all duration-300">
+                            <i class="fa-solid fa-plus"></i>
+                            Tạo ví mới
+                        </a>
                     </div>
                 @endforelse
             </div>

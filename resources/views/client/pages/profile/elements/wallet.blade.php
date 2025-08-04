@@ -21,6 +21,17 @@
             @endforeach
         </ul>
     @else
-        <p class="text-center text-gray-500 italic">Bạn chưa có ví nào.</p>
+        <div class="w-full col-span-full bg-white border border-teal-400 rounded-2xl shadow-sm p-12 text-center">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-4">
+                <i class="fa-solid fa-wallet text-gray-400 text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">Chưa có ví nào</h3>
+            <p class="text-gray-600 mb-6">Hãy tạo ví đầu tiên để bắt đầu quản lý chi tiêu của bạn</p>
+            <a href="{{ route('client.wallets.create') }}"
+                class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all duration-300">
+                <i class="fa-solid fa-plus"></i>
+                Tạo ví mới
+            </a>
+        </div>
     @endif
 </div>
