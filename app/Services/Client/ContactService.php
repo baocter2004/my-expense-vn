@@ -2,13 +2,11 @@
 
 namespace App\Services\Client;
 
-use App\Models\Contact;
 use App\Notifications\ContactSubmited;
 use App\Repositories\ContactRepository;
 use App\Services\BaseCRUDService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
@@ -40,9 +38,7 @@ class ContactService extends BaseCRUDService
 
     public function submitContact(array $params = []): array
     {
-        sleep(1);
         try {
-            DB::beginTransaction();
             $params['user_id'] = Auth::id() ?? null;
             $params['subscribe'] = isset($params['subscribe']) ? $params['subscribe'] : 0;
             $params['ip_address'] = request()->ip();
@@ -72,16 +68,12 @@ class ContactService extends BaseCRUDService
                 Notification::route('mail', config('mail.admin_address'))
                     ->notify(new ContactSubmited($contact));
             }
-
-            DB::commit();
-
             return [
                 'success' => true,
                 'message' => 'Gửi liên hệ thành công!',
                 'data' => $contact,
             ];
         } catch (\Throwable $th) {
-            DB::rollBack();
             Log::error('Error in ' . __CLASS__ . '::' . __FUNCTION__ . ' => ' . $th->getMessage(), [
                 'file' => $th->getFile(),
                 'line' => $th->getLine(),
