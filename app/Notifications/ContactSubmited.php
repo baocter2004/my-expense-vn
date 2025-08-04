@@ -38,14 +38,10 @@ class ContactSubmited extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Liên hệ mới từ website')
-            ->greeting('Xin chào quản trị viên,')
-            ->line('Bạn vừa nhận được một liên hệ mới:')
-            ->line('Họ tên: ' . $this->contact['last_name'] . ' ' . $this->contact['first_name'])
-            ->line('Email: ' . $this->contact['email'])
-            ->line('Subscribe: ' . ($this->contact['subscribe'] ? 'Có' : 'Không'))
-            ->line('IP: ' . $this->contact['ip_address'])
-            ->line('Vui lòng xử lý yêu cầu này nếu cần.');
+            ->subject('📩 Liên hệ mới từ website MyExpenseVn')
+            ->view('client.components.emails.mail-contact-to-admin', [
+                'contact' => $this->contact
+            ]);
     }
 
     /**
