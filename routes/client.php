@@ -3,6 +3,7 @@
 use App\Http\Controllers\Client\CategoryController;
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Client\TransactionController;
 use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\Client\WalletController;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +49,13 @@ Route::name('client.')
                         Route::put('/{id}', [WalletController::class, 'update'])->name('update');
                         Route::get('/trash', [WalletController::class, 'trash'])->name('trash');
                         Route::post('/{id}/restore', [WalletController::class, 'restore'])->name('restore');
+                    });
+
+                // TRANSACTIONS
+                Route::prefix('/transactions')
+                    ->name('transactions.')
+                    ->group(function () {
+                        Route::get('/', [TransactionController::class,'index'])->name('index');
                     });
             });
     });

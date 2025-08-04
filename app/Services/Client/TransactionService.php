@@ -6,6 +6,7 @@ use App\Consts\GlobalConst;
 use App\Repositories\TransactionRepository;
 use App\Services\BaseCRUDService;
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 
 class TransactionService extends BaseCRUDService
@@ -21,9 +22,39 @@ class TransactionService extends BaseCRUDService
     {
         $wheres     = Arr::get($params, 'wheres', []);
         $whereLikes = Arr::get($params, 'likes', []);
-        $sort       = Arr::get($params, 'sort', 'created_at');
+        $sort       = Arr::get($params, 'sort', 'occurred_at');
         $order      = Arr::get($params, 'order', 'desc');
         $relates    = Arr::get($params, 'relates', []);
+
+        $relates = [
+            'wallet',
+            'category'
+        ];
+
+        if (!empty($params['created_from'])) {
+            $wheres[] = ['transactions.occurred_at', '>=', $params['created_from']];
+        }
+
+        if (!empty($params['created_to'])) {
+            $wheres[] = ['transactions.occurred_at', '<=', $params['created_to']];
+        }
+
+        if (!empty($params['keyword'])) {
+            $keyword = $params['keyword'];
+
+            $wheres[] = [
+                function ($query) use ($keyword) {
+                    $query->where(function ($q) use ($keyword) {
+                        $q->where('transactions.code', 'like', '%' . $keyword . '%');
+
+                        if (is_numeric($keyword)) {
+                            $q->orWhereBetween('transactions.amount', [0, (float) $keyword]);
+                        }
+                    });
+                }
+            ];
+        }
+
 
         return [
             'wheres' => $wheres,
@@ -31,5 +62,18 @@ class TransactionService extends BaseCRUDService
             'sort'   => $sort . ':' . $order,
             'relates' => $relates,
         ];
+    }
+
+    public function search(array $params = [], $limit = 6): LengthAwarePaginator
+    {
+        if (!empty($params['limit'])) {
+            $limit = $params['limit'];
+        }
+
+        $query = $this->filter($params);
+
+        dd($query);
+
+        return $query->paginate($limit)->appends(request()->query());
     }
 }
