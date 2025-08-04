@@ -22,8 +22,8 @@ class TransactionService extends BaseCRUDService
     {
         $wheres     = Arr::get($params, 'wheres', []);
         $whereLikes = Arr::get($params, 'likes', []);
-        $sort       = Arr::get($params, 'sort', 'occurred_at');
-        $order      = Arr::get($params, 'order', 'desc');
+        $order = Arr::get($params, 'sort') ?: 'desc';
+        $sort  = 'occurred_at';
         $relates    = Arr::get($params, 'relates', []);
 
         $relates = [
@@ -55,7 +55,6 @@ class TransactionService extends BaseCRUDService
             ];
         }
 
-
         return [
             'wheres' => $wheres,
             'likes'  => $whereLikes,
@@ -72,7 +71,7 @@ class TransactionService extends BaseCRUDService
 
         $query = $this->filter($params);
 
-        dd($query);
+        // dd($query->toRawSql());
 
         return $query->paginate($limit)->appends(request()->query());
     }
