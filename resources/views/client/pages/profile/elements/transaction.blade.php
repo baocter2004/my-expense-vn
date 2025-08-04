@@ -71,8 +71,11 @@
             {{ $transactions->onEachSide(1)->links('client.components.elements.paginate') }}
         </div>
     @else
-        <div class="text-center py-8 bg-gray-50 rounded-lg border border-dashed border-gray-200">
-            <p class="text-gray-500 italic">Bạn chưa có giao dịch nào.</p>
+        <div class="w-full col-span-full bg-white border border-teal-400 rounded-2xl shadow-sm p-12 text-center">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-4">
+                <i class="fa-solid fa-clock-rotate-left text-gray-400 text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">Chưa có giao dịch nào</h3>
         </div>
     @endif
 </div>

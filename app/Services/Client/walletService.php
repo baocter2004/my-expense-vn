@@ -191,6 +191,13 @@ class WalletService extends BaseCRUDService
                 ];
             }
 
+            if ($wallet->balance_vnd > 0) {
+                return [
+                    'status' => false,
+                    'message' => 'Không thể xoá vì ví vẫn còn tiền.',
+                ];
+            }
+
             $this->repository->delete($id);
 
             return [
