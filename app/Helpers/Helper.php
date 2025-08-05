@@ -59,6 +59,10 @@ class Helper
             [
                 'label' => 'Ví',
                 'route' => 'client.wallets.index'
+            ],
+            [
+                'label' => 'Giao Dịch',
+                'route' => 'client.transactions.index'
             ]
         ];
     }

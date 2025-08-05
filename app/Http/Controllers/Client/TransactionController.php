@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Http\Controllers\Client;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Transactions\GetTransactionRequest;
+use App\Services\Client\TransactionService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class TransactionController extends Controller
+{
+    public function __construct(private TransactionService $transactionService) {}
+    
+    public function index(GetTransactionRequest $request)
+    {
+        $params = array_merge(
+            $request->validated(),
+            ['user_id' => Auth::guard('user')->id()]
+        );
+
+        $items = $this->transactionService->search($params);
+
+        return view('client.pages.transactions.index', compact('items'));
+    }
+}

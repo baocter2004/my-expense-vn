@@ -15,6 +15,7 @@ class CategoryController extends Controller
     public function __construct(
         private CategoryService $categoryService
     ) {}
+
     public function index(GetCategoryRequest $request)
     {
         $id = Auth::id();

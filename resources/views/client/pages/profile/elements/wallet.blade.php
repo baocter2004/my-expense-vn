@@ -2,11 +2,13 @@
     class=" mx-auto mb-6 bg-white rounded-lg shadow-sm flex flex-col items-center text-center gap-3
          md:flex-row md:justify-between md:items-center md:text-left md:gap-0 p-4">
     <div class="flex items-center gap-2">
-        <h2
-            class="flex items-center gap-2 text-lg font-extrabold text-teal-600
+        <a href="{{ route('client.wallets.index') }}">
+            <h2
+                class="flex items-center gap-2 text-lg font-extrabold text-teal-600
            border-b-2 border-teal-200 pb-1 md:pb-0">
-            <i class="fa-solid fa-wallet text-teal-500 text-lg md:text-xl"></i> Ví của bạn
-        </h2>
+                <i class="fa-solid fa-wallet text-teal-500 text-lg md:text-xl"></i> Ví của bạn
+            </h2>
+        </a>
     </div>
 </div>
 
@@ -24,23 +26,25 @@
                             <span class="px-2 py-1 bg-teal-100 text-teal-800 text-xs rounded-full">Mặc định</span>
                         @endif
                     </div>
-                    <p class="text-sm text-gray-600 mb-2">
-                        <span class="font-medium text-gray-800">ID: {{ $wallet->id }}</span>
-                    </p>
-                    <div class="space-y-1 mb-4">
-                        <p class="text-sm text-gray-600">
-                            Số dư:
-                            <span class="font-medium text-gray-800">
-                                {{ number_format($wallet->balance, 2, ',', '.') }}
+                    <div class="grid gap-3 mb-4 text-sm">
+                        <div class="flex justify-between items-center bg-gray-50 p-4 rounded-xl shadow-sm">
+                            <div class="text-teal-500">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+                            <div class="text-right font-semibold text-gray-900">
+                                {{ number_format($wallet->balance, 0, ',', '.') }}
                                 {{ \App\Consts\GlobalConst::CURRENCIES[$wallet->currency] }}
-                            </span>
-                        </p>
-                        <p class="text-sm text-gray-600">
-                            Quy đổi VND:
-                            <span class="font-medium text-gray-800">
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-center bg-gray-50 p-4 rounded-xl shadow-sm">
+                            <div class="text-teal-500">
+                                <i class="fa-solid fa-money-bill-transfer"></i>
+                            </div>
+                            <div class="text-right font-semibold text-gray-900">
                                 {{ number_format($wallet->balance_vnd, 0, ',', '.') }} VND
-                            </span>
-                        </p>
+                            </div>
+                        </div>
                     </div>
                     <p class="text-sm text-gray-500">Ghi chú: {{ $wallet->note ?? '—' }}</p>
                 </div>
