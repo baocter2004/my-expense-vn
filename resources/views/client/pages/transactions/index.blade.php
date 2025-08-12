@@ -5,7 +5,7 @@
 @endpush
 
 @section('title')
-    Trang Ví Cá Nhân
+    Trang Giao Dịch Cá Nhân
 @endsection
 
 @php
@@ -34,18 +34,20 @@
 
                         <div class="relative bg-white m-[2px] rounded-2xl p-5 space-y-4">
                             <div class="space-y-4 text-sm text-gray-800">
-                                <div
-                                    class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-teal-500 pb-2 gap-2">
-                                    <div class="flex items-center gap-2 text-lg font-semibold text-teal-600">
-                                        <i class="fa-solid fa-receipt"></i>
-                                        <span class="md:inline hidden">Mã giao dịch</span>
-                                        <span class="inline md:hidden text-base">Mã</span>
+                                <a href="{{ route('client.transactions.show',$item->code) }}">
+                                    <div
+                                        class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-teal-500 pb-2 gap-2 cursor-pointer">
+                                        <div class="flex items-center gap-2 text-lg font-semibold text-teal-600">
+                                            <i class="fa-solid fa-receipt"></i>
+                                            <span class="md:inline hidden">Mã giao dịch</span>
+                                            <span class="inline md:hidden text-base">Mã</span>
+                                        </div>
+                                        <div class="flex items-center gap-1 text-sm text-gray-700 truncate  max-w-[50%]"
+                                            title="{{ $item->code }}">
+                                            {{ $item->code }}
+                                        </div>
                                     </div>
-                                    <div class="flex items-center gap-1 text-sm text-gray-700 truncate   max-w-[50%]"
-                                        title="{{ $item->code }}">
-                                        {{ $item->code }}
-                                    </div>
-                                </div>
+                                </a>
 
                                 <div
                                     class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 px-4 py-3 rounded-xl shadow-inner">
@@ -86,7 +88,7 @@
                                 </div>
                                 @if (!empty($item->description))
                                     <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-                                        <div class="flex items-start gap-2 text-sm text-gray-700">
+                                        <div class="flex items-start gap-2 text-sm truncate text-gray-700">
                                             <i class="fa-solid fa-comment text-gray-400 mt-1"></i>
                                             <span>{{ $item->description }}</span>
                                         </div>

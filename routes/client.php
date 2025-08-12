@@ -6,6 +6,7 @@ use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\TransactionController;
 use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\Client\WalletController;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\Route;
 
 // ========================== CLIENT ==============================
@@ -56,6 +57,7 @@ Route::name('client.')
                     ->name('transactions.')
                     ->group(function () {
                         Route::get('/', [TransactionController::class,'index'])->name('index');
+                        Route::get('/{id}',[TransactionController::class,'show'])->name('show');
                     });
             });
     });
