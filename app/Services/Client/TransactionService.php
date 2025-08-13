@@ -71,8 +71,12 @@ class TransactionService extends BaseCRUDService
 
         $query = $this->filter($params);
 
-        // dd($query->toRawSql());
-
         return $query->paginate($limit)->appends(request()->query());
+    }
+
+    public function show(int|string $id)
+    {
+        $item = $this->repository->with(['wallet','category'], $id);
+        return $item;
     }
 }

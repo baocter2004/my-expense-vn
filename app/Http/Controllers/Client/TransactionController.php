@@ -23,4 +23,10 @@ class TransactionController extends Controller
 
         return view('client.pages.transactions.index', compact('items'));
     }
+
+    public function show(int|string $id)
+    {
+        $item = $this->transactionService->show($id);
+        return view('client.pages.transactions.show',compact('item'));
+    }
 }
