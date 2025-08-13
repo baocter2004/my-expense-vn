@@ -127,6 +127,18 @@
                 </div>
             @endif
         </div>
+
+        <div class="w-full bg-white p-4 md:p-6 max-w-3xl rounded-2xl shadow-xl grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+            <a href=""
+                class="w-full bg-teal-300 text-white py-2 px-4 rounded-xl flex items-center justify-center gap-x-2 shadow hover:shadow-lg transition">
+                Chỉnh sửa giao dịch
+            </a>
+
+            <a href="{{ route('client.transactions.index') }}"
+                class="w-full bg-white text-teal-300 border border-teal-300 py-2 px-4 rounded-xl flex items-center justify-center gap-x-2 shadow hover:shadow-lg transition">
+                Danh sách giao dịch
+            </a>
+        </div>
     </div>
 @endsection
 
