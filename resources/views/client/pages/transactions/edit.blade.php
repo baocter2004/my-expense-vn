@@ -5,14 +5,14 @@
 @endpush
 
 @section('title')
-    Trang Giao Dịch Cá Nhân [Chi Tiết]
+    Trang Giao Dịch Cá Nhân [Chỉnh Sửa]
 @endsection
 
 @php
     $breadcrumb = [
         ['label' => 'Trang chủ', 'url' => route('client.index'), 'icon' => 'fa-home'],
         ['label' => 'Danh Sách', 'url' => route('client.transactions.index'), 'icon' => 'fa-list'],
-        ['label' => 'Chi Tiết'],
+        ['label' => 'Chỉnh sửa'],
     ];
 @endphp
 @section('content')

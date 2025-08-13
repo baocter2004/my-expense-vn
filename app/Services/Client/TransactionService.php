@@ -76,7 +76,7 @@ class TransactionService extends BaseCRUDService
 
     public function show(int|string $id)
     {
-        $item = $this->repository->with(['wallet','category'], $id);
+        $item = $this->repository->with(['wallet','category'], $id,'code');
         return $item;
     }
 }
