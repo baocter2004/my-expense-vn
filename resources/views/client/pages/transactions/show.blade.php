@@ -129,7 +129,7 @@
         </div>
 
         <div class="w-full bg-white p-4 md:p-6 max-w-3xl rounded-2xl shadow-xl grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-            <a href=""
+            <a href="{{ route('client.transactions.edit', $item->code) }}"
                 class="w-full bg-teal-300 text-white py-2 px-4 rounded-xl flex items-center justify-center gap-x-2 shadow hover:shadow-lg transition">
                 Chỉnh sửa giao dịch
             </a>

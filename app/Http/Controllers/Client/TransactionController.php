@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class TransactionController extends Controller
 {
     public function __construct(private TransactionService $transactionService) {}
-    
+
     public function index(GetTransactionRequest $request)
     {
         $params = array_merge(
@@ -27,6 +27,21 @@ class TransactionController extends Controller
     public function show(int|string $id)
     {
         $item = $this->transactionService->show($id);
-        return view('client.pages.transactions.show',compact('item'));
+        return view('client.pages.transactions.show', compact('item'));
+    }
+
+    public function edit(int|string $code)
+    {
+        $item = $this->transactionService->show($code);
+        return view('client.pages.transactions.edit', compact('item'));
+    }
+
+    public function update(int|string $code)
+    {
+
+    }
+
+    public function confirm() {
+        
     }
 }

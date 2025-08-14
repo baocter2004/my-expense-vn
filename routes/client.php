@@ -57,7 +57,9 @@ Route::name('client.')
                     ->name('transactions.')
                     ->group(function () {
                         Route::get('/', [TransactionController::class,'index'])->name('index');
-                        Route::get('/{id}',[TransactionController::class,'show'])->name('show');
+                        Route::get('/{code}',[TransactionController::class,'show'])->name('show');
+                        Route::get('/{code}/edit',[TransactionController::class,'edit'])->name('edit');
+                        Route::put('/{code}',[TransactionController::class,'update'])->name('update');
                     });
             });
     });
