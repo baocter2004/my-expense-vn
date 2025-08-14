@@ -22,7 +22,14 @@ class PostTransactionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'user_id',
+            'category_id',
+            'wallet_id',
+            'code',
+            'amount',
+            'transaction_type',
+            'occurred_at',
+            'description',
         ];
     }
 }
