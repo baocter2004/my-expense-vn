@@ -149,4 +149,9 @@ abstract class BaseService
     {
         return $this->getRepository()->updateOrCreate($values, $attributes);
     }
+
+    public function getFields(array $fields, array $params = [])
+    {
+        return $this->repository->getFields($fields, $params);
+    }
 }

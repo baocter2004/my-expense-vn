@@ -56,10 +56,12 @@ Route::name('client.')
                 Route::prefix('/transactions')
                     ->name('transactions.')
                     ->group(function () {
-                        Route::get('/', [TransactionController::class,'index'])->name('index');
-                        Route::get('/{code}',[TransactionController::class,'show'])->name('show');
-                        Route::get('/{code}/edit',[TransactionController::class,'edit'])->name('edit');
-                        Route::put('/{code}',[TransactionController::class,'update'])->name('update');
+                        Route::get('/', [TransactionController::class, 'index'])->name('index');
+                        Route::get('/create', [TransactionController::class, 'create'])->name('create');
+                        Route::post('/create', [TransactionController::class, 'store'])->name('store');
+                        Route::get('/{code}', [TransactionController::class, 'show'])->name('show');
+                        Route::get('/{code}/edit', [TransactionController::class, 'edit'])->name('edit');
+                        Route::put('/{code}', [TransactionController::class, 'update'])->name('update');
                     });
             });
     });
