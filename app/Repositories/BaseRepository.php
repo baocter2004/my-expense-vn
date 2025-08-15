@@ -261,4 +261,9 @@ abstract class BaseRepository
 
         return $query->count();
     }
+
+    public function getFields(array $fields, array $params = [])
+    {
+        return $this->filter($params)->select($fields)->get();
+    }
 }
