@@ -1,5 +1,6 @@
 <?php
 
+use App\Consts\GlobalConst;
 use App\Consts\TransactionConst;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,6 +18,7 @@ return new class extends Migration
             $table->string('receipt_image')->nullable()->after('occurred_at');
             $table->unsignedBigInteger('parent_transaction_id')->nullable()->after('occurred_at');
             $table->boolean('is_reversal')->default(false)->after('occurred_at');
+            $table->unsignedInteger('currency')->default(GlobalConst::CURRENCY_VND)->after('occurred_at'); // VND
 
             $table->index(['parent_transaction_id', 'occurred_at']);
             $table->index(['status']);
@@ -33,7 +35,8 @@ return new class extends Migration
                 'status',
                 'receipt_image',
                 'parent_transaction_id',
-                'is_reversal'
+                'is_reversal',
+                'currency',
             ]);
         });
     }

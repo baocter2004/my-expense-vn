@@ -25,9 +25,9 @@
     <div class="relative">
         <input id="{{ $name }}" name="{{ $name }}" type="text"
             value="{{ old($name, request($name, $value)) }}" placeholder="{{ $placeholder }}"
-            class="flatpickr w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500 {{ $hasError ? 'is-valid' : '' }}">
+            class="flatpickr w-full pl-4 pr-10 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500 {{ $hasError ? 'is-valid' : '' }}">
 
-        <div class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+        <div class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
             <i class="fa-solid fa-calendar-days"></i>
         </div>
     </div>

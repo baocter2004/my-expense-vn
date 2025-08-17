@@ -119,7 +119,7 @@
                         </div>
                         <h3 class="text-xl font-semibold text-gray-800 mb-2">Chưa có giao dịch nào</h3>
                         <p class="text-gray-600 mb-6">Hãy tạo giao dịch đầu tiên để bắt đầu quản lý chi tiêu của bạn</p>
-                        <a href="{{ route('client.wallets.create') }}"
+                        <a href="{{ route('client.transactions.create') }}"
                             class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all duration-300">
                             <i class="fa-solid fa-plus"></i>
                             Tạo ví mới

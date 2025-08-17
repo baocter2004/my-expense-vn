@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Transactions\GetTransactionRequest;
+use App\Http\Requests\Transactions\PostTransactionRequest;
 use App\Services\Client\CategoryService;
 use App\Services\Client\TransactionService;
 use App\Services\Client\WalletService;
@@ -45,6 +46,8 @@ class TransactionController extends Controller
         return view('client.pages.transactions.create', compact('categories', 'wallets'));
     }
 
+    public function store() {}
+
     public function show(int|string $id)
     {
         $item = $this->transactionService->show($id);
@@ -59,5 +62,18 @@ class TransactionController extends Controller
 
     public function update(int|string $code) {}
 
-    public function confirm() {}
+    public function confirm(PostTransactionRequest $request)
+    {
+        $items = $request->validated();
+
+        dd($items);
+
+        if ($request->hasFile('receipt_image')) {
+            $items['receipt_image'] = $request->file('receipt_image')->store('transactions/temp','public');
+        }
+
+        session(['transaction_items' => $items]);
+
+        return view('client.pages.transactions.confirm', compact('items'));
+    }
 }
