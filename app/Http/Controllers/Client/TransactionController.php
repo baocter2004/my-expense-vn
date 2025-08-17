@@ -46,7 +46,26 @@ class TransactionController extends Controller
         return view('client.pages.transactions.create', compact('categories', 'wallets'));
     }
 
-    public function store() {}
+    public function store()
+    {
+        $items = session('transaction_items');
+
+        if (!$items) {
+            return redirect()->route('client.transactions.create')->with('error', 'Không có dữ liệu để lưu.');
+        }
+
+        $params = array_merge(
+            ['user_id' => Auth::guard('user')->id()],
+            $items
+        );
+
+        $transaction = $this->transactionService->create($params);
+
+        session()->forget('transaction_items');
+
+        return redirect()->route('client.transactions.show', $transaction->code)
+            ->with('success', 'Tạo giao dịch thành công!');
+    }
 
     public function show(int|string $id)
     {
@@ -66,10 +85,8 @@ class TransactionController extends Controller
     {
         $items = $request->validated();
 
-        dd($items);
-
         if ($request->hasFile('receipt_image')) {
-            $items['receipt_image'] = $request->file('receipt_image')->store('transactions/temp','public');
+            $items['receipt_image'] = $request->file('receipt_image')->store('transactions/temp', 'public');
         }
 
         session(['transaction_items' => $items]);

@@ -20,11 +20,11 @@
             <div class="flex justify-between"><span>Số tiền:</span> <strong>{{ number_format($items['amount']) }} đ</strong>
             </div>
             <div class="flex justify-between"><span>Loại giao dịch:</span>
-                <strong>{{ $items['transaction_type'] == 'income' ? 'Thu nhập' : 'Chi tiêu' }}</strong>
+                <strong>{{  \App\Consts\TransactionConst::TRANSACTION_TYPE[$items['transaction_type']] }}</strong>
             </div>
             <div class="flex justify-between"><span>Ngày giờ:</span> <strong>{{ $items['occurred_at'] }}</strong></div>
             <div class="flex justify-between"><span>Mô tả:</span> <strong>{{ $items['description'] ?? '-' }}</strong></div>
-            <div class="flex justify-between"><span>Danh mục:</span> <strong>{{ $items['category_id'] }}</strong></div>
+            <div class="flex justify-between"><span>Danh mục:</span> <strong>{{  $items['category_id'] }}</strong></div>
             <div class="flex justify-between"><span>Ví:</span> <strong>{{ $items['wallet_id'] }}</strong></div>
             <div class="flex justify-between"><span>Trạng thái:</span> <strong>{{ $items['status'] }}</strong></div>
             @if (!empty($items['receipt_image']))
@@ -42,7 +42,7 @@
         <div class="w-full bg-white p-4 md:p-6 max-w-3xl rounded-2xl shadow-xl grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
             <form action="{{ route('client.transactions.store') }}" method="POST">
                 @csrf
-                <button form="transactions"
+                <button
                     class="w-full bg-teal-300 text-white py-2 px-4 rounded-xl flex items-center justify-center gap-x-2 shadow hover:shadow-lg transition">
                     Xác nhận giao dịch
                 </button>

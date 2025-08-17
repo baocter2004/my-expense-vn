@@ -40,6 +40,24 @@
                     'options' => \App\Consts\GlobalConst::CURRENCIES,
                 ])
 
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    @include('client.components.forms.select', [
+                        'placeholder' => 'Vui lòng chọn danh mục',
+                        'name' => 'category_id',
+                        'label' => 'Danh mục',
+                        'icon' => 'tags',
+                        'options' => $categories,
+                    ])
+
+                    @include('client.components.forms.select', [
+                        'placeholder' => 'Vui lòng chọn ví tiền',
+                        'name' => 'wallet_id',
+                        'label' => 'Ví',
+                        'icon' => 'wallet',
+                        'options' => $wallets,
+                    ])
+                </div>
+
                 <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-3 items-start">
                     @include('client.components.forms.input', [
                         'name' => 'amount',
@@ -73,6 +91,7 @@
                     'name' => 'occurred_at',
                     'label' => 'Ngày giờ giao dịch',
                     'icon' => 'calendar-alt',
+                    'with_time' => true
                 ])
 
                 @include('client.components.forms.text-area', [
@@ -81,24 +100,6 @@
                     'label' => 'Mô tả',
                     'icon' => 'align-left',
                 ])
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    @include('client.components.forms.select', [
-                        'placeholder' => 'Vui lòng chọn danh mục',
-                        'name' => 'category_id',
-                        'label' => 'Danh mục',
-                        'icon' => 'tags',
-                        'options' => $categories,
-                    ])
-
-                    @include('client.components.forms.select', [
-                        'placeholder' => 'Vui lòng chọn ví tiền',
-                        'name' => 'wallet_id',
-                        'label' => 'Ví',
-                        'icon' => 'wallet',
-                        'options' => $wallets,
-                    ])
-                </div>
 
                 @include('client.components.forms.select', [
                     'name' => 'status',

@@ -57,12 +57,15 @@ Route::name('client.')
                     ->name('transactions.')
                     ->group(function () {
                         Route::get('/', [TransactionController::class, 'index'])->name('index');
+
                         Route::get('/create', [TransactionController::class, 'create'])->name('create');
                         Route::post('/create', [TransactionController::class, 'store'])->name('store');
+
                         Route::post('/confirm', [TransactionController::class, 'confirm'])->name('confirm');
-                        Route::get('/{code}', [TransactionController::class, 'show'])->name('show');
+
                         Route::get('/{code}/edit', [TransactionController::class, 'edit'])->name('edit');
                         Route::put('/{code}', [TransactionController::class, 'update'])->name('update');
+                        Route::get('/{code}', [TransactionController::class, 'show'])->name('show');
                     });
             });
     });
