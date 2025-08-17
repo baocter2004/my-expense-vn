@@ -89,6 +89,7 @@
 
         <div class="relative">
             @include('client.components.forms.date', [
+                'icon' => 'calendar-days',
                 'name' => 'created_from',
                 'label' => 'Từ ngày',
             ])
@@ -96,6 +97,7 @@
 
         <div class="relative">
             @include('client.components.forms.date', [
+                'icon' => 'calendar-days',
                 'name' => 'created_to',
                 'label' => 'Đến ngày',
             ])

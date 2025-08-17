@@ -19,7 +19,8 @@ class Transaction extends Model
         'transaction_type',
         'occurred_at',
         'description',
-        'code'
+        'code',
+        'currency'
     ];
     // ============================= Booted ===============================
     protected static function boot()

@@ -13,6 +13,12 @@
         ['label' => 'Trang chủ', 'url' => route('client.index'), 'icon' => 'fa-home'],
         ['label' => 'Danh Sách'],
     ];
+
+    $statusColors = [
+        \App\Consts\TransactionConst::STATUS_PENDING => 'bg-yellow-300 text-yellow-700 border-yellow-300',
+        \App\Consts\TransactionConst::STATUS_COMPLETED => 'bg-green-300 text-green-700 border-green-300',
+        \App\Consts\TransactionConst::STATUS_REVERSED => 'bg-red-300 text-red-700 border-red-300',
+    ];
 @endphp
 
 @section('content')
@@ -23,6 +29,7 @@
                 'sloganText' => 'Quản lý chi tiêu thông minh - Tương lai tài chính vững vàng',
                 'icon' => 'fa-wallet',
                 'routeSearch' => route('client.transactions.index'),
+                'routeCreate' => route('client.transactions.create')
             ])
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
                 @forelse ($items as $item)
@@ -34,7 +41,15 @@
 
                         <div class="relative bg-white m-[2px] rounded-2xl p-5 space-y-4">
                             <div class="space-y-4 text-sm text-gray-800">
-                                <a href="{{ route('client.transactions.show',$item->code) }}">
+
+                                <div class="flex justify-end items-center gap-2">
+                                    <span
+                                        class="w-3 h-3 rounded-full {{ $statusColors[$item->status] ?? 'bg-gray-400' }}"></span>
+                                    <span
+                                        class="hidden md:inline-block">{{ \App\Consts\TransactionConst::STATUS_LABELS[$item->status] ?? 'Không xác định' }}</span>
+                                </div>
+
+                                <a href="{{ route('client.transactions.show', $item->code) }}">
                                     <div
                                         class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-teal-500 pb-2 gap-2 cursor-pointer">
                                         <div class="flex items-center gap-2 text-lg font-semibold text-teal-600">
@@ -49,22 +64,21 @@
                                     </div>
                                 </a>
 
-                                <div
-                                    class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 px-4 py-3 rounded-xl shadow-inner">
+                                <div class="grid grid-cols-1 gap-4 bg-gray-50 px-2 md:px-4 py-3 rounded-xl shadow-inner">
 
-                                    <div class="flex items-center gap-2">
+                                    <div class="flex items-center gap-2 w-full">
                                         <i class="fa-solid fa-tag text-teal-500"></i>
                                         <span class="font-medium">Danh mục:</span>
                                         <span>{{ $item->category->name }}</span>
                                     </div>
 
-                                    <div class="flex items-center gap-2">
+                                    <div class="flex items-center gap-2 w-full">
                                         <i class="fa-solid fa-wallet text-cyan-500"></i>
                                         <span class="font-medium">Ví:</span>
                                         <span>{{ $item->wallet->name }}</span>
                                     </div>
 
-                                    <div class="flex items-center gap-2">
+                                    <div class="flex items-center gap-2 w-full">
                                         <i class="fa-solid fa-coins text-yellow-500"></i>
                                         <span class="font-medium">Số tiền:</span>
                                         <span class="inline-block">
@@ -73,13 +87,13 @@
                                         </span>
                                     </div>
 
-                                    <div class="flex items-center gap-2">
+                                    <div class="flex items-center gap-2 w-full">
                                         <i class="fa-solid fa-arrow-right-arrow-left text-purple-500"></i>
                                         <span class="font-medium">Loại:</span>
                                         <span>{{ \App\Consts\TransactionConst::TRANSACTION_TYPE[$item->transaction_type ?? 1] }}</span>
                                     </div>
 
-                                    <div class="flex items-center gap-2 md:col-span-2">
+                                    <div class="flex items-center gap-2 w-full">
                                         <i class="fa-solid fa-calendar-days text-green-500"></i>
                                         <span class="font-medium">Ngày:</span>
                                         <span>{{ \Carbon\Carbon::parse($item->occurred_at)->format('d/m/Y H:i') }}</span>
@@ -105,7 +119,7 @@
                         </div>
                         <h3 class="text-xl font-semibold text-gray-800 mb-2">Chưa có giao dịch nào</h3>
                         <p class="text-gray-600 mb-6">Hãy tạo giao dịch đầu tiên để bắt đầu quản lý chi tiêu của bạn</p>
-                        <a href="{{ route('client.wallets.create') }}"
+                        <a href="{{ route('client.transactions.create') }}"
                             class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all duration-300">
                             <i class="fa-solid fa-plus"></i>
                             Tạo ví mới
