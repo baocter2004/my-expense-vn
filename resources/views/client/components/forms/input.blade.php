@@ -44,8 +44,8 @@
 
     @if ($type === 'file')
         <div class="mt-3 flex justify-center items-center">
-            <img id="preview-{{ $name }}" src="{{ $value ? asset($value) : '' }}" alt="Preview"
-                class="max-h-40 rounded-lg border hidden" />
+            <img id="preview-{{ $name }}" src="{{ $value ? asset('storage/' . $value) : '' }}" alt="Preview"
+                class="max-h-40 rounded-lg border {{ $value ? '' : 'hidden' }}" />
         </div>
     @endif
 

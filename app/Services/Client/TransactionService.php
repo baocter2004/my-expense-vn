@@ -11,9 +11,11 @@ use App\Services\BaseCRUDService;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class TransactionService extends BaseCRUDService
 {
@@ -96,7 +98,7 @@ class TransactionService extends BaseCRUDService
         return $item;
     }
 
-    public function create(array $params = []): Transaction
+    public function store(array $params = [])
     {
         try {
             DB::beginTransaction();
@@ -109,20 +111,54 @@ class TransactionService extends BaseCRUDService
 
             if (($params['transaction_type'] ?? null) == TransactionConst::EXPENSE) {
                 if ($wallet->balance < $params['amount']) {
-                    throw new \Exception('Số dư không đủ để thực hiện giao dịch');
+                    return [
+                        'status' => false,
+                        'message' => 'Số dư không đủ để thực hiện giao dịch !'
+                    ];
                 }
             }
 
             $transaction = parent::create($params);
 
             if (!empty($params['receipt_image']) && str_contains($params['receipt_image'], 'transactions/temp')) {
-                $newPath = str_replace('transactions/temp', "transactions/{$transaction->id}", $params['receipt_image']);
-                Storage::disk('public')->move($params['receipt_image'], $newPath);
+                $oldPath = $params['receipt_image'];
 
-                $transaction->update(['receipt_image' => $newPath]);
+                $userId = $transaction->user_id ?? ($params['user_id'] ?? Auth::id());
+
+                $originalName = basename($oldPath);
+                $ext = pathinfo($originalName, PATHINFO_EXTENSION);
+                $nameOnly = pathinfo($originalName, PATHINFO_FILENAME);
+                $newFileName = time() . '_' . Str::random(6) . '_' . Str::slug($nameOnly) . ($ext ? '.' . $ext : '');
+
+                $newDir = "users/{$userId}/transactions/{$transaction->id}";
+
+                if (!Storage::disk('public')->exists($newDir)) {
+                    Storage::disk('public')->makeDirectory($newDir);
+                }
+
+                $newPath = $newDir . '/' . $newFileName;
+
+                if (Storage::disk('public')->exists($oldPath)) {
+                    try {
+                        Storage::disk('public')->move($oldPath, $newPath);
+                        $transaction->update(['receipt_image' => $newPath]);
+                    } catch (\Throwable $e) {
+                        Log::error('Failed to move receipt image', [
+                            'error' => $e->getMessage(),
+                            'from' => $oldPath,
+                            'to' => $newPath,
+                        ]);
+                    }
+                } else {
+                    Log::warning('Receipt temp file not found', ['path' => $oldPath, 'transaction_id' => $transaction->id]);
+                }
             }
             DB::commit();
-            return $transaction;
+            return [
+                'status' => true,
+                'data' => $transaction,
+                'message' => 'Thêm mới thành công giao dịch : ' . $transaction->code,
+            ];
         } catch (\Throwable $th) {
             Log::error('Error in ' . __CLASS__ . '::' . __FUNCTION__ . ' => ' . $th->getMessage(), [
                 'file' => $th->getFile(),
@@ -133,9 +169,12 @@ class TransactionService extends BaseCRUDService
             if (isset($newPath) && Storage::disk('public')->exists($newPath)) {
                 Storage::disk('public')->delete($newPath);
             }
-            
+
             DB::rollBack();
-            throw $th;
+            return [
+                'status' => false,
+                'message' => 'Có lỗi xảy ra , vui lòng thử lại !'
+            ];
         }
     }
 }

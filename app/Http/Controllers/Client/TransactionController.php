@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Consts\GlobalConst;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Transactions\GetTransactionRequest;
 use App\Http\Requests\Transactions\PostTransactionRequest;
@@ -10,6 +11,7 @@ use App\Services\Client\TransactionService;
 use App\Services\Client\WalletService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class TransactionController extends Controller
 {
@@ -34,17 +36,45 @@ class TransactionController extends Controller
     public function create()
     {
         $categories = $this->categoryService
-            ->getFields(['id', 'name'], ['where' => ['is_active' => 1]])
+            ->getFields(['id', 'name'], ['where' => ['is_active' => GlobalConst::ACTIVE]])
             ->pluck('name', 'id')
             ->toArray();
 
-        $wallets = $this->walletService
-            ->getFields(['id', 'name'])
-            ->pluck('name', 'id')
-            ->toArray();
+        $walletData = $this->walletService->getWalletForTransactions();
+        $byCurrency = $walletData['by_currency'] ?? [];
 
-        return view('client.pages.transactions.create', compact('categories', 'wallets'));
+        $oldItems = session('transaction_items', []);
+
+        $initialCurrency = old('currency', $oldItems['currency'] ?? null);
+
+        if (empty($initialCurrency)) {
+            $defaultCurrency = null;
+            foreach ($byCurrency as $currencyKey => $meta) {
+                if (!empty($meta['default'])) {
+                    $defaultCurrency = $currencyKey;
+                    break;
+                }
+            }
+            $initialCurrency = $defaultCurrency ?? array_key_first($byCurrency) ?? GlobalConst::CURRENCY_VND;
+        }
+
+        $walletsForInitialCurrency = $byCurrency[$initialCurrency]['items'] ?? [];
+
+        $defaultWalletId = old('wallet_id', $oldItems['wallet_id'] ?? ($byCurrency[$initialCurrency]['default'] ?? null));
+
+        $walletBalances = collect($walletData['wallets'] ?? [])->pluck('balance_vnd', 'id')->toArray();
+
+        return view('client.pages.transactions.create', [
+            'categories' => $categories,
+            'wallets' => $walletsForInitialCurrency,
+            'defaultWalletId' => $defaultWalletId,
+            'walletByCurrency' => $byCurrency,
+            'walletBalances' => $walletBalances,
+            'initialCurrency' => $initialCurrency,
+            'oldItems' => $oldItems,
+        ]);
     }
+
 
     public function store()
     {
@@ -59,12 +89,15 @@ class TransactionController extends Controller
             $items
         );
 
-        $transaction = $this->transactionService->create($params);
-
+        $result = $this->transactionService->store($params);
         session()->forget('transaction_items');
 
-        return redirect()->route('client.transactions.show', $transaction->code)
-            ->with('success', 'Tạo giao dịch thành công!');
+        if ($result['status']) {
+            return redirect()->route('client.transactions.index')
+                ->with('success', 'Thêm mới giao dịch thành công!');
+        } else {
+            return redirect()->route('client.transactions.create')->with('error', $result['message']);
+        }
     }
 
     public function show(int|string $id)
