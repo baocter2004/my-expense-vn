@@ -130,7 +130,7 @@ class TransactionService extends BaseCRUDService
                 $nameOnly = pathinfo($originalName, PATHINFO_FILENAME);
                 $newFileName = time() . '_' . Str::random(6) . '_' . Str::slug($nameOnly) . ($ext ? '.' . $ext : '');
 
-                $newDir = "users/{$userId}/transactions/{$transaction->id}";
+                $newDir = "users/transactions/{$userId}";
 
                 if (!Storage::disk('public')->exists($newDir)) {
                     Storage::disk('public')->makeDirectory($newDir);
@@ -148,9 +148,20 @@ class TransactionService extends BaseCRUDService
                             'from' => $oldPath,
                             'to' => $newPath,
                         ]);
+                        return [
+                            'status' => false,
+                            'message' => 'Có lỗi khi di chuyển ảnh!'
+                        ];
                     }
                 } else {
-                    Log::warning('Receipt temp file not found', ['path' => $oldPath, 'transaction_id' => $transaction->id]);
+                    Log::warning('Receipt temp file not found', [
+                        'path' => $oldPath,
+                        'transaction_id' => $transaction->id
+                    ]);
+                    return [
+                        'status' => false,
+                        'message' => 'Không tìm thấy ảnh!'
+                    ];
                 }
             }
             DB::commit();
