@@ -20,11 +20,11 @@
             <div class="flex justify-between"><span>Số tiền:</span> <strong>{{ number_format($items['amount']) }} đ</strong>
             </div>
             <div class="flex justify-between"><span>Loại giao dịch:</span>
-                <strong>{{  \App\Consts\TransactionConst::TRANSACTION_TYPE[$items['transaction_type']] }}</strong>
+                <strong>{{ \App\Consts\TransactionConst::TRANSACTION_TYPE[$items['transaction_type']] }}</strong>
             </div>
             <div class="flex justify-between"><span>Ngày giờ:</span> <strong>{{ $items['occurred_at'] }}</strong></div>
             <div class="flex justify-between"><span>Mô tả:</span> <strong>{{ $items['description'] ?? '-' }}</strong></div>
-            <div class="flex justify-between"><span>Danh mục:</span> <strong>{{  $items['category_id'] }}</strong></div>
+            <div class="flex justify-between"><span>Danh mục:</span> <strong>{{ $items['category_id'] }}</strong></div>
             <div class="flex justify-between"><span>Ví:</span> <strong>{{ $items['wallet_id'] }}</strong></div>
             <div class="flex justify-between"><span>Trạng thái:</span> <strong>{{ $items['status'] }}</strong></div>
             @if (!empty($items['receipt_image']))
@@ -48,9 +48,9 @@
                 </button>
             </form>
 
-            <a href="{{ route('client.transactions.index') }}"
+            <a href="{{ route('client.transactions.create') }}"
                 class="w-full bg-white text-teal-300 border border-teal-300 py-2 px-4 rounded-xl flex items-center justify-center gap-x-2 shadow hover:shadow-lg transition">
-                Danh sách giao dịch
+                Quay lại
             </a>
         </div>
     </div>

@@ -5,7 +5,7 @@
 @endpush
 
 @section('title')
-    Trang Giao Dịch Cá Nhân [Thêm mới]
+    Trang Giao Dịch Cá Nhân - Thêm mới
 @endsection
 
 @php
@@ -38,15 +38,17 @@
                     'name' => 'currency',
                     'placeholder' => 'Vui lòng chọn loại tiền',
                     'options' => \App\Consts\GlobalConst::CURRENCIES,
+                    'value' => $oldItems['currency'] ?? '',
                 ])
 
-                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     @include('client.components.forms.select', [
                         'placeholder' => 'Vui lòng chọn danh mục',
                         'name' => 'category_id',
                         'label' => 'Danh mục',
                         'icon' => 'tags',
                         'options' => $categories,
+                        'value' => $oldItems['category_id'] ?? '',
                     ])
 
                     @include('client.components.forms.select', [
@@ -55,6 +57,7 @@
                         'label' => 'Ví',
                         'icon' => 'wallet',
                         'options' => $wallets,
+                        'value' => $oldItems['wallet_id'] ?? $defaultWalletId,
                     ])
                 </div>
 
@@ -65,6 +68,7 @@
                         'type' => 'number',
                         'label' => 'Số tiền',
                         'icon' => 'money-bill-wave',
+                        'value' => $oldItems['amount'] ?? 0,
                     ])
 
                     <div>
@@ -81,17 +85,16 @@
                     'name' => 'transaction_type',
                     'label' => 'Loại giao dịch',
                     'icon' => 'exchange-alt',
-                    'options' => [
-                        \App\Consts\TransactionConst::EXPENSE => 'Chi tiêu',
-                        \App\Consts\TransactionConst::INCOME => 'Thu nhập',
-                    ],
+                    'options' => \App\Consts\TransactionConst::TRANSACTION_TYPE,
+                    'value' => $oldItems['transaction_type'] ?? '',
                 ])
 
                 @include('client.components.forms.date', [
                     'name' => 'occurred_at',
                     'label' => 'Ngày giờ giao dịch',
                     'icon' => 'calendar-alt',
-                    'with_time' => true
+                    'with_time' => true,
+                    'value' => $oldItems['occurred_at'] ?? '',
                 ])
 
                 @include('client.components.forms.text-area', [
@@ -99,6 +102,7 @@
                     'placeholder' => 'Thêm ghi chú (tuỳ chọn)',
                     'label' => 'Mô tả',
                     'icon' => 'align-left',
+                    'value' => $oldItems['description'] ?? '',
                 ])
 
                 @include('client.components.forms.select', [
@@ -106,6 +110,7 @@
                     'label' => 'Trạng thái',
                     'icon' => 'clipboard-check',
                     'options' => \App\Consts\TransactionConst::STATUS_LABELS,
+                    'value' => $oldItems['status'] ?? '',
                 ])
 
                 @include('client.components.forms.input', [
@@ -113,6 +118,7 @@
                     'type' => 'file',
                     'label' => 'Ảnh hoá đơn',
                     'icon' => 'image',
+                    'value' => $oldItems['receipt_image'] ?? ''
                 ])
             </form>
         </div>
@@ -158,23 +164,95 @@
                 });
             @endif
 
-            const rates = @json(\App\Consts\GlobalConst::EXCHANGE_RATES_TO_VND)
+            const rates = @json(\App\Consts\GlobalConst::EXCHANGE_RATES_TO_VND);
+            const walletByCurrency = @json($walletByCurrency);
+            const walletBalances = @json($walletBalances);
+            const $currency = $('#currency');
+            const $wallet = $('#wallet_id');
+            const $amount = $('#amount');
+            const $balanceVnd = $('#balance_vnd');
+            const $submitBtn = $('button[type=submit]');
 
-            $('#currency, #amount').on('change input', function() {
-                var bal = parseFloat($('#amount').val()) || 0;
-                var curr = $('#currency').val();
+            function renderWalletOptions(currency, selectedWalletId = null) {
+                const meta = walletByCurrency[currency] || {
+                    items: {},
+                    default: null
+                };
+                $wallet.empty();
+
+                $wallet.append(
+                    `<option value="" disabled ${!selectedWalletId ? 'selected' : ''}>Vui lòng chọn ví tiền</option>`
+                );
+
+                for (const [id, label] of Object.entries(meta.items)) {
+                    const isSelected = String(id) === String(selectedWalletId) ? 'selected' : '';
+                    $wallet.append(`<option value="${id}" ${isSelected}>${label}</option>`);
+                }
+
+                if (Object.keys(meta.items).length === 0) {
+                    $wallet.prop('disabled', true);
+                    if ($('#wallet-empty-note').length === 0) {
+                        $wallet.after(
+                            '<p id="wallet-empty-note" class="text-red-500 text-sm mt-1">Không có ví cho loại tiền này.</p>'
+                        );
+                    }
+                } else {
+                    $wallet.prop('disabled', false);
+                    $('#wallet-empty-note').remove();
+                }
+            }
+
+            function updateBalanceVndAndValidate() {
+                var bal = parseFloat($amount.val()) || 0;
+                var curr = $currency.val();
                 var rate = parseFloat(rates[curr]) || 1;
                 var vnd = bal * rate;
 
-                $('#balance_vnd').val(
+                $balanceVnd.val(
                     vnd.toLocaleString('vi-VN', {
                         minimumFractionDigits: 0,
                         maximumFractionDigits: 0
                     })
                 );
+
+                const walletId = $wallet.val();
+                const walletBalanceVnd = parseFloat(walletBalances[walletId] ?? 0) || 0;
+                if (vnd > walletBalanceVnd) {
+                    $amount.addClass('border-red-500');
+                    $amount.removeClass('focus:ring-1 focus:ring-teal-500');
+                    if ($('#amount-error').length === 0) {
+                        $amount.after(
+                            '<p id="amount-error" class="text-red-500 text-sm mt-1">Số tiền vượt quá số dư trong ví!</p>'
+                        );
+                    }
+                    $submitBtn.prop('disabled', true);
+                } else {
+                    $amount.removeClass('border-red-500');
+                    $('#amount-error').remove();
+                    $submitBtn.prop('disabled', $wallet.prop('disabled'));
+                }
+            }
+
+            $currency.on('change', function() {
+                const curr = $(this).val();
+                const meta = walletByCurrency[curr] || {};
+                const defaultId = meta.default ?? null;
+                let selectedWallet = $wallet.val();
+                if (!selectedWallet || !(meta.items && selectedWallet in meta.items)) {
+                    selectedWallet = defaultId;
+                }
+                renderWalletOptions(curr, selectedWallet);
+                updateBalanceVndAndValidate();
             });
 
-            $('#currency').trigger('change');
+            $wallet.on('change', updateBalanceVndAndValidate);
+
+            $amount.on('input change', updateBalanceVndAndValidate);
+
+            @if (!empty($initialCurrency))
+                $currency.val('{{ $initialCurrency }}');
+            @endif
+            $currency.trigger('change');
         });
     </script>
 @endpush

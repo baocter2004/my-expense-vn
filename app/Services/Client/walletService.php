@@ -231,4 +231,42 @@ class WalletService extends BaseCRUDService
             throw $th;
         }
     }
+    public function getWalletForTransactions(int|string|null $userId = null): array
+    {
+        $userId = $userId ?? Auth::id();
+
+        $wallets = $this->getRepository()
+            ->getModel()
+            ->where('user_id', $userId)
+            ->get(['id', 'name', 'balance', 'balance_vnd', 'currency', 'is_default']);
+
+        $byCurrency = [];
+        foreach ($wallets as $w) {
+            $currencyLabel = GlobalConst::CURRENCIES[$w->currency] ?? 'VND';
+
+            $label = number_format($w->balance, 2) . ' ' . $currencyLabel;
+            if ($w->currency != GlobalConst::CURRENCY_VND) {
+                $label .= ' (≈ ' . number_format($w->balance_vnd, 0) . ' VND)';
+            }
+            $label = $w->name . ' - ' . $label;
+
+            if (!isset($byCurrency[$w->currency])) {
+                $byCurrency[$w->currency] = [
+                    'items' => [],
+                    'default' => null,
+                ];
+            }
+
+            $byCurrency[$w->currency]['items'][$w->id] = $label;
+
+            if ($w->is_default) {
+                $byCurrency[$w->currency]['default'] = $w->id;
+            }
+        }
+
+        return [
+            'by_currency' => $byCurrency,
+            'wallets' => $wallets->toArray()
+        ];
+    }
 }

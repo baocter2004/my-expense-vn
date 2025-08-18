@@ -96,6 +96,7 @@ class PostTransactionRequest extends FormRequest
             'receipt_image' => 'Ảnh biên lai',
             'parent_transaction_id' => 'Giao dịch gốc',
             'is_reversal' => 'Đảo chiều',
+            'currency' => 'Loại tiền'
         ];
     }
 }

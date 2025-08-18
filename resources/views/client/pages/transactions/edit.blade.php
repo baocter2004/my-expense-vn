@@ -5,7 +5,7 @@
 @endpush
 
 @section('title')
-    Trang Giao Dịch Cá Nhân [Chỉnh Sửa]
+    Trang Giao Dịch Cá Nhân - Chỉnh Sửa
 @endsection
 
 @php
