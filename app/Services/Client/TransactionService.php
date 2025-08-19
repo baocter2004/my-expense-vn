@@ -41,7 +41,7 @@ class TransactionService extends BaseCRUDService
         $wheres     = Arr::get($params, 'wheres', []);
         $whereLikes = Arr::get($params, 'likes', []);
         $order = Arr::get($params, 'sort') ?: 'desc';
-        $sort  = 'occurred_at';
+        $sort  = 'id';
         $relates    = Arr::get($params, 'relates', []);
 
         $relates = [
@@ -162,6 +162,14 @@ class TransactionService extends BaseCRUDService
                         'status' => false,
                         'message' => 'Không tìm thấy ảnh!'
                     ];
+                }
+            }
+            if (!empty($wallet)) {
+                $amount = (float) $transaction->amount;
+                if ($transaction->transaction_type == TransactionConst::EXPENSE) {
+                    $wallet->decrement('balance', $amount);
+                } elseif ($transaction->transaction_type == TransactionConst::INCOME) {
+                    $wallet->increment('balance', $amount);
                 }
             }
             DB::commit();
