@@ -48,10 +48,10 @@ class PostTransactionRequest extends FormRequest
                 'min:1'
             ],
 
-            'receipt_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'receipt_image' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
 
             'status' => [
-                'required',
+                'nullable',
                 'integer',
                 Rule::in(array_keys(TransactionConst::STATUS_LABELS))
             ],

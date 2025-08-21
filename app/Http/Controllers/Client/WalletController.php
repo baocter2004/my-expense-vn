@@ -15,7 +15,6 @@ class WalletController extends Controller
     {
         $id = Auth::id();
         $items = $this->walletService->getList($id, $getWalletRequest->validated());
-        dd($items);
         return view('client.pages.wallets.index', compact('items'));
     }
 

@@ -81,13 +81,24 @@
                     </div>
                 </div>
 
-                @include('client.components.forms.select', [
-                    'name' => 'transaction_type',
-                    'label' => 'Loại giao dịch',
-                    'icon' => 'exchange-alt',
-                    'options' => \App\Consts\TransactionConst::TRANSACTION_TYPE,
-                    'value' => $oldItems['transaction_type'] ?? '',
-                ])
+                <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-3 items-start">
+                    @include('client.components.forms.select', [
+                        'name' => 'transaction_type',
+                        'label' => 'Loại giao dịch',
+                        'placeholder' => 'Vui lòng chọn loại giao dịch',
+                        'icon' => 'exchange-alt',
+                        'options' => \App\Consts\TransactionConst::TRANSACTION_TYPE,
+                        'value' => $oldItems['transaction_type'] ?? '',
+                    ])
+
+                    @include('client.components.forms.input', [
+                        'name' => 'receipt_image',
+                        'type' => 'file',
+                        'label' => 'Ảnh hoá đơn',
+                        'icon' => 'image',
+                        'value' => $oldItems['receipt_image'] ?? '',
+                    ])
+                </div>
 
                 @include('client.components.forms.date', [
                     'name' => 'occurred_at',
@@ -103,22 +114,6 @@
                     'label' => 'Mô tả',
                     'icon' => 'align-left',
                     'value' => $oldItems['description'] ?? '',
-                ])
-
-                @include('client.components.forms.select', [
-                    'name' => 'status',
-                    'label' => 'Trạng thái',
-                    'icon' => 'clipboard-check',
-                    'options' => \App\Consts\TransactionConst::STATUS_LABELS,
-                    'value' => $oldItems['status'] ?? '',
-                ])
-
-                @include('client.components.forms.input', [
-                    'name' => 'receipt_image',
-                    'type' => 'file',
-                    'label' => 'Ảnh hoá đơn',
-                    'icon' => 'image',
-                    'value' => $oldItems['receipt_image'] ?? ''
                 ])
             </form>
         </div>

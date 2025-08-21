@@ -72,13 +72,11 @@ class WalletService extends BaseCRUDService
             $join->on('t.wallet_id', '=', 'wallets.id')
                 ->whereDate('t.created_at', now()->toDateString());
         });
+
         $query->select([
             'wallets.*',
-            DB::raw('(SELECT COUNT(*) 
-              FROM transactions t 
-              WHERE t.wallet_id = wallets.id 
-              AND DATE(t.created_at) = CURDATE()) as total_transactions'),
-        ]);
+            DB::raw('COUNT(t.id) as total_transactions'),
+        ])->groupBy('wallets.id');
 
         return $query->paginate($limit)->appends(request()->query());
     }

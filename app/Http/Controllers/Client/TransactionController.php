@@ -119,7 +119,22 @@ class TransactionController extends Controller
         $items = $request->validated();
 
         if ($request->hasFile('receipt_image')) {
-            $items['receipt_image'] = $request->file('receipt_image')->store('transactions/temp', 'public');
+            $items['receipt_image'] = $request->file('receipt_image')
+                ->store('transactions/temp', 'public');
+        }
+
+        if (!empty($items['category_id'])) {
+            $category = $this->categoryService
+                ->getFields(['id', 'name'], ['where' => ['id' => $items['category_id']]])
+                ->first();
+            $items['category_name'] = $category->name ?? null;
+        }
+
+        if (!empty($items['wallet_id'])) {
+            $wallet = $this->walletService
+                ->getFields(['id', 'name'], ['where' => ['id' => $items['wallet_id']]])
+                ->first();
+            $items['wallet_name'] = $wallet->name ?? null;
         }
 
         session(['transaction_items' => $items]);

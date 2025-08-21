@@ -103,7 +103,7 @@ class TransactionService extends BaseCRUDService
         try {
             DB::beginTransaction();
 
-            $params['status'] = $params['status'] ?? TransactionConst::STATUS_PENDING;
+            $params['status'] = $params['status'] ?? TransactionConst::STATUS_COMPLETED;
 
             if (!empty($params['wallet_id'])) {
                 $wallet = $this->getWalletService()->find($params['wallet_id']);

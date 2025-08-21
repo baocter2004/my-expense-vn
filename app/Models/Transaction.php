@@ -20,7 +20,11 @@ class Transaction extends Model
         'occurred_at',
         'description',
         'code',
-        'currency'
+        'currency',
+        'status',
+        'receipt_image',
+        'parent_transaction_id',
+        'is_reversal'
     ];
     // ============================= Booted ===============================
     protected static function boot()
