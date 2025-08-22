@@ -29,8 +29,13 @@
                 'sloganText' => 'Quản lý chi tiêu thông minh - Tương lai tài chính vững vàng',
                 'icon' => 'fa-wallet',
                 'routeSearch' => route('client.transactions.index'),
-                'routeCreate' => route('client.transactions.create')
+                'routeCreate' => route('client.transactions.create'),
             ])
+
+            <div class="w-full flex justify-end items-center gap-6 mt-4 mb-4">
+                
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
                 @forelse ($items as $item)
                     <div

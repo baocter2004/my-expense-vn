@@ -48,8 +48,9 @@
                                     </div>
                                     @if ($item->is_default)
                                         <span
-                                            class="px-3 py-1 bg-gradient-to-r from-teal-500 to-cyan-500 text-white text-xs font-semibold rounded-full">
-                                            Mặc định
+                                            class="flex items-center justify-center gap-1 px-3 py-1 bg-gradient-to-r from-teal-500 to-cyan-500 text-white text-xs font-semibold rounded-full">
+                                            <i class="fa-solid fa-star"></i>
+                                            <span class="hidden md:inline">Mặc định</span>
                                         </span>
                                     @endif
                                 </div>
@@ -159,7 +160,8 @@
                         </div>
                     </div>
                 @empty
-                    <div class="w-full col-span-full bg-white border border-teal-400 rounded-2xl shadow-sm p-12 text-center">
+                    <div
+                        class="w-full col-span-full bg-white border border-teal-400 rounded-2xl shadow-sm p-12 text-center">
                         <div class="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-4">
                             <i class="fa-solid fa-wallet text-gray-400 text-3xl"></i>
                         </div>
