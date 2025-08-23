@@ -28,7 +28,6 @@
                 <p class="text-sm opacity-90">Thông tin chi tiết về giao dịch này</p>
             </div>
         </div>
-        ~
         <div class="w-full bg-white p-6 max-w-3xl rounded-2xl shadow-xl space-y-6">
             <div class="flex items-center justify-between border-b pb-4">
                 <div class="max-w-[200px] md:max-w-xs">
@@ -189,7 +188,7 @@
                 $("#image-modal").removeClass('hidden');
             });
 
-            $("#image-modal").on("click", function () {
+            $("#image-modal").on("click", function() {
                 $("#modal-img").removeAttr("src");
                 $("#image-modal").addClass('hidden');
             });

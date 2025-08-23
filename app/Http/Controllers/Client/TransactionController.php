@@ -75,7 +75,6 @@ class TransactionController extends Controller
         ]);
     }
 
-
     public function store()
     {
         $items = session('transaction_items');

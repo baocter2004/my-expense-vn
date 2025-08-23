@@ -30,7 +30,7 @@
 @endpush
 
 @section('content')
-    <div class="relative min-h-screen w-full flex items-center justify-center bg-gray-100 p-4 overflow-hidden">
+    <div class="w-full flex justify-center items-start p-6">
         
         @include('client.pages.auth.elements.background')
 
