@@ -9,7 +9,7 @@
             <div class="text-center mb-8">
                 <h1 class="text-3xl font-extrabold text-cyan-500">Giới Thiệu MyExpenseVn</h1>
                 <div class="my-2 flex justify-center">
-                    <div class="w-20 h-1 rounded-full bg-gradient-to-r from-teal-500 to-cyan-400 opacity-50"></div>
+                    <div class="w-20 h-1 rounded-full bg-teal-500 opacity-50"></div>
                 </div>
                 <p class="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
                     MyExpenseVn là nền tảng quản lý chi tiêu cá nhân và nhóm hoàn toàn miễn phí, giúp bạn kiểm soát tài
@@ -77,7 +77,7 @@
 
             <div class="text-center mb-8">
                 <h2
-                    class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-cyan-400 flex items-center justify-center">
+                    class="text-2xl font-extrabold bg-clip-text text-transparent bg-teal-500 flex items-center justify-center">
                     Cách sử dụng & Tính năng hệ thống</h2>
                 <div class="w-24 h-1 bg-primary mx-auto rounded-full opacity-50"></div>
             </div>

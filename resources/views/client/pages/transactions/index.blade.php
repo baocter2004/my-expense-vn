@@ -33,86 +33,160 @@
             ])
 
             <div class="w-full flex justify-end items-center gap-6 mt-4 mb-4">
-                
+
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
                 @forelse ($items as $item)
                     <div
-                        class="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
+                        class="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-teal-200">
                         <div
-                            class="absolute inset-0 bg-gradient-to-r from-teal-400 to-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            class="absolute inset-0 bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl">
                         </div>
 
-                        <div class="relative bg-white m-[2px] rounded-2xl p-5 space-y-4">
-                            <div class="space-y-4 text-sm text-gray-800">
-
-                                <div class="flex justify-end items-center gap-2">
-                                    <span
-                                        class="w-3 h-3 rounded-full {{ $statusColors[$item->status] ?? 'bg-gray-400' }}"></span>
-                                    <span
-                                        class="hidden md:inline-block">{{ \App\Consts\TransactionConst::STATUS_LABELS[$item->status] ?? 'Không xác định' }}</span>
+                        <div class="relative bg-white m-[2px] rounded-3xl overflow-hidden">
+                            <div class="relative bg-teal-50 p-4 sm:p-6 pb-3 sm:pb-4">
+                                <div class="flex justify-center mb-4">
+                                    <div
+                                        class="flex items-center gap-2 px-3 py-2 rounded-full bg-white/80 backdrop-blur-sm shadow-sm">
+                                        <span
+                                            class="w-[10px] h-[10px] rounded-full {{ $statusColors[$item->status] ?? 'bg-gray-400' }} animate-pulse"></span>
+                                        <span class="text-xs font-medium text-gray-700">
+                                            {{ \App\Consts\TransactionConst::STATUS_LABELS[$item->status] ?? 'Không xác định' }}
+                                        </span>
+                                    </div>
                                 </div>
 
-                                <a href="{{ route('client.transactions.show', $item->code) }}">
-                                    <div
-                                        class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-teal-500 pb-2 gap-2 cursor-pointer">
-                                        <div class="flex items-center gap-2 text-lg font-semibold text-teal-600">
-                                            <i class="fa-solid fa-receipt"></i>
-                                            <span class="md:inline hidden">Mã giao dịch</span>
-                                            <span class="inline md:hidden text-base">Mã</span>
+                                <a href="{{ route('client.transactions.show', $item->code) }}" class="block group/link">
+                                    <div class="flex items-center gap-3 mb-3 sm:mb-4">
+                                        <div
+                                            class="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-xl sm:rounded-2xl shadow-lg group-hover/link:scale-110 transition-transform duration-300">
+                                            <i class="fa-solid fa-receipt text-white text-base sm:text-lg"></i>
                                         </div>
-                                        <div class="flex items-center gap-1 text-sm text-gray-700 truncate  max-w-[50%]"
-                                            title="{{ $item->code }}">
-                                            {{ $item->code }}
+
+                                        <div class="flex-1 min-w-0">
+                                            <div class="text-xs sm:text-sm font-medium text-gray-500 mb-1">Mã giao dịch
+                                            </div>
+                                            <div class="text-base sm:text-lg font-bold text-gray-800 transition-colors duration-300 truncate"
+                                                title="{{ $item->code }}">
+                                                {{ $item->code }}
+                                            </div>
                                         </div>
+
+                                        <i
+                                            class="fa-solid fa-chevron-right text-gray-400 group-hover/link:text-teal-500 group-hover/link:translate-x-1 transition-all duration-300 hidden sm:block"></i>
                                     </div>
                                 </a>
 
-                                <div class="grid grid-cols-1 gap-4 bg-gray-50 px-2 md:px-4 py-3 rounded-xl shadow-inner">
+                                <div class="bg-white/70 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-sm">
+                                    <div
+                                        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+                                        <div class="flex items-center gap-2 sm:gap-3">
+                                            <div
+                                                class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-lg sm:rounded-xl flex items-center justify-center shadow-md">
+                                                <i class="fa-solid fa-coins text-white text-sm sm:text-base"></i>
+                                            </div>
+                                            <div>
+                                                <div class="text-xs font-medium text-gray-500">Số tiền giao dịch</div>
+                                                <div class="text-lg sm:text-xl font-bold text-gray-800">
+                                                    {{ \App\Helpers\Helper::formatPrice($item->amount, \App\Consts\GlobalConst::CURRENCIES[$item->wallet?->currency] ?? 'VND') }}
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                    <div class="flex items-center gap-2 w-full">
-                                        <i class="fa-solid fa-tag text-teal-500"></i>
-                                        <span class="font-medium">Danh mục:</span>
-                                        <span>{{ $item->category->name }}</span>
+                                        <div class="flex justify-start sm:justify-end">
+                                            <div
+                                                class="inline-flex px-2.5 sm:px-3 py-1.5 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold">
+                                                <span
+                                                    class="sm:hidden">{{ \App\Consts\TransactionConst::TRANSACTION_TYPE[$item->transaction_type ?? 1] ?? 'N/A' }}</span>
+                                                <span
+                                                    class="hidden sm:inline">{{ \App\Consts\TransactionConst::TRANSACTION_TYPE[$item->transaction_type ?? 1] }}</span>
+                                            </div>
+                                        </div>
                                     </div>
-
-                                    <div class="flex items-center gap-2 w-full">
-                                        <i class="fa-solid fa-wallet text-cyan-500"></i>
-                                        <span class="font-medium">Ví:</span>
-                                        <span>{{ $item->wallet->name }}</span>
-                                    </div>
-
-                                    <div class="flex items-center gap-2 w-full">
-                                        <i class="fa-solid fa-coins text-yellow-500"></i>
-                                        <span class="font-medium">Số tiền:</span>
-                                        <span class="inline-block">
-                                            {{ number_format($item->amount, 2, ',', '.') }}
-                                            {{ \App\Consts\GlobalConst::CURRENCIES[$item->wallet?->currency] ?? 1 }}
-                                        </span>
-                                    </div>
-
-                                    <div class="flex items-center gap-2 w-full">
-                                        <i class="fa-solid fa-arrow-right-arrow-left text-purple-500"></i>
-                                        <span class="font-medium">Loại:</span>
-                                        <span>{{ \App\Consts\TransactionConst::TRANSACTION_TYPE[$item->transaction_type ?? 1] }}</span>
-                                    </div>
-
-                                    <div class="flex items-center gap-2 w-full">
-                                        <i class="fa-solid fa-calendar-days text-green-500"></i>
-                                        <span class="font-medium">Ngày:</span>
-                                        <span>{{ \Carbon\Carbon::parse($item->occurred_at)->format('d/m/Y H:i') }}</span>
-                                    </div>
-
                                 </div>
+                            </div>
+
+                            <div class="p-6 pt-4 space-y-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div
+                                        class="flex items-center gap-3 p-3 bg-teal-50 rounded-xl border border-teal-100 hover:bg-teal-100 transition-colors duration-300">
+                                        <div
+                                            class="w-9 h-9 bg-teal-500 rounded-lg flex items-center justify-center shadow-sm">
+                                            <i class="fa-solid fa-tag text-white text-sm"></i>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="text-xs text-teal-600 font-medium">Danh mục</div>
+                                            <div class="text-sm font-semibold text-teal-800 truncate"
+                                                title="{{ $item->category->name }}">
+                                                {{ $item->category->name }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="flex items-center gap-3 p-3 bg-cyan-50 rounded-xl border border-cyan-100 hover:bg-cyan-100 transition-colors duration-300">
+                                        <div
+                                            class="w-9 h-9 bg-cyan-500 rounded-lg flex items-center justify-center shadow-sm">
+                                            <i class="fa-solid fa-wallet text-white text-sm"></i>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="text-xs text-cyan-600 font-medium">Ví tiền</div>
+                                            <div class="text-sm font-semibold text-cyan-800 truncate"
+                                                title="{{ $item->wallet->name }}">
+                                                {{ $item->wallet->name }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center gap-3 p-3 bg-green-50 rounded-xl border border-green-100">
+                                    <div class="w-9 h-9 bg-green-500 rounded-lg flex items-center justify-center shadow-sm">
+                                        <i class="fa-solid fa-calendar-days text-white text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-green-600 font-medium">Thời gian giao dịch</div>
+                                        <div class="text-sm font-semibold text-green-800">
+                                            {{ \Carbon\Carbon::parse($item->occurred_at)->format('d/m/Y H:i') }}
+                                        </div>
+                                    </div>
+                                </div>
+
                                 @if (!empty($item->description))
-                                    <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-                                        <div class="flex items-start gap-2 text-sm truncate text-gray-700">
-                                            <i class="fa-solid fa-comment text-gray-400 mt-1"></i>
-                                            <span>{{ $item->description }}</span>
+                                    <div
+                                        class="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-4 border border-gray-200">
+                                        <div class="flex items-start gap-3">
+                                            <div
+                                                class="w-8 h-8 bg-gray-400 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                                <i class="fa-solid fa-comment text-white text-xs"></i>
+                                            </div>
+                                            <div class="flex-1">
+                                                <div class="text-xs text-gray-500 font-medium mb-1">Ghi chú</div>
+                                                <div class="text-sm text-gray-700 leading-relaxed break-words">
+                                                    {{ $item->description }}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 @endif
+
+                                <div class="grid grid-cols-2 gap-3 pt-2">
+                                    <a href="{{ route('client.transactions.show', $item->code) }}"
+                                        class="flex items-center justify-center gap-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white py-2 px-4 rounded-xl font-medium shadow-lg hover:shadow-xl hover:from-teal-600 hover:to-cyan-600 transform hover:scale-105 transition-all duration-300">
+                                        <i class="fa-solid fa-eye text-sm"></i>
+                                        <span class="text-sm">Chi tiết</span>
+                                    </a>
+
+                                    <a href="{{ route('client.transactions.edit', $item->code) }}"
+                                        class="flex items-center justify-center gap-2 bg-white border border-teal-500 text-teal-500 py-2 px-4 rounded-xl font-medium shadow-lg hover:shadow-xl hover:bg-teal-50 transform hover:scale-105 transition-all duration-300">
+                                        <i class="fa-solid fa-edit text-sm"></i>
+                                        <span class="text-sm">Sửa</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-teal-400/5 to-cyan-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-3xl">
                             </div>
                         </div>
                     </div>

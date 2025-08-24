@@ -120,13 +120,14 @@
 
         <div class="w-full bg-white p-4 md:p-6 max-w-3xl rounded-2xl shadow-xl grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
             <button form="transactions" type="submit"
-                class="w-full bg-teal-300 text-white py-2 px-4 rounded-xl flex items-center justify-center gap-x-2 shadow hover:shadow-lg transition">
+                class="w-full bg-teal-500 text-white py-2 px-4 rounded-xl flex items-center justify-center gap-x-2 shadow hover:shadow-lg transition">
                 Xác nhận giao dịch
             </button>
 
             <a href="{{ route('client.transactions.index') }}"
-                class="w-full bg-white text-teal-300 border border-teal-300 py-2 px-4 rounded-xl flex items-center justify-center gap-x-2 shadow hover:shadow-lg transition">
-                Danh sách giao dịch
+                class="bg-white border border-teal-500 text-teal-500 hover:bg-teal-50 hover:border-teal-600 py-3 px-4 rounded-xl text-center font-medium shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-list text-lg"></i>
+                <span class="hidden sm:inline">Quay lại</span>
             </a>
         </div>
     </div>
