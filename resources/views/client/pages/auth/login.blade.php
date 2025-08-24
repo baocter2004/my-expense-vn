@@ -29,18 +29,18 @@
 @endpush
 
 @section('content')
-    <div class="relative min-h-screen w-full flex items-center justify-center bg-gray-100 p-4 overflow-hidden">
+    <div class="w-full flex justify-center items-start p-6">
         
         @include('client.pages.auth.elements.background')
 
         <div class="bg-white rounded-2xl shadow-xl w-full p-8 relative z-10 max-w-md">
             <div class="text-center mb-8">
                 <h1
-                    class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-cyan-400 flex items-center justify-center gap-x-2">
+                    class="text-2xl font-extrabold bg-clip-text text-transparent bg-teal-500 flex items-center justify-center gap-x-2">
                     <i class="fa-solid fa-wallet"></i> MyExpenseVn
                 </h1>
                 <div class="my-2 flex justify-center">
-                    <div class="w-20 h-1 rounded-full bg-gradient-to-r from-teal-500 to-cyan-400 opacity-50"></div>
+                    <div class="w-20 h-1 rounded-full bg-teal-500 opacity-50"></div>
                 </div>
                 <h2 class="text-lg md:text-xl font-medium text-center text-gray-600 tracking-wide">Đăng Nhập Thành Viên
                 </h2>
@@ -66,7 +66,7 @@
                     ])
 
                     <button type="submit"
-                        class="w-full bg-gradient-to-r from-teal-500 to-cyan-400 text-white font-semibold py-2 px-4 rounded-full flex items-center justify-center gap-x-2 shadow hover:shadow-lg transition">
+                        class="w-full bg-teal-500 text-white font-semibold py-2 px-4 rounded-full flex items-center justify-center gap-x-2 shadow hover:shadow-lg transition">
                         <i class="fa-solid fa-arrow-right-to-bracket"></i> Đăng Nhập
                     </button>
                 </form>

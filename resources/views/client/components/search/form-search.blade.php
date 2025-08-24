@@ -121,7 +121,7 @@
 </div>
 <div class="flex items-center justify-center mb-8">
     <div
-        class="flex items-center gap-3 px-8 py-3.5 bg-white border-2 border-emerald-400/40 rounded-2xl hover:border-emerald-400/60 transition-all duration-300 hover:scale-105">
+        class="flex items-center gap-3 px-8 py-3.5 bg-white border border-emerald-400/40 rounded-2xl hover:border-emerald-400/60 transition-all duration-300 hover:scale-105">
         <div class="w-2 h-2 bg-teal-400 rounded-full animate-ping opacity-75"></div>
         <i class="fa-solid fa-list-check text-teal-400 text-base"></i>
         <span class="font-semibold text-teal-300 tracking-wide">Danh sách</span>

@@ -40,7 +40,7 @@
                 </div>
 
                 <h1
-                    class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-500 to-cyan-400 mb-4 p-2">
+                    class="text-4xl font-extrabold text-transparent bg-clip-text bg-teal-500 mb-4 p-2">
                     Oops! Không tìm thấy trang
                 </h1>
 

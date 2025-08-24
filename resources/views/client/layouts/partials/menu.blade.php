@@ -1,10 +1,10 @@
 <nav class="px-5 py-4 flex items-center justify-between shadow-md fixed top-0 left-0 w-full bg-white z-50">
     <a href="{{ route('client.index') }}" class="relative inline-block">
         <h1
-            class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-cyan-400 flex items-center gap-x-2">
+            class="text-2xl font-extrabold bg-clip-text text-transparent bg-teal-500 flex items-center gap-x-2">
             <i class="fa-solid fa-wallet"></i> MyExpenseVn
         </h1>
-        <span class="absolute left-0 w-full h-1 bg-gradient-to-r from-teal-500 to-cyan-400"></span>
+        <span class="absolute left-0 w-full h-1 bg-teal-500"></span>
     </a>
 
     <ul class="hidden md:flex space-x-6">

@@ -8,11 +8,11 @@
             class="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-3 rounded-custom-sides">
             <div class="text-center mb-8">
                 <h1
-                    class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-cyan-400 flex items-center justify-center gap-x-2">
+                    class="text-2xl font-extrabold bg-clip-text text-transparent bg-teal-500 flex items-center justify-center gap-x-2">
                     <i class="fa-solid fa-wallet"></i> MyExpenseVn
                 </h1>
                 <div class="my-2 flex justify-center">
-                    <div class="w-20 h-1 rounded-full bg-gradient-to-r from-teal-500 to-cyan-400 opacity-50"></div>
+                    <div class="w-20 h-1 rounded-full bg-teal-500 opacity-50"></div>
                 </div>
                 <h2 class="text-base sm:text-lg font-medium text-center text-gray-600 tracking-wide">
                     Kiểm soát tài chính cá nhân thật đơn giản.
@@ -82,7 +82,7 @@
 
             <div class="text-center mb-8">
                 <h2
-                    class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-cyan-400 flex items-center justify-center">
+                    class="text-2xl font-extrabold bg-clip-text text-transparent bg-teal-500 flex items-center justify-center">
                     Cách sử dụng & Tính năng hệ thống</h2>
                 <div class="w-24 h-1 bg-primary mx-auto rounded-full opacity-50"></div>
             </div>
@@ -339,7 +339,7 @@
                         </ul>
 
                         <button type="submit" form="register-form"
-                            class="w-full bg-gradient-to-r from-teal-500 to-cyan-400 text-white font-semibold py-2 px-4 rounded-full flex items-center justify-center gap-x-2 shadow hover:shadow-lg transition">
+                            class="w-full bg-teal-500 text-white font-semibold py-2 px-4 rounded-full flex items-center justify-center gap-x-2 shadow hover:shadow-lg transition">
                             <i class="fa-solid fa-arrow-right-to-bracket"></i> Đăng Ký
                         </button>
 

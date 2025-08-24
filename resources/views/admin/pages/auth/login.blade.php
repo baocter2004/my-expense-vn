@@ -53,11 +53,11 @@
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-8 relative z-10">
             <div class="text-center mb-8">
                 <h1
-                    class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-cyan-400 flex items-center justify-center gap-x-2">
+                    class="text-2xl font-extrabold bg-clip-text text-transparent bg-teal-500 flex items-center justify-center gap-x-2">
                     <i class="fa-solid fa-wallet"></i> MyExpenseVn
                 </h1>
                 <div class="my-2 flex justify-center">
-                    <div class="w-20 h-1 rounded-full bg-gradient-to-r from-teal-500 to-cyan-400 opacity-50"></div>
+                    <div class="w-20 h-1 rounded-full bg-teal-500 opacity-50"></div>
                 </div>
                 <h2 class="text-base sm:text-lg font-medium text-center text-gray-600 tracking-wide">Đăng Nhập Quản Trị</h2>
             </div>

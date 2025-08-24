@@ -67,11 +67,14 @@ class Helper
         ];
     }
 
-    public static function formatPrice($amount, string $suffix = 'VND', int $decimals = 0): string
+    public static function formatPrice($amount, string $currency = 'VND'): string
     {
         if (!is_numeric($amount)) {
-            return '0 ' . $suffix;
+            return '0 ' . $currency;
         }
-        return number_format($amount, $decimals, ',', '.') . ' ' . $suffix;
+
+        $decimals = ($currency === 'VND') ? 0 : 2;
+
+        return number_format($amount, $decimals, ',', '.') . ' ' . $currency;
     }
 }

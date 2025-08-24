@@ -10,7 +10,7 @@
                         🤖
                     </div>
                     <div
-                        class="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white animate-pulse">
+                        class="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border border-white animate-pulse">
                     </div>
                 </div>
                 <div>

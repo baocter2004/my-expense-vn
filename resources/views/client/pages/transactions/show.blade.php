@@ -28,12 +28,18 @@
                 <p class="text-sm opacity-90">Thông tin chi tiết về giao dịch này</p>
             </div>
         </div>
-        
         <div class="w-full bg-white p-6 max-w-3xl rounded-2xl shadow-xl space-y-6">
-            <div class="flex items-center justify-between border-b pb-4">
-                <div class="max-w-[200px] md:max-w-xs">
-                    <div class="text-xs text-gray-500">Mã giao dịch</div>
-                    <div class="text-lg font-bold text-teal-600 truncate" title="{{ $item->code }}">
+            <div class="flex items-center justify-between border-b pb-4 gap-4">
+                <div
+                    class="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-xl sm:rounded-2xl shadow-lg group-hover/link:scale-110 transition-transform duration-300">
+                    <i class="fa-solid fa-receipt text-white text-base sm:text-lg"></i>
+                </div>
+
+                <div class="flex-1 min-w-0">
+                    <div class="text-xs sm:text-sm font-medium text-gray-500 mb-1">Mã giao dịch
+                    </div>
+                    <div class="text-base sm:text-lg font-bold text-gray-800 transition-colors duration-300 truncate"
+                        title="{{ $item->code }}">
                         {{ $item->code }}
                     </div>
                 </div>
@@ -46,79 +52,83 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl border">
+                <div
+                    class="flex items-center justify-between p-3 bg-teal-50 rounded-xl border border-teal-100 hover:bg-teal-100">
                     <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 flex items-center justify-center rounded-md bg-teal-50 text-teal-600">
+                        <div class="w-9 h-9 flex items-center justify-center rounded-md bg-teal-500 text-white">
                             <i class="fa-solid fa-tag"></i>
                         </div>
-                        <div class="text-sm font-medium text-gray-600">Danh mục</div>
+                        <div class="text-sm font-medium text-teal-600 hidden md:block">Danh mục</div>
                     </div>
-                    <div class="text-sm text-gray-800 font-medium truncate text-right" title="{{ $item->category->name }}">
+                    <div class="text-sm text-teal-800 font-medium truncate text-right" title="{{ $item->category->name }}">
                         {{ $item->category->name }}
                     </div>
                 </div>
 
-                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl border">
+                <div
+                    class="flex items-center justify-between p-3 bg-cyan-50 rounded-xl border border-cyan-100 hover:bg-cyan-100">
                     <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 flex items-center justify-center rounded-md bg-cyan-50 text-cyan-600">
+                        <div class="w-9 h-9 flex items-center justify-center rounded-md bg-cyan-500 text-white">
                             <i class="fa-solid fa-wallet"></i>
                         </div>
-                        <div class="text-sm font-medium text-gray-600">Ví</div>
+                        <div class="text-sm font-medium text-cyan-600 hidden md:block">Ví</div>
                     </div>
-                    <div class="text-sm text-gray-800 font-medium truncate text-right" title="{{ $item->wallet->name }}">
+                    <div class="text-sm text-cyan-800 font-medium truncate text-right" title="{{ $item->wallet->name }}">
                         {{ $item->wallet->name }}
                     </div>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl border">
+                <div
+                    class="flex items-center justify-between p-3 bg-yellow-50 rounded-xl border border-yellow-100 hover:bg-yellow-100">
                     <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 flex items-center justify-center rounded-md bg-yellow-50 text-yellow-500">
+                        <div class="w-9 h-9 flex items-center justify-center rounded-md bg-yellow-500 text-white">
                             <i class="fa-solid fa-coins"></i>
                         </div>
-                        <div class="text-sm font-medium text-gray-600">Số tiền</div>
+                        <div class="text-sm font-medium text-yellow-600 hidden md:block">Số tiền</div>
                     </div>
-                    <div class="text-sm text-gray-800 font-medium text-right">
-                        {{ number_format($item->amount, 2, ',', '.') }}
-                        {{ \App\Consts\GlobalConst::CURRENCIES[$item->wallet?->currency] ?? '' }}
+                    <div class="text-sm text-yellow-800 font-medium text-right">
+                        {{ \App\Helpers\Helper::formatPrice($item->amount, \App\Consts\GlobalConst::CURRENCIES[$item->wallet?->currency] ?? 'VND') }}
                     </div>
                 </div>
 
-                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl border">
+                <div
+                    class="flex items-center justify-between p-3 bg-purple-50 rounded-xl border border-purple-100 hover:bg-purple-100">
                     <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 flex items-center justify-center rounded-md bg-purple-50 text-purple-500">
+                        <div class="w-9 h-9 flex items-center justify-center rounded-md bg-purple-500 text-white">
                             <i class="fa-solid fa-arrow-right-arrow-left"></i>
                         </div>
-                        <div class="text-sm font-medium text-gray-600">Loại</div>
+                        <div class="text-sm font-medium text-purple-600 hidden md:block">Loại</div>
                     </div>
-                    <div class="text-sm text-gray-800 font-medium text-right">
+                    <div class="text-sm text-purple-800 font-medium text-right">
                         {{ \App\Consts\TransactionConst::TRANSACTION_TYPE[$item->transaction_type ?? 1] }}
                     </div>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl border">
+                <div
+                    class="flex items-center justify-between p-3 bg-green-50 rounded-xl border border-green-100 hover:bg-green-100">
                     <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 flex items-center justify-center rounded-md bg-green-50 text-green-500">
+                        <div class="w-9 h-9 flex items-center justify-center rounded-md bg-green-500 text-white">
                             <i class="fa-solid fa-calendar-days"></i>
                         </div>
-                        <div class="text-sm font-medium text-gray-600">Ngày</div>
+                        <div class="text-sm font-medium text-green-600 hidden md:block">Ngày</div>
                     </div>
-                    <div class="text-sm text-gray-800 text-right">
+                    <div class="text-sm text-green-800 text-right">
                         {{ \Carbon\Carbon::parse($item->occurred_at)->format('d/m/Y H:i') }}
                     </div>
                 </div>
-
-                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl border">
+                <div
+                    class="flex items-center justify-between p-3 bg-red-50 rounded-xl border border-red-100 hover:bg-red-100">
                     <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 flex items-center justify-center rounded-md bg-red-50 text-red-500">
+                        <div class="w-9 h-9 flex items-center justify-center rounded-md bg-red-500 text-white">
                             <i class="fa-solid fa-undo"></i>
                         </div>
-                        <div class="text-sm font-medium text-gray-600">Hoàn tác</div>
+                        <div class="text-sm font-medium text-red-600 hidden md:block">Hoàn tác</div>
                     </div>
-                    <div class="text-sm text-gray-800 font-medium text-right">
+                    <div class="text-sm text-red-800 font-medium text-right">
                         {{ $item->is_reversal ? 'Có' : 'Không' }}
                     </div>
                 </div>
@@ -134,24 +144,69 @@
             @endif
 
             @if (!empty($item->receipt_image))
-                <div>
-                    <div class="text-sm font-medium text-gray-600 mb-2">Ảnh hóa đơn</div>
-                    <img src="{{ asset('storage/' . $item->receipt_image) }}" alt="Hóa đơn"
+                <div class="flex flex-col justify-center items-center">
+                    <div class="text-sm font-medium text-gray-600 hidden md:block mb-2">Ảnh hóa đơn</div>
+                    <img id="image" src="{{ asset('storage/' . $item->receipt_image) }}" alt="Hóa đơn"
                         class="rounded-lg border shadow-sm max-h-80 object-contain">
+                </div>
+                <div id="image-modal"
+                    class="hidden fixed inset-0 bg-black bg-opacity-75 flex flex-col items-center justify-center z-50">
+                    <div class="overflow-hidden flex items-center justify-center w-full h-[80%] p-5">
+                        <img id="modal-img" src=""
+                            class="transition-transform duration-200 ease-in-out h-full rounded-lg shadow-lg select-none">
+                    </div>
                 </div>
             @endif
         </div>
 
-        <div class="w-full max-w-3xl grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+        <div class="w-full max-w-3xl grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
             <a href="{{ route('client.transactions.edit', $item->code) }}"
-                class="bg-teal-500 text-white py-3 px-4 rounded-xl text-center font-medium shadow hover:shadow-lg transition">
-                <i class="fa-solid fa-pen-to-square"></i> Chỉnh sửa
+                class="bg-teal-500 hover:bg-teal-600 text-white py-3 px-4 rounded-xl text-center font-medium shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-pen-to-square text-lg"></i>
+                <span class="hidden sm:inline">Chỉnh sửa</span>
             </a>
+
+            @if (!$item->is_reversal && $item->status !== \App\Consts\TransactionConst::STATUS_REVERSED)
+                <button onclick="confirmReversal()"
+                    class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white py-3 px-4 rounded-xl text-center font-medium shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300">
+                    </div>
+                    <i class="fa-solid fa-undo-alt text-lg animate-pulse"></i>
+                    <span class="hidden sm:inline">Hoàn tác</span>
+                    <div class="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full animate-ping"></div>
+                    <div class="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full"></div>
+                </button>
+            @else
+                <div
+                    class="bg-gray-300 text-gray-500 py-3 px-4 rounded-xl text-center font-medium shadow-lg flex items-center justify-center gap-2 cursor-not-allowed">
+                    <i class="fa-solid fa-ban text-lg"></i>
+                    <span class="hidden sm:inline">Đã hoàn tác</span>
+                </div>
+            @endif
+
             <a href="{{ route('client.transactions.index') }}"
-                class="bg-white border border-teal-500 text-teal-500 py-3 px-4 rounded-xl text-center font-medium shadow hover:shadow-lg transition">
-                <i class="fa-solid fa-list"></i> Quay lại danh sách
+                class="bg-white border border-teal-500 text-teal-500 hover:bg-teal-50 hover:border-teal-600 py-3 px-4 rounded-xl text-center font-medium shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-list text-lg"></i>
+                <span class="hidden sm:inline">Quay lại</span>
             </a>
         </div>
+
+        @if (!$item->is_reversal && $item->status !== \App\Consts\TransactionConst::STATUS_REVERSED)
+            <div
+                class="w-full max-w-3xl mt-4 p-4 bg-gradient-to-r from-amber-50 to-orange-50 border-l-4 border-orange-400 rounded-xl shadow-md">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <i class="fa-solid fa-exclamation-triangle text-orange-500 text-xl"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-orange-700 font-medium">
+                            <span class="font-semibold">Lưu ý:</span> Thao tác hoàn tác sẽ tạo một giao dịch ngược lại để bù
+                            trừ giao dịch này và không thể hoàn tác.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
 @endsection
 
@@ -177,6 +232,81 @@
                     confirmButtonColor: '#ef4444'
                 });
             @endif
+
+            $("#image").on("click", function() {
+                let src = $(this).attr("src");
+                $("#modal-img").attr("src", src);
+                $("#image-modal").removeClass('hidden');
+            });
+
+            $("#image-modal").on("click", function() {
+                $("#modal-img").removeAttr("src");
+                $("#image-modal").addClass('hidden');
+            });
         });
+
+        function confirmReversal() {
+            Swal.fire({
+                title: 'Xác nhận hoàn tác?',
+                html: `
+                    <div class="text-left space-y-3">
+                        <div class="flex items-center gap-2 text-orange-600">
+                            <i class="fa-solid fa-exclamation-triangle"></i>
+                            <span class="font-semibold">Cảnh báo quan trọng:</span>
+                        </div>
+                        <ul class="text-sm text-gray-700 space-y-1 ml-6">
+                            <li>Sẽ tạo giao dịch ngược lại để bù trừ</li>
+                            <li>Số dư ví sẽ được điều chỉnh</li>
+                            <li>Thao tác này không thể hoàn tác</li>
+                        </ul>
+                        <div class="mt-4 p-3 bg-gray-50 rounded-lg">
+                            <div class="text-sm text-gray-600">
+                                <strong>Giao dịch:</strong> {{ $item->code }}<br>
+                                <strong>Số tiền:</strong> {{ \App\Helpers\Helper::formatPrice($item->amount, \App\Consts\GlobalConst::CURRENCIES[$item->wallet?->currency] ?? 'VND') }}
+                            </div>
+                        </div>
+                    </div>
+                `,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: '<i class="fa-solid fa-undo-alt"></i> Xác nhận hoàn tác',
+                cancelButtonText: '<i class="fa-solid fa-times"></i> Hủy bỏ',
+                reverseButtons: true,
+                customClass: {
+                    popup: 'rounded-2xl',
+                    confirmButton: 'rounded-xl px-6 py-2',
+                    cancelButton: 'rounded-xl px-6 py-2'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Đang xử lý...',
+                        html: 'Vui lòng đợi trong giây lát',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        customClass: {
+                            popup: 'rounded-2xl'
+                        },
+                        willOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '{{ route('client.transactions.create', $item->code) }}';
+
+                    const csrfToken = document.createElement('input');
+                    csrfToken.type = 'hidden';
+                    csrfToken.name = '_token';
+                    csrfToken.value = '{{ csrf_token() }}';
+                    form.appendChild(csrfToken);
+
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        }
     </script>
 @endpush

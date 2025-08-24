@@ -41,7 +41,7 @@ class TransactionService extends BaseCRUDService
         $wheres     = Arr::get($params, 'wheres', []);
         $whereLikes = Arr::get($params, 'likes', []);
         $order = Arr::get($params, 'sort') ?: 'desc';
-        $sort  = 'occurred_at';
+        $sort  = 'id';
         $relates    = Arr::get($params, 'relates', []);
 
         $relates = [
@@ -103,7 +103,7 @@ class TransactionService extends BaseCRUDService
         try {
             DB::beginTransaction();
 
-            $params['status'] = $params['status'] ?? TransactionConst::STATUS_PENDING;
+            $params['status'] = $params['status'] ?? TransactionConst::STATUS_COMPLETED;
 
             if (!empty($params['wallet_id'])) {
                 $wallet = $this->getWalletService()->find($params['wallet_id']);
@@ -130,7 +130,7 @@ class TransactionService extends BaseCRUDService
                 $nameOnly = pathinfo($originalName, PATHINFO_FILENAME);
                 $newFileName = time() . '_' . Str::random(6) . '_' . Str::slug($nameOnly) . ($ext ? '.' . $ext : '');
 
-                $newDir = "users/{$userId}/transactions/{$transaction->id}";
+                $newDir = "users/transactions/{$userId}";
 
                 if (!Storage::disk('public')->exists($newDir)) {
                     Storage::disk('public')->makeDirectory($newDir);
@@ -148,9 +148,28 @@ class TransactionService extends BaseCRUDService
                             'from' => $oldPath,
                             'to' => $newPath,
                         ]);
+                        return [
+                            'status' => false,
+                            'message' => 'Có lỗi khi di chuyển ảnh!'
+                        ];
                     }
                 } else {
-                    Log::warning('Receipt temp file not found', ['path' => $oldPath, 'transaction_id' => $transaction->id]);
+                    Log::warning('Receipt temp file not found', [
+                        'path' => $oldPath,
+                        'transaction_id' => $transaction->id
+                    ]);
+                    return [
+                        'status' => false,
+                        'message' => 'Không tìm thấy ảnh!'
+                    ];
+                }
+            }
+            if (!empty($wallet)) {
+                $amount = (float) $transaction->amount;
+                if ($transaction->transaction_type == TransactionConst::EXPENSE) {
+                    $wallet->decrement('balance', $amount);
+                } elseif ($transaction->transaction_type == TransactionConst::INCOME) {
+                    $wallet->increment('balance', $amount);
                 }
             }
             DB::commit();
