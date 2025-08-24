@@ -175,12 +175,19 @@ class TransactionService extends BaseCRUDService
             }
             if (!empty($wallet)) {
                 $amount = (float) $transaction->amount;
+                $currency = $transaction->currency;
+                $rate = GlobalConst::EXCHANGE_RATES_TO_VND[$currency] ?? 1;
+                $amountVnd = $amount * $rate;
+
                 if ($transaction->transaction_type == TransactionConst::EXPENSE) {
                     $wallet->decrement('balance', $amount);
+                    $wallet->decrement('balance_vnd', $amountVnd);
                 } elseif ($transaction->transaction_type == TransactionConst::INCOME) {
                     $wallet->increment('balance', $amount);
+                    $wallet->increment('balance_vnd', $amountVnd);
                 }
             }
+
             DB::commit();
             return [
                 'status' => true,
@@ -256,21 +263,32 @@ class TransactionService extends BaseCRUDService
             }
 
             if ($oldWallet) {
+                $oldAmount   = $transaction->amount;
+                $oldCurrency = $transaction->currency;
+                $oldType     = $transaction->transaction_type;
+                $oldRate     = $transaction->exchange_rate ?? (GlobalConst::EXCHANGE_RATES_TO_VND[$oldCurrency] ?? 1);
+                $oldAmountVnd = $oldAmount * $oldRate;
+
                 if ($oldType == TransactionConst::EXPENSE) {
                     $oldWallet->increment('balance', $oldAmount);
+                    $oldWallet->increment('balance_vnd', $oldAmountVnd);
                 } elseif ($oldType == TransactionConst::INCOME) {
                     $oldWallet->decrement('balance', $oldAmount);
+                    $oldWallet->decrement('balance_vnd', $oldAmountVnd);
                 }
             }
 
             $transaction->update($params);
-    
+
             $newWalletId = $params['wallet_id'] ?? $oldWalletId;
             $newWallet   = $this->getWalletService()->find($newWalletId);
 
             if ($newWallet) {
-                $newAmount = $transaction->amount;
-                $newType   = $transaction->transaction_type;
+                $newAmount   = $transaction->amount;
+                $newCurrency = $transaction->currency;
+                $newType     = $transaction->transaction_type;
+                $newRate     = $transaction->exchange_rate ?? (GlobalConst::EXCHANGE_RATES_TO_VND[$newCurrency] ?? 1);
+                $newAmountVnd = $newAmount * $newRate;
 
                 if ($newType == TransactionConst::EXPENSE) {
                     if ($newWallet->balance < $newAmount) {
@@ -281,8 +299,10 @@ class TransactionService extends BaseCRUDService
                         ];
                     }
                     $newWallet->decrement('balance', $newAmount);
+                    $newWallet->decrement('balance_vnd', $newAmountVnd);
                 } elseif ($newType == TransactionConst::INCOME) {
                     $newWallet->increment('balance', $newAmount);
+                    $newWallet->increment('balance_vnd', $newAmountVnd);
                 }
             }
 
@@ -307,7 +327,6 @@ class TransactionService extends BaseCRUDService
             ];
         }
     }
-
 
     public function prepareParams($request, ?string $code = null): array
     {
