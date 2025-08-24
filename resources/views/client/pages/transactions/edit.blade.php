@@ -163,11 +163,13 @@
             const rates = @json(\App\Consts\GlobalConst::EXCHANGE_RATES_TO_VND);
             const walletByCurrency = @json($walletByCurrency);
             const walletBalances = @json($walletBalances);
+
             const $currency = $('#currency');
             const $wallet = $('#wallet_id');
             const $amount = $('#amount');
             const $balanceVnd = $('#balance_vnd');
             const $submitBtn = $('button[type=submit]');
+            const $transactionType = $('#transaction_type');
 
             function renderWalletOptions(currency, selectedWalletId = null) {
                 const meta = walletByCurrency[currency] || {
@@ -213,7 +215,9 @@
 
                 const walletId = $wallet.val();
                 const walletBalanceVnd = parseFloat(walletBalances[walletId] ?? 0) || 0;
-                if (vnd > walletBalanceVnd) {
+
+                const type = $transactionType.val();
+                if (type === 'EXPENSE' && vnd > walletBalanceVnd) {
                     $amount.addClass('border-red-500');
                     $amount.removeClass('focus:ring-1 focus:ring-teal-500');
                     if ($('#amount-error').length === 0) {
@@ -242,13 +246,14 @@
             });
 
             $wallet.on('change', updateBalanceVndAndValidate);
-
             $amount.on('input change', updateBalanceVndAndValidate);
+            $transactionType.on('change', updateBalanceVndAndValidate);
 
             @if (!empty($initialCurrency))
                 $currency.val('{{ $initialCurrency }}');
             @endif
             $currency.trigger('change');
+
         });
     </script>
 @endpush
