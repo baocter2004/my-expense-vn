@@ -26,8 +26,7 @@
 
     <div class="relative">
         <input id="{{ $name }}" name="{{ $name }}" type="{{ $type }}"
-            @if ($disabled) disabled @endif
-            @if ($type !== 'file') value="{{ old($name, request($name, $value)) }}" @endif
+            @if ($disabled) disabled @endif value="{{ old($name, request($name, $value)) }}"
             placeholder="{{ $placeholder }}"
             class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500
                 {{ $hasError ? 'is-valid' : '' }}

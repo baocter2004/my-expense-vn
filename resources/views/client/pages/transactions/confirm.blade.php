@@ -63,20 +63,32 @@
         </div>
 
         <div class="w-full bg-white p-4 md:p-6 max-w-3xl rounded-2xl shadow-xl grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-            <form action="{{ route('client.transactions.store') }}" method="POST" class="w-full">
+            <form
+                action="{{ !empty($items['code'])
+                    ? route('client.transactions.update', $items['code'])
+                    : route('client.transactions.store') }}"
+                method="POST" class="w-full">
                 @csrf
+
+                @if (!empty($items['code']))
+                    @method('PUT')
+                @endif
+
                 <button
                     class="w-full bg-teal-500 text-white py-3 px-4 rounded-xl flex items-center justify-center 
-                           shadow hover:bg-teal-600 transition font-semibold">
-                    Xác nhận giao dịch
+                   shadow hover:bg-teal-600 transition font-semibold">
+                    {{ !empty($items['code']) ? 'Cập nhật giao dịch' : 'Xác nhận giao dịch' }}
                 </button>
             </form>
 
-             <a href="{{ route('client.transactions.create') }}"
+            <a href="{{ !empty($items['code'])
+                ? route('client.transactions.edit', $items['code'])
+                : route('client.transactions.create') }}"
                 class="bg-white border border-teal-500 text-teal-500 hover:bg-teal-50 hover:border-teal-600 py-3 px-4 rounded-xl text-center font-medium shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2">
                 <i class="fa-solid fa-list text-lg"></i>
                 <span class="hidden sm:inline">Quay lại</span>
             </a>
         </div>
+
     </div>
 @endsection
