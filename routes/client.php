@@ -66,6 +66,7 @@ Route::name('client.')
 
                         Route::get('/{code}/edit', [TransactionController::class, 'edit'])->name('edit');
                         Route::put('/{code}', [TransactionController::class, 'update'])->name('update');
+                        Route::put('/{code}/undo-transaction', [TransactionController::class,'undoTransaction'])->name('undo-transaction');
                         Route::get('/{code}', [TransactionController::class, 'show'])->name('show');
                     });
             });

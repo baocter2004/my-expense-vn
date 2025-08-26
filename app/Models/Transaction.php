@@ -50,4 +50,14 @@ class Transaction extends Model
     {
         return $this->belongsTo(Category::class)->withTrashed();
     }
+
+    public function parentTransaction()
+    {
+        return $this->belongsTo(Transaction::class, 'parent_transaction_id','id');
+    }
+
+    public function reversal()
+    {
+        return $this->belongsTo(Transaction::class, 'parent_transaction_id','id');
+    }
 }

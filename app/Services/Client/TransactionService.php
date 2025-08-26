@@ -55,7 +55,9 @@ class TransactionService extends BaseCRUDService
 
         $relates = [
             'wallet',
-            'category'
+            'category',
+            'parentTransaction',
+            'reversal'
         ];
 
         if (!empty($params['created_from'])) {
@@ -316,6 +318,81 @@ class TransactionService extends BaseCRUDService
         } catch (\Throwable $th) {
             DB::rollBack();
 
+            Log::error('Error in ' . __CLASS__ . '::' . __FUNCTION__, [
+                'error' => $th->getMessage(),
+                'trace' => $th->getTraceAsString(),
+            ]);
+
+            return [
+                'status' => false,
+                'message' => 'Có lỗi xảy ra, vui lòng thử lại!'
+            ];
+        }
+    }
+
+    public function undoTransaction(int|string $code)
+    {
+        DB::beginTransaction();
+        try {
+            $transaction = $this->show($code);
+
+            if (!$transaction) {
+                return [
+                    'status' => false,
+                    'message' => 'Không tìm thấy giao dịch!'
+                ];
+            }
+
+            $wallet = $this->getWalletService()->find($transaction->wallet_id);
+
+            if ($wallet) {
+                $amount   = $transaction->amount;
+                $currency = $transaction->currency;
+                $rate     = $transaction->exchange_rate ?? (GlobalConst::EXCHANGE_RATES_TO_VND[$currency] ?? 1);
+                $amountVnd = $amount * $rate;
+
+                if ($transaction->transaction_type == TransactionConst::EXPENSE) {
+                    $wallet->increment('balance', $amount);
+                    $wallet->increment('balance_vnd', $amountVnd);
+                } elseif ($transaction->transaction_type == TransactionConst::INCOME) {
+                    if ($wallet->balance < $amount) {
+                        DB::rollBack();
+                        return [
+                            'status' => false,
+                            'message' => 'Số dư không đủ để hoàn tác giao dịch!'
+                        ];
+                    }
+                    $wallet->decrement('balance', $amount);
+                    $wallet->decrement('balance_vnd', $amountVnd);
+                }
+            }
+            $data = $transaction->toArray();
+            unset($data['id'], $data['created_at'], $data['updated_at']);
+
+            if ($transaction->transaction_type == TransactionConst::EXPENSE) {
+                $data['transaction_type'] = TransactionConst::INCOME;
+            } elseif ($transaction->transaction_type == TransactionConst::INCOME) {
+                $data['transaction_type'] = TransactionConst::EXPENSE;
+            }
+
+            $data['status'] = TransactionConst::STATUS_REVERSED;
+            $data['parent_transaction_id'] = $transaction->id;
+            $data['description'] = 'Hoàn tác của giao dịch ' . $transaction->code;
+
+            $newTransaction = parent::create($data);
+
+            if($newTransaction) {
+                $this->update($transaction->id,['is_reversal' => 1]);
+            }
+
+            DB::commit();
+            return [
+                'status' => true,
+                'data' => $newTransaction,
+                'message' => 'Hoàn tác giao dịch thành công: ' . $transaction->code,
+            ];
+        } catch (\Throwable $th) {
+            DB::rollBack();
             Log::error('Error in ' . __CLASS__ . '::' . __FUNCTION__, [
                 'error' => $th->getMessage(),
                 'trace' => $th->getTraceAsString(),

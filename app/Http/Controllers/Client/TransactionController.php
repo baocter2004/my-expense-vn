@@ -13,6 +13,7 @@ use App\Services\Client\WalletService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rules\In;
 
 class TransactionController extends Controller
 {
@@ -60,7 +61,7 @@ class TransactionController extends Controller
 
         if ($result['status']) {
             return redirect()->route('client.transactions.index')
-                ->with('success', 'Thêm mới giao dịch thành công!');
+                ->with('success', $result['message']);
         } else {
             return redirect()->route('client.transactions.create')->with('error', $result['message']);
         }
@@ -97,14 +98,16 @@ class TransactionController extends Controller
             $items
         );
 
-        $result = $this->transactionService->updateTransaction($code,$params);
+        $result = $this->transactionService->updateTransaction($code, $params);
         session()->forget('transaction_items');
 
         if ($result['status']) {
             return redirect()->route('client.transactions.index')
-                ->with('success', 'Thay đổi giao dịch thành công!');
+                ->with('success', $result['message']);
         } else {
-            return redirect()->route('client.transactions.create')->with('error', $result['message']);
+            return redirect()
+                ->route('client.transactions.edit', $items->code)
+                ->with('error', $result['message']);
         }
     }
 
@@ -122,5 +125,16 @@ class TransactionController extends Controller
         session(['transaction_items' => $items]);
 
         return view('client.pages.transactions.confirm', compact('items'));
+    }
+
+    public function undoTransaction(int|string $code)
+    {
+        $result = $this->transactionService->undoTransaction($code);
+        if ($result['status']) {
+            return redirect()->route('client.transactions.index')
+                ->with('success', $result['message']);
+        } else {
+            return back()->with('error', $result['message']);
+        }
     }
 }

@@ -39,13 +39,9 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
                 @forelse ($items as $item)
                     <div
-                        class="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-teal-200">
-                        <div
-                            class="absolute inset-0 bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl">
-                        </div>
-
-                        <div class="relative bg-white m-[2px] rounded-3xl overflow-hidden">
-                            <div class="relative bg-teal-50 p-4 sm:p-6 pb-3 sm:pb-4">
+                        class="bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border-2 hover:border-teal-200">
+                        <div class="bg-white rounded-3xl overflow-hidden">
+                            <div class="bg-teal-50 p-4 sm:p-6 pb-3 sm:pb-4">
                                 <div class="flex justify-center mb-4">
                                     <div
                                         class="flex items-center gap-2 px-3 py-2 rounded-full bg-white/80 backdrop-blur-sm shadow-sm">
@@ -160,9 +156,9 @@
                                                 class="w-8 h-8 bg-gray-400 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
                                                 <i class="fa-solid fa-comment text-white text-xs"></i>
                                             </div>
-                                            <div class="flex-1">
+                                            <div class="flex-1 w-full max-w-[300px]">
                                                 <div class="text-xs text-gray-500 font-medium mb-1">Ghi chú</div>
-                                                <div class="text-sm text-gray-700 leading-relaxed break-words">
+                                                <div class="text-sm text-gray-700 truncate">
                                                     {{ $item->description }}
                                                 </div>
                                             </div>
