@@ -23,15 +23,97 @@
                 <i class="fa-solid fa-credit-card text-2xl"></i>
             </div>
             <div>
-                <h2 class="text-lg md:text-xl font-semibold">Chỉnh Sửa Giao Dịch</h2>
+                <h2 class="text-lg md:text-xl font-semibold">Thêm Mới Giao Dịch</h2>
                 <p class="text-sm opacity-90">Xem thông tin chi tiết của giao dịch cá nhân</p>
             </div>
         </div>
         <div class="w-full bg-white p-4 md:p-6 max-w-3xl rounded-2xl shadow-xl">
-            <form action="{{ route('client.transactions.update', $item->code) }}" class="space-y-4" method="POST"
-                id="transactions">
-                @include('client.components.forms.input',[
-                    'name' => ''
+            <form action="{{ route('client.transactions.edit-confirm', ['code' => $oldItems['code']]) }}" class="space-y-4"
+                method="POST" enctype="multipart/form-data" id="transactions">
+                @csrf
+
+                @include('client.components.forms.select', [
+                    'icon' => 'money-bill',
+                    'label' => 'Loại Tiền',
+                    'name' => 'currency',
+                    'placeholder' => 'Vui lòng chọn loại tiền',
+                    'options' => \App\Consts\GlobalConst::CURRENCIES,
+                    'value' => $oldItems['currency'] ?? '',
+                ])
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    @include('client.components.forms.select', [
+                        'placeholder' => 'Vui lòng chọn danh mục',
+                        'name' => 'category_id',
+                        'label' => 'Danh mục',
+                        'icon' => 'tags',
+                        'options' => $categories,
+                        'value' => $oldItems['category_id'] ?? '',
+                    ])
+
+                    @include('client.components.forms.select', [
+                        'placeholder' => 'Vui lòng chọn ví tiền',
+                        'name' => 'wallet_id',
+                        'label' => 'Ví',
+                        'icon' => 'wallet',
+                        'options' => $wallets,
+                        'value' => $oldItems['wallet_id'] ?? $defaultWalletId,
+                    ])
+                </div>
+
+                <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-3 items-start">
+                    @include('client.components.forms.input', [
+                        'name' => 'amount',
+                        'placeholder' => 'Vui lòng nhập số tiền',
+                        'type' => 'number',
+                        'label' => 'Số tiền',
+                        'icon' => 'money-bill-wave',
+                        'value' => $oldItems['amount'] ?? 0,
+                    ])
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1" for="balance_vnd">
+                            Số Tiền (VND)
+                        </label>
+                        <input type="text" id="balance_vnd" name="balance_vnd" value="{{ old('balance_vnd', '0.00') }}"
+                            readonly
+                            class="block w-full rounded-md border-gray-300 bg-gray-100 py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-300" />
+                    </div>
+                </div>
+
+                <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-3 items-start">
+                    @include('client.components.forms.select', [
+                        'name' => 'transaction_type',
+                        'label' => 'Loại giao dịch',
+                        'placeholder' => 'Vui lòng chọn loại giao dịch',
+                        'icon' => 'exchange-alt',
+                        'options' => \App\Consts\TransactionConst::TRANSACTION_TYPE,
+                        'value' => $oldItems['transaction_type'] ?? '',
+                    ])
+
+                    @include('client.components.forms.input', [
+                        'name' => 'receipt_image',
+                        'type' => 'file',
+                        'label' => 'Ảnh hoá đơn',
+                        'icon' => 'image',
+                        'value' => $oldItems['receipt_image'] ?? '',
+                    ])
+                </div>
+
+                @include('client.components.forms.date', [
+                    'name' => 'occurred_at',
+                    'label' => 'Ngày giờ giao dịch',
+                    'icon' => 'calendar-alt',
+                    'with_time' => true,
+                    'value' => $oldItems['occurred_at'] ?? '',
+                ])
+
+                @include('client.components.forms.text-area', [
+                    'name' => 'description',
+                    'placeholder' => 'Thêm ghi chú (tuỳ chọn)',
+                    'label' => 'Mô tả',
+                    'icon' => 'align-left',
+                    'value' => $oldItems['description'] ?? '',
                 ])
             </form>
         </div>
@@ -71,12 +153,123 @@
             @if (session('error'))
                 Swal.fire({
                     icon: 'error',
-                    title: 'Thất Bại!',
+                    title: 'Thất bại!',
                     text: "{{ session('error') }}",
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#ef4444'
                 });
             @endif
+
+            const rates = @json(\App\Consts\GlobalConst::EXCHANGE_RATES_TO_VND);
+            const walletByCurrency = @json($walletByCurrency);
+            const walletBalances = @json($walletBalances);
+
+            const $currency = $('#currency');
+            const $wallet = $('#wallet_id');
+            const $amount = $('#amount');
+            const $balanceVnd = $('#balance_vnd');
+            const $submitBtn = $('button[type=submit]');
+            const $transactionType = $('#transaction_type');
+
+            console.log($currency,$wallet,$amount,$balanceVnd,$submitBtn,$transactionType)
+
+            function renderWalletOptions(currency, selectedWalletId = null) {
+                const meta = walletByCurrency[currency] || {
+                    items: {},
+                    default: null
+                };
+                $wallet.empty();
+
+                $wallet.append(
+                    `<option value="" disabled ${!selectedWalletId ? 'selected' : ''}>Vui lòng chọn ví tiền</option>`
+                );
+
+                for (const [id, label] of Object.entries(meta.items)) {
+                    const isSelected = String(id) === String(selectedWalletId) ? 'selected' : '';
+                    $wallet.append(`<option value="${id}" ${isSelected}>${label}</option>`);
+                }
+
+                if (Object.keys(meta.items).length === 0) {
+                    $wallet.prop('disabled', true);
+                    if ($('#wallet-empty-note').length === 0) {
+                        $wallet.after(
+                            '<p id="wallet-empty-note" class="text-red-500 text-sm mt-1">Không có ví nào cho loại tiền này.</p>'
+                        );
+                    }
+                } else {
+                    $wallet.prop('disabled', false);
+                    $('#wallet-empty-note').remove();
+                }
+            }
+
+            function updateBalanceVndAndValidate() {
+                const bal = parseFloat($amount.val()) || 0;
+                const curr = $currency.val();
+                const rate = parseFloat(rates[curr]) || 1;
+
+                const vnd = bal * rate;
+                $balanceVnd.val(
+                    vnd.toLocaleString('vi-VN', {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0
+                    })
+                );
+
+                const walletId = $wallet.val();
+                const walletBalance = parseFloat(walletBalances[walletId] ?? 0) || 0;
+                const type = $transactionType.val();
+
+                const formattedBalance = walletBalance.toLocaleString('vi-VN', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                });
+                console.log(type,bal,walletBalance)
+                if (type == 2 && bal > walletBalance) {
+                    console.log('eeeee')
+                    $amount.addClass('border-red-500');
+                    $amount.removeClass('focus:ring-1 focus:ring-teal-500');
+                    if ($('#amount-error').length === 0) {
+                        $amount.after(
+                            `<p id="amount-error" class="text-red-500 text-sm mt-1">
+                                Số tiền vượt quá số dư trong ví (số dư: ${formattedBalance} ${curr})
+                            </p>`
+                        );
+                    } else {
+                        $('#amount-error').text(
+                            `Số tiền vượt quá số dư trong ví (số dư: ${formattedBalance} ${curr})`
+                        );
+                    }
+                    $submitBtn.prop('disabled', true);
+                } else {
+                    $amount.removeClass('border-red-500');
+                    $('#amount-error').remove();
+                    $submitBtn.prop('disabled', $wallet.prop('disabled'));
+                }
+            }
+
+
+            $currency.on('change', function() {
+                const curr = $(this).val();
+                const meta = walletByCurrency[curr] || {};
+                const defaultId = meta.default ?? null;
+                let selectedWallet = $wallet.val();
+
+                if (!selectedWallet || !(meta.items && selectedWallet in meta.items)) {
+                    selectedWallet = defaultId;
+                }
+
+                renderWalletOptions(curr, selectedWallet);
+                updateBalanceVndAndValidate();
+            });
+
+            $wallet.on('change', updateBalanceVndAndValidate);
+            $amount.on('input change', updateBalanceVndAndValidate);
+            $transactionType.on('change', updateBalanceVndAndValidate);
+
+            @if (!empty($initialCurrency))
+                $currency.val('{{ $initialCurrency }}');
+            @endif
+            $currency.trigger('change');
         });
     </script>
 @endpush

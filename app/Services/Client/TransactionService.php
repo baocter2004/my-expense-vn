@@ -20,6 +20,7 @@ use Illuminate\Support\Str;
 class TransactionService extends BaseCRUDService
 {
     protected $walletService;
+    protected $categoryService;
     protected function getRepository(): TransactionRepository
     {
         if (empty($this->repository)) {
@@ -36,6 +37,14 @@ class TransactionService extends BaseCRUDService
         return $this->walletService;
     }
 
+    protected function getCategoryService(): CategoryService
+    {
+        if (empty($this->categoryService)) {
+            $this->categoryService = app()->make(CategoryService::class);
+        }
+        return $this->categoryService;
+    }
+
     protected function buildFilterParams(array $params): array
     {
         $wheres     = Arr::get($params, 'wheres', []);
@@ -46,7 +55,9 @@ class TransactionService extends BaseCRUDService
 
         $relates = [
             'wallet',
-            'category'
+            'category',
+            'parentTransaction',
+            'reversal'
         ];
 
         if (!empty($params['created_from'])) {
@@ -166,12 +177,19 @@ class TransactionService extends BaseCRUDService
             }
             if (!empty($wallet)) {
                 $amount = (float) $transaction->amount;
+                $currency = $transaction->currency;
+                $rate = GlobalConst::EXCHANGE_RATES_TO_VND[$currency] ?? 1;
+                $amountVnd = $amount * $rate;
+
                 if ($transaction->transaction_type == TransactionConst::EXPENSE) {
                     $wallet->decrement('balance', $amount);
+                    $wallet->decrement('balance_vnd', $amountVnd);
                 } elseif ($transaction->transaction_type == TransactionConst::INCOME) {
                     $wallet->increment('balance', $amount);
+                    $wallet->increment('balance_vnd', $amountVnd);
                 }
             }
+
             DB::commit();
             return [
                 'status' => true,
@@ -195,5 +213,272 @@ class TransactionService extends BaseCRUDService
                 'message' => 'Có lỗi xảy ra , vui lòng thử lại !'
             ];
         }
+    }
+    public function updateTransaction(int|string $code, array $params = [])
+    {
+        try {
+            DB::beginTransaction();
+
+            $transaction = $this->show($code);
+            if (!$transaction) {
+                return [
+                    'status' => false,
+                    'message' => 'Không tìm thấy giao dịch!'
+                ];
+            }
+
+            $params['status'] = $params['status'] ?? TransactionConst::STATUS_COMPLETED;
+
+            $oldWalletId = $transaction->wallet_id;
+            $oldAmount   = $transaction->amount;
+            $oldType     = $transaction->transaction_type;
+
+            $oldWallet = $this->getWalletService()->find($oldWalletId);
+
+            if (!empty($params['receipt_image']) && str_contains($params['receipt_image'], 'transactions/temp')) {
+                $oldPath = $params['receipt_image'];
+                $userId = $transaction->user_id ?? ($params['user_id'] ?? Auth::id());
+
+                $originalName = basename($oldPath);
+                $ext = pathinfo($originalName, PATHINFO_EXTENSION);
+                $nameOnly = pathinfo($originalName, PATHINFO_FILENAME);
+                $newFileName = time() . '_' . Str::random(6) . '_' . Str::slug($nameOnly) . ($ext ? '.' . $ext : '');
+
+                $newDir = "users/transactions/{$userId}";
+                if (!Storage::disk('public')->exists($newDir)) {
+                    Storage::disk('public')->makeDirectory($newDir);
+                }
+
+                $newPath = $newDir . '/' . $newFileName;
+
+                if (Storage::disk('public')->exists($oldPath)) {
+                    Storage::disk('public')->move($oldPath, $newPath);
+                    $params['receipt_image'] = $newPath;
+                } else {
+                    return [
+                        'status' => false,
+                        'message' => 'Không tìm thấy ảnh!'
+                    ];
+                }
+            } else {
+                unset($params['receipt_image']);
+            }
+
+            if ($oldWallet) {
+                $oldAmount   = $transaction->amount;
+                $oldCurrency = $transaction->currency;
+                $oldType     = $transaction->transaction_type;
+                $oldRate     = $transaction->exchange_rate ?? (GlobalConst::EXCHANGE_RATES_TO_VND[$oldCurrency] ?? 1);
+                $oldAmountVnd = $oldAmount * $oldRate;
+
+                if ($oldType == TransactionConst::EXPENSE) {
+                    $oldWallet->increment('balance', $oldAmount);
+                    $oldWallet->increment('balance_vnd', $oldAmountVnd);
+                } elseif ($oldType == TransactionConst::INCOME) {
+                    $oldWallet->decrement('balance', $oldAmount);
+                    $oldWallet->decrement('balance_vnd', $oldAmountVnd);
+                }
+            }
+
+            $transaction->update($params);
+
+            $newWalletId = $params['wallet_id'] ?? $oldWalletId;
+            $newWallet   = $this->getWalletService()->find($newWalletId);
+
+            if ($newWallet) {
+                $newAmount   = $transaction->amount;
+                $newCurrency = $transaction->currency;
+                $newType     = $transaction->transaction_type;
+                $newRate     = $transaction->exchange_rate ?? (GlobalConst::EXCHANGE_RATES_TO_VND[$newCurrency] ?? 1);
+                $newAmountVnd = $newAmount * $newRate;
+
+                if ($newType == TransactionConst::EXPENSE) {
+                    if ($newWallet->balance < $newAmount) {
+                        DB::rollBack();
+                        return [
+                            'status' => false,
+                            'message' => 'Số dư không đủ để thực hiện giao dịch!'
+                        ];
+                    }
+                    $newWallet->decrement('balance', $newAmount);
+                    $newWallet->decrement('balance_vnd', $newAmountVnd);
+                } elseif ($newType == TransactionConst::INCOME) {
+                    $newWallet->increment('balance', $newAmount);
+                    $newWallet->increment('balance_vnd', $newAmountVnd);
+                }
+            }
+
+            DB::commit();
+
+            return [
+                'status' => true,
+                'data' => $transaction,
+                'message' => 'Cập nhật giao dịch thành công: ' . $transaction->code,
+            ];
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            Log::error('Error in ' . __CLASS__ . '::' . __FUNCTION__, [
+                'error' => $th->getMessage(),
+                'trace' => $th->getTraceAsString(),
+            ]);
+
+            return [
+                'status' => false,
+                'message' => 'Có lỗi xảy ra, vui lòng thử lại!'
+            ];
+        }
+    }
+
+    public function undoTransaction(int|string $code)
+    {
+        DB::beginTransaction();
+        try {
+            $transaction = $this->show($code);
+
+            if (!$transaction) {
+                return [
+                    'status' => false,
+                    'message' => 'Không tìm thấy giao dịch!'
+                ];
+            }
+
+            $wallet = $this->getWalletService()->find($transaction->wallet_id);
+
+            if ($wallet) {
+                $amount   = $transaction->amount;
+                $currency = $transaction->currency;
+                $rate     = $transaction->exchange_rate ?? (GlobalConst::EXCHANGE_RATES_TO_VND[$currency] ?? 1);
+                $amountVnd = $amount * $rate;
+
+                if ($transaction->transaction_type == TransactionConst::EXPENSE) {
+                    $wallet->increment('balance', $amount);
+                    $wallet->increment('balance_vnd', $amountVnd);
+                } elseif ($transaction->transaction_type == TransactionConst::INCOME) {
+                    if ($wallet->balance < $amount) {
+                        DB::rollBack();
+                        return [
+                            'status' => false,
+                            'message' => 'Số dư không đủ để hoàn tác giao dịch!'
+                        ];
+                    }
+                    $wallet->decrement('balance', $amount);
+                    $wallet->decrement('balance_vnd', $amountVnd);
+                }
+            }
+            $data = $transaction->toArray();
+            unset($data['id'], $data['created_at'], $data['updated_at']);
+
+            if ($transaction->transaction_type == TransactionConst::EXPENSE) {
+                $data['transaction_type'] = TransactionConst::INCOME;
+            } elseif ($transaction->transaction_type == TransactionConst::INCOME) {
+                $data['transaction_type'] = TransactionConst::EXPENSE;
+            }
+
+            $data['status'] = TransactionConst::STATUS_REVERSED;
+            $data['parent_transaction_id'] = $transaction->id;
+            $data['description'] = 'Hoàn tác của giao dịch ' . $transaction->code;
+
+            $newTransaction = parent::create($data);
+
+            if($newTransaction) {
+                $this->update($transaction->id,['is_reversal' => 1]);
+            }
+
+            DB::commit();
+            return [
+                'status' => true,
+                'data' => $newTransaction,
+                'message' => 'Hoàn tác giao dịch thành công: ' . $transaction->code,
+            ];
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error('Error in ' . __CLASS__ . '::' . __FUNCTION__, [
+                'error' => $th->getMessage(),
+                'trace' => $th->getTraceAsString(),
+            ]);
+
+            return [
+                'status' => false,
+                'message' => 'Có lỗi xảy ra, vui lòng thử lại!'
+            ];
+        }
+    }
+
+    public function prepareParams($request, ?string $code = null): array
+    {
+        $items = $request->validated();
+
+        if ($request->hasFile('receipt_image')) {
+            $items['receipt_image'] = $request->file('receipt_image')
+                ->store('transactions/temp', 'public');
+        } elseif ($code) {
+            $old = $this->show($code);
+            if ($old && $old->receipt_image) {
+                $items['receipt_image'] = $old->receipt_image;
+            }
+        }
+
+        if (!empty($items['category_id'])) {
+            $category = $this->getCategoryService()
+                ->getFields(['id', 'name'], ['where' => ['id' => $items['category_id']]])
+                ->first();
+            $items['category_name'] = $category->name ?? null;
+        }
+
+        if (!empty($items['wallet_id'])) {
+            $wallet = $this->getWalletService()
+                ->getFields(['id', 'name'], ['where' => ['id' => $items['wallet_id']]])
+                ->first();
+            $items['wallet_name'] = $wallet->name ?? null;
+        }
+
+        if ($code) {
+            $items['code'] = $code;
+        }
+
+        return $items;
+    }
+
+    public function prepareFormData(array $params = []): array
+    {
+        $categories = $this->getCategoryService()
+            ->getFields(['id', 'name'], ['where' => ['is_active' => GlobalConst::ACTIVE]])
+            ->pluck('name', 'id')
+            ->toArray();
+
+        $walletData = $this->getWalletService()->getWalletForTransactions();
+        $byCurrency = $walletData['by_currency'] ?? [];
+
+        $oldItems = $params['oldItems'] ?? session('transaction_items', []);
+
+        $initialCurrency = old('currency', $oldItems['currency'] ?? null);
+
+        if (empty($initialCurrency)) {
+            $defaultCurrency = null;
+            foreach ($byCurrency as $currencyKey => $meta) {
+                if (!empty($meta['default'])) {
+                    $defaultCurrency = $currencyKey;
+                    break;
+                }
+            }
+            $initialCurrency = $defaultCurrency ?? array_key_first($byCurrency) ?? GlobalConst::CURRENCY_VND;
+        }
+
+        $walletsForInitialCurrency = $byCurrency[$initialCurrency]['items'] ?? [];
+
+        $defaultWalletId = old('wallet_id', $oldItems['wallet_id'] ?? ($byCurrency[$initialCurrency]['default'] ?? null));
+
+        $walletBalances = collect($walletData['wallets'] ?? [])->pluck('balance_vnd', 'id')->toArray();
+
+        return [
+            'categories' => $categories,
+            'wallets' => $walletsForInitialCurrency,
+            'defaultWalletId' => $defaultWalletId,
+            'walletByCurrency' => $byCurrency,
+            'walletBalances' => $walletBalances,
+            'initialCurrency' => $initialCurrency,
+            'oldItems' => $oldItems,
+        ];
     }
 }

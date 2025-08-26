@@ -153,7 +153,7 @@
             @if (session('error'))
                 Swal.fire({
                     icon: 'error',
-                    title: 'Thất Bại!',
+                    title: 'Thất bại!',
                     text: "{{ session('error') }}",
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#ef4444'
@@ -163,11 +163,15 @@
             const rates = @json(\App\Consts\GlobalConst::EXCHANGE_RATES_TO_VND);
             const walletByCurrency = @json($walletByCurrency);
             const walletBalances = @json($walletBalances);
+
             const $currency = $('#currency');
             const $wallet = $('#wallet_id');
             const $amount = $('#amount');
             const $balanceVnd = $('#balance_vnd');
             const $submitBtn = $('button[type=submit]');
+            const $transactionType = $('#transaction_type');
+
+            console.log($currency, $wallet, $amount, $balanceVnd, $submitBtn, $transactionType)
 
             function renderWalletOptions(currency, selectedWalletId = null) {
                 const meta = walletByCurrency[currency] || {
@@ -189,7 +193,7 @@
                     $wallet.prop('disabled', true);
                     if ($('#wallet-empty-note').length === 0) {
                         $wallet.after(
-                            '<p id="wallet-empty-note" class="text-red-500 text-sm mt-1">Không có ví cho loại tiền này.</p>'
+                            '<p id="wallet-empty-note" class="text-red-500 text-sm mt-1">Không có ví nào cho loại tiền này.</p>'
                         );
                     }
                 } else {
@@ -199,11 +203,11 @@
             }
 
             function updateBalanceVndAndValidate() {
-                var bal = parseFloat($amount.val()) || 0;
-                var curr = $currency.val();
-                var rate = parseFloat(rates[curr]) || 1;
-                var vnd = bal * rate;
+                const bal = parseFloat($amount.val()) || 0;
+                const curr = $currency.val();
+                const rate = parseFloat(rates[curr]) || 1;
 
+                const vnd = bal * rate;
                 $balanceVnd.val(
                     vnd.toLocaleString('vi-VN', {
                         minimumFractionDigits: 0,
@@ -212,13 +216,27 @@
                 );
 
                 const walletId = $wallet.val();
-                const walletBalanceVnd = parseFloat(walletBalances[walletId] ?? 0) || 0;
-                if (vnd > walletBalanceVnd) {
+                const walletBalance = parseFloat(walletBalances[walletId] ?? 0) || 0;
+                const type = $transactionType.val();
+
+                const formattedBalance = walletBalance.toLocaleString('vi-VN', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                });
+                console.log(type, bal, walletBalance)
+                if (type == 2 && bal > walletBalance) {
+                    console.log('eeeee')
                     $amount.addClass('border-red-500');
                     $amount.removeClass('focus:ring-1 focus:ring-teal-500');
                     if ($('#amount-error').length === 0) {
                         $amount.after(
-                            '<p id="amount-error" class="text-red-500 text-sm mt-1">Số tiền vượt quá số dư trong ví!</p>'
+                            `<p id="amount-error" class="text-red-500 text-sm mt-1">
+                                Số tiền vượt quá số dư trong ví (số dư: ${formattedBalance} ${curr})
+                            </p>`
+                        );
+                    } else {
+                        $('#amount-error').text(
+                            `Số tiền vượt quá số dư trong ví (số dư: ${formattedBalance} ${curr})`
                         );
                     }
                     $submitBtn.prop('disabled', true);
@@ -229,21 +247,24 @@
                 }
             }
 
+
             $currency.on('change', function() {
                 const curr = $(this).val();
                 const meta = walletByCurrency[curr] || {};
                 const defaultId = meta.default ?? null;
                 let selectedWallet = $wallet.val();
+
                 if (!selectedWallet || !(meta.items && selectedWallet in meta.items)) {
                     selectedWallet = defaultId;
                 }
+
                 renderWalletOptions(curr, selectedWallet);
                 updateBalanceVndAndValidate();
             });
 
             $wallet.on('change', updateBalanceVndAndValidate);
-
             $amount.on('input change', updateBalanceVndAndValidate);
+            $transactionType.on('change', updateBalanceVndAndValidate);
 
             @if (!empty($initialCurrency))
                 $currency.val('{{ $initialCurrency }}');

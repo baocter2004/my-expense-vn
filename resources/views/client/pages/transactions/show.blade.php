@@ -166,7 +166,7 @@
                 <span class="hidden sm:inline">Chỉnh sửa</span>
             </a>
 
-            @if (!$item->is_reversal && $item->status !== \App\Consts\TransactionConst::STATUS_REVERSED)
+            @if ($item->status !== \App\Consts\TransactionConst::STATUS_REVERSED && !$item->is_reversal)
                 <button onclick="confirmReversal()"
                     class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white py-3 px-4 rounded-xl text-center font-medium shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 relative overflow-hidden group">
                     <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300">
@@ -295,13 +295,20 @@
                     });
                     const form = document.createElement('form');
                     form.method = 'POST';
-                    form.action = '{{ route('client.transactions.create', $item->code) }}';
+                    form.action = '{{ route('client.transactions.undo-transaction', $item->code) }}';
+                    console.log(form)
 
                     const csrfToken = document.createElement('input');
                     csrfToken.type = 'hidden';
                     csrfToken.name = '_token';
                     csrfToken.value = '{{ csrf_token() }}';
                     form.appendChild(csrfToken);
+
+                    const methodInput = document.createElement('input');
+                    methodInput.type = 'hidden';
+                    methodInput.name = '_method';
+                    methodInput.value = 'PUT';
+                    form.appendChild(methodInput);
 
                     document.body.appendChild(form);
                     form.submit();

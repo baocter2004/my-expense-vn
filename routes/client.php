@@ -59,12 +59,14 @@ Route::name('client.')
                         Route::get('/', [TransactionController::class, 'index'])->name('index');
 
                         Route::get('/create', [TransactionController::class, 'create'])->name('create');
-                        Route::post('/create', [TransactionController::class, 'store'])->name('store');
+                        Route::post('/', [TransactionController::class, 'store'])->name('store');
 
                         Route::post('/confirm', [TransactionController::class, 'confirm'])->name('confirm');
+                        Route::post('{code}/confirm', [TransactionController::class, 'editConfirm'])->name('edit-confirm');
 
                         Route::get('/{code}/edit', [TransactionController::class, 'edit'])->name('edit');
                         Route::put('/{code}', [TransactionController::class, 'update'])->name('update');
+                        Route::put('/{code}/undo-transaction', [TransactionController::class,'undoTransaction'])->name('undo-transaction');
                         Route::get('/{code}', [TransactionController::class, 'show'])->name('show');
                     });
             });
