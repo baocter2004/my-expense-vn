@@ -160,11 +160,19 @@
         </div>
 
         <div class="w-full max-w-3xl grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-            <a href="{{ route('client.transactions.edit', $item->code) }}"
-                class="bg-teal-500 hover:bg-teal-600 text-white py-3 px-4 rounded-xl text-center font-medium shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2">
-                <i class="fa-solid fa-pen-to-square text-lg"></i>
-                <span class="hidden sm:inline">Chỉnh sửa</span>
-            </a>
+            @if (!$item->is_reversal && $item->status !== \App\Consts\TransactionConst::STATUS_REVERSED)
+                <a href="{{ route('client.transactions.edit', $item->code) }}"
+                    class="flex items-center justify-center gap-2 bg-white border border-teal-500 text-teal-500 py-2 px-4 rounded-xl font-medium shadow-lg hover:shadow-xl hover:bg-teal-50 transform hover:scale-105 transition-all duration-300">
+                    <i class="fa-solid fa-edit text-sm"></i>
+                    <span class="text-sm">Sửa</span>
+                </a>
+            @else
+                <div
+                    class="flex items-center justify-center gap-2 bg-gray-200 text-gray-500 py-2 px-4 rounded-xl font-medium shadow-md cursor-not-allowed">
+                    <i class="fa-solid fa-ban text-sm"></i>
+                    <span class="text-sm">Không thể sửa</span>
+                </div>
+            @endif
 
             @if ($item->status !== \App\Consts\TransactionConst::STATUS_REVERSED && !$item->is_reversal)
                 <button onclick="confirmReversal()"
@@ -200,7 +208,8 @@
                     </div>
                     <div class="ml-3">
                         <p class="text-sm text-orange-700 font-medium">
-                            <span class="font-semibold">Lưu ý:</span> Thao tác hoàn tác sẽ tạo một giao dịch ngược lại để bù
+                            <span class="font-semibold">Lưu ý:</span> Thao tác hoàn tác sẽ tạo một giao dịch ngược lại để
+                            bù
                             trừ giao dịch này và không thể hoàn tác.
                         </p>
                     </div>

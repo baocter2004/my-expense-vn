@@ -173,11 +173,19 @@
                                         <span class="text-sm">Chi tiết</span>
                                     </a>
 
-                                    <a href="{{ route('client.transactions.edit', $item->code) }}"
-                                        class="flex items-center justify-center gap-2 bg-white border border-teal-500 text-teal-500 py-2 px-4 rounded-xl font-medium shadow-lg hover:shadow-xl hover:bg-teal-50 transform hover:scale-105 transition-all duration-300">
-                                        <i class="fa-solid fa-edit text-sm"></i>
-                                        <span class="text-sm">Sửa</span>
-                                    </a>
+                                    @if (!$item->is_reversal && $item->status !== \App\Consts\TransactionConst::STATUS_REVERSED)
+                                        <a href="{{ route('client.transactions.edit', $item->code) }}"
+                                            class="flex items-center justify-center gap-2 bg-white border border-teal-500 text-teal-500 py-2 px-4 rounded-xl font-medium shadow-lg hover:shadow-xl hover:bg-teal-50 transform hover:scale-105 transition-all duration-300">
+                                            <i class="fa-solid fa-edit text-sm"></i>
+                                            <span class="text-sm">Sửa</span>
+                                        </a>
+                                    @else
+                                        <div
+                                            class="flex items-center justify-center gap-2 bg-gray-200 text-gray-500 py-2 px-4 rounded-xl font-medium shadow-md cursor-not-allowed">
+                                            <i class="fa-solid fa-ban text-sm"></i>
+                                            <span class="text-sm">Không thể sửa</span>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
 
