@@ -1,4 +1,5 @@
-<div id="chatModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-2 z-[2000] hidden">
+<div id="chatModal"
+    class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-2 z-[2000] hidden">
     <div
         class="bg-white rounded-xl w-full max-w-2xl h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-gray-200">
         <div
@@ -7,7 +8,7 @@
                 <div class="relative">
                     <div
                         class="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
-                        🤖
+                        AI
                     </div>
                     <div
                         class="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border border-white animate-pulse">
@@ -32,8 +33,7 @@
                             d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     </svg>
                 </button>
-                <button id="closeChat"
-                    class="w-8 h-8 flex items-center justify-center rounded-full">
+                <button id="closeChat" class="w-8 h-8 flex items-center justify-center rounded-full">
                     ✖
                 </button>
             </div>
@@ -47,7 +47,7 @@
             </div>
         </div>
 
-        <div
+        <div id="chat-container"
             class="flex-1 p-4 overflow-y-auto bg-gradient-to-br from-teal-50 to-cyan-50 space-y-4 scrollbar-thin scrollbar-thumb-teal-400 scrollbar-track-transparent hover:scrollbar-thumb-teal-500">
 
             <div class="text-center py-4">
@@ -127,24 +127,6 @@
                 </div>
             </div>
 
-            <div class="flex items-center gap-2">
-                <div
-                    class="w-8 h-8 rounded-full bg-teal-400 flex items-center justify-center text-white font-bold animate-pulse">
-                    AI
-                </div>
-                <div class="bg-white border border-teal-200 rounded-lg px-3 py-2 shadow">
-                    <div class="flex items-center gap-1">
-                        <div class="w-2 h-2 bg-teal-400 rounded-full animate-bounce"></div>
-                        <div class="w-2 h-2 bg-teal-400 rounded-full animate-bounce" style="animation-delay: 0.1s">
-                        </div>
-                        <div class="w-2 h-2 bg-teal-400 rounded-full animate-bounce" style="animation-delay: 0.2s">
-                        </div>
-                        <span class="text-teal-600 ml-2 text-sm">Đang suy nghĩ...</span>
-                    </div>
-                </div>
-            </div>
-
-
             <div class="flex items-start gap-2">
                 <div class="w-8 h-8 rounded-full bg-teal-400 flex items-center justify-center text-white font-bold">
                     AI
@@ -189,7 +171,7 @@
         <div class="p-4 border-t bg-white rounded-b-xl space-y-3">
             <div class="w-full grid grid-cols-2 md:grid-cols-4 gap-2 mb-2">
                 <button
-                    class="flex items-center gap-1 px-3 py-1 bg-teal-100 hover:bg-teal-200 text-teal-700 rounded-full text-sm transition-all duration-200 hover:scale-105">
+                    class="quick-send flex items-center gap-1 px-3 py-1 bg-teal-100 hover:bg-teal-200 text-teal-700 rounded-full text-sm transition-all duration-200 hover:scale-105">
                     <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
                         <path
                             d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
@@ -197,7 +179,7 @@
                     Giới thiệu
                 </button>
                 <button
-                    class="flex items-center gap-1 px-3 py-1 bg-teal-100 hover:bg-teal-200 text-teal-700 rounded-full text-sm transition-all duration-200 hover:scale-105">
+                    class="quick-send flex items-center gap-1 px-3 py-1 bg-teal-100 hover:bg-teal-200 text-teal-700 rounded-full text-sm transition-all duration-200 hover:scale-105">
                     <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
                         <path
                             d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
@@ -205,7 +187,7 @@
                     Hướng dẫn
                 </button>
                 <button
-                    class="flex items-center gap-1 px-3 py-1 bg-teal-100 hover:bg-teal-200 text-teal-700 rounded-full text-sm transition-all duration-200 hover:scale-105">
+                    class="quick-send flex items-center gap-1 px-3 py-1 bg-teal-100 hover:bg-teal-200 text-teal-700 rounded-full text-sm transition-all duration-200 hover:scale-105">
                     <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
                         <path
                             d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
@@ -213,7 +195,7 @@
                     Liên hệ
                 </button>
                 <button
-                    class="flex items-center gap-1 px-3 py-1 bg-cyan-100 hover:bg-cyan-200 text-cyan-700 rounded-full text-sm transition-all duration-200 hover:scale-105">
+                    class="quick-send flex items-center gap-1 px-3 py-1 bg-cyan-100 hover:bg-cyan-200 text-cyan-700 rounded-full text-sm transition-all duration-200 hover:scale-105">
                     <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
                         <path
                             d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.82,11.69,4.82,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z" />
@@ -224,24 +206,14 @@
 
             <div class="bg-gradient-to-r from-teal-50 to-cyan-50 border border-teal-200 rounded-lg p-2">
                 <div class="w-full flex items-center gap-2 p-2 bg-gray-50">
-                    <div class="relative">
-                        <button id="menu-btn"
-                            class="w-10 h-10 flex items-center justify-center rounded-lg bg-white border border-teal-200 hover:bg-gray-50 transition">
-                            <svg class="w-5 h-5 text-teal-500" fill="currentColor" viewBox="0 0 20 20">
-                                <path
-                                    d="M6 10a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0z" />
-                            </svg>
-                        </button>
-                    </div>
-
-                    <input type="text" placeholder="Nhập tin nhắn..."
+                    <input type="text" placeholder="Nhập tin nhắn..." id="input-form"
                         class="flex-1 border border-teal-400 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white">
-                    <button
+                    <button id="button-send"
                         class="bg-gradient-to-r from-teal-400 to-cyan-400 text-white px-4 py-2 rounded-md transition hover:scale-105 flex items-center gap-2">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                         </svg>
-                        <span class="hidden sm:inline">Gửi</span>
+                        <span class="hidden md:inline">Gửi</span>
                     </button>
                 </div>
 
@@ -262,3 +234,5 @@
         </div>
     </div>
 </div>
+
+@include('client.components.scripts.ai-modal')
