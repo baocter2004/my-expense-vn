@@ -18,13 +18,13 @@
 @section('content')
     <div
         class="w-full flex flex-col items-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-4 md:p-6 rounded-3xl min-h-screen">
-        <div class="mb-6 p-4 md:p-6 bg-teal-500 rounded-2xl shadow-lg flex items-center gap-4 text-white">
+        <div class="w-full max-w-3xl mb-6 p-4 md:p-6 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-2xl shadow-lg flex items-center gap-4 text-white">
             <div class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-full shadow-md">
                 <i class="fa-solid fa-credit-card text-2xl"></i>
             </div>
             <div>
-                <h2 class="text-lg md:text-xl font-semibold">Thêm Mới Giao Dịch</h2>
-                <p class="text-sm opacity-90">Xem thông tin chi tiết của giao dịch cá nhân</p>
+                <h2 class="text-lg md:text-xl font-semibold">Chỉnh Sửa Giao Dịch</h2>
+                <p class="text-sm opacity-90">Chỉnh sửa thông tin chi tiết của giao dịch cá nhân</p>
             </div>
         </div>
         <div class="w-full bg-white p-4 md:p-6 max-w-3xl rounded-2xl shadow-xl">
@@ -171,7 +171,7 @@
             const $submitBtn = $('button[type=submit]');
             const $transactionType = $('#transaction_type');
 
-            console.log($currency,$wallet,$amount,$balanceVnd,$submitBtn,$transactionType)
+            console.log($currency, $wallet, $amount, $balanceVnd, $submitBtn, $transactionType)
 
             function renderWalletOptions(currency, selectedWalletId = null) {
                 const meta = walletByCurrency[currency] || {
@@ -223,7 +223,7 @@
                     minimumFractionDigits: 0,
                     maximumFractionDigits: 0
                 });
-                console.log(type,bal,walletBalance)
+                console.log(type, bal, walletBalance)
                 if (type == 2 && bal > walletBalance) {
                     console.log('eeeee')
                     $amount.addClass('border-red-500');
@@ -246,7 +246,6 @@
                     $submitBtn.prop('disabled', $wallet.prop('disabled'));
                 }
             }
-
 
             $currency.on('change', function() {
                 const curr = $(this).val();

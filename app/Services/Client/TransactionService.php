@@ -421,14 +421,14 @@ class TransactionService extends BaseCRUDService
 
         if (!empty($items['category_id'])) {
             $category = $this->getCategoryService()
-                ->getFields(['id', 'name'], ['where' => ['id' => $items['category_id']]])
+                ->getFields(['id', 'name'], ['wheres' => ['id' => $items['category_id']]])
                 ->first();
             $items['category_name'] = $category->name ?? null;
         }
 
         if (!empty($items['wallet_id'])) {
             $wallet = $this->getWalletService()
-                ->getFields(['id', 'name'], ['where' => ['id' => $items['wallet_id']]])
+                ->getFields(['id', 'name'], ['wheres' => ['id' => $items['wallet_id']]])
                 ->first();
             $items['wallet_name'] = $wallet->name ?? null;
         }
@@ -443,7 +443,7 @@ class TransactionService extends BaseCRUDService
     public function prepareFormData(array $params = []): array
     {
         $categories = $this->getCategoryService()
-            ->getFields(['id', 'name'], ['where' => ['is_active' => GlobalConst::ACTIVE]])
+            ->getFields(['id', 'name'], ['wheres' => ['is_active' => GlobalConst::ACTIVE]])
             ->pluck('name', 'id')
             ->toArray();
 
