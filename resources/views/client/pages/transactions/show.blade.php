@@ -19,11 +19,13 @@
     <div
         class="w-full flex flex-col items-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-4 md:p-6 rounded-3xl min-h-screen">
         <div
-            class="w-full max-w-3xl mb-6 p-4 md:p-6 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-2xl shadow-lg flex items-center gap-4 text-white">
+            class="w-full max-w-3xl mb-6 p-4 md:p-6 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-2xl shadow-lg flex flex-col md:flex-row items-center gap-4 text-white">
+
             <div class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-full shadow-md">
                 <i class="fa-solid fa-credit-card text-2xl"></i>
             </div>
-            <div>
+
+            <div class="text-center md:text-left">
                 <h2 class="text-lg md:text-xl font-semibold">Chi Tiết Giao Dịch</h2>
                 <p class="text-sm opacity-90">Thông tin chi tiết về giao dịch này</p>
             </div>
@@ -183,7 +185,7 @@
             @endif
 
             @if ($item->status !== \App\Consts\TransactionConst::STATUS_REVERSED && !$item->is_reversal)
-                <button onclick="confirmReversal()"
+                <button id="confirm-reversal"
                     class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white py-3 px-4 rounded-xl text-center font-medium shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 relative overflow-hidden group">
                     <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300">
                     </div>
@@ -265,7 +267,7 @@
                 $("#image-modal").addClass('hidden');
             });
 
-            function confirmReversal() {
+            $('#confirm-reversal').on('click', function() {
                 Swal.fire({
                     title: 'Xác nhận hoàn tác?',
                     html: `
@@ -315,7 +317,8 @@
                         });
                         const form = document.createElement('form');
                         form.method = 'POST';
-                        form.action = '{{ route('client.transactions.undo-transaction', $item->code) }}';
+                        form.action =
+                            '{{ route('client.transactions.undo-transaction', $item->code) }}';
                         console.log(form)
 
                         const csrfToken = document.createElement('input');
@@ -334,32 +337,49 @@
                         form.submit();
                     }
                 });
-            }
+            });
 
             $("#btn-pdf").on('click', function() {
-                const elementPdf = $('#content-pdf')[0];
+                Swal.fire({
+                    title: 'Tải PDF ?',
+                    text: "Bạn có chắc chắn muốn tải file PDF này không ?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Tải ngay',
+                    confirmButtonColor: '#14b8a6',
+                    cancelButtonColor: '#6b7280',
+                    cancelButtonText: 'Hủy bỏ',
+                    reverseButtons: true
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        const elementPdf = $('#content-pdf')[0];
 
-                const opt = {
-                    margin: 10,
-                    filename: "giao-dich-{{ $item->code }}.pdf",
-                    image: {
-                        type: 'jpeg',
-                        quality: 0.98
-                    },
-                    html2canvas: {
-                        scale: 2
-                    },
-                    jsPDF: {
-                        unit: 'mm',
-                        format: 'a4',
-                        orientation: 'portrait'
-                    },
-                    pagebreak: {
-                        mode: ['css', 'legacy']
+                        const opt = {
+                            margin: 10,
+                            filename: "giao-dich-{{ $item->code }}.pdf",
+                            image: {
+                                type: 'jpeg',
+                                quality: 0.98
+                            },
+                            html2canvas: {
+                                scale: 2
+                            },
+                            jsPDF: {
+                                unit: 'mm',
+                                format: 'a4',
+                                orientation: 'portrait'
+                            },
+                            pagebreak: {
+                                mode: ['css', 'legacy']
+                            }
+                        };
+
+                        html2pdf().set(opt).from(elementPdf).save().then(() => {
+                            Swal.fire('Thành công!', 'File PDF đã được tải xuống.',
+                                'success');
+                        });
                     }
-                };
-
-                html2pdf().set(opt).from(elementPdf).save();
+                });
             });
         });
     </script>
