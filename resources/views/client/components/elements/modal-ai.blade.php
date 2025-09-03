@@ -145,38 +145,75 @@
 
         <div class="p-4 border-t bg-white rounded-b-xl space-y-3">
             <div class="w-full grid grid-cols-2 md:grid-cols-4 gap-2 mb-2">
-                <button
-                    class="quick-send flex justify-center items-center gap-1 px-3 py-1 bg-teal-100 hover:bg-teal-200 text-teal-700 rounded-full text-sm transition-all duration-200 hover:scale-105">
-                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                        <path
-                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-                    </svg>
-                    Giới thiệu
-                </button>
-                <button
-                    class="quick-send flex justify-center items-center gap-1 px-3 py-1 bg-teal-100 hover:bg-teal-200 text-teal-700 rounded-full text-sm transition-all duration-200 hover:scale-105">
-                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                        <path
-                            d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
-                    </svg>
-                    Hướng dẫn
-                </button>
-                <button
-                    class="quick-send flex justify-center items-center gap-1 px-3 py-1 bg-teal-100 hover:bg-teal-200 text-teal-700 rounded-full text-sm transition-all duration-200 hover:scale-105">
-                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                        <path
-                            d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
-                    </svg>
-                    Liên hệ
-                </button>
-                <button
-                    class="quick-send flex justify-center items-center gap-1 px-3 py-1 bg-cyan-100 hover:bg-cyan-200 text-cyan-700 rounded-full text-sm transition-all duration-200 hover:scale-105">
-                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                        <path
-                            d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.82,11.69,4.82,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z" />
-                    </svg>
-                    Cài đặt
-                </button>
+                @if (Auth::user())
+                    <button
+                        class="quick-send flex justify-center items-center gap-1 px-3 py-1 bg-teal-100 hover:bg-teal-200 
+                       text-teal-700 rounded-full text-sm transition-all duration-200 hover:scale-105">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M4 6h16M4 12h8m-8 6h16" />
+                        </svg>
+                        Danh mục
+                    </button>
+                    <button
+                        class="quick-send flex justify-center items-center gap-1 px-3 py-1 bg-teal-100 hover:bg-teal-200 
+                       text-teal-700 rounded-full text-sm transition-all duration-200 hover:scale-105">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M3 3h18v18H3z" />
+                            <path d="M3 9h18M9 21V9" />
+                        </svg>
+                        SL danh mục
+                    </button>
+                    <button
+                        class="quick-send flex justify-center items-center gap-1 px-3 py-1 bg-teal-100 hover:bg-teal-200 
+                       text-teal-700 rounded-full text-sm transition-all duration-200 hover:scale-105">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V4m0 16v-4" />
+                        </svg>
+                        Tháng này
+                    </button>
+                    <button
+                        class="quick-send flex justify-center items-center gap-1 px-3 py-1 bg-cyan-100 hover:bg-cyan-200 
+                       text-cyan-700 rounded-full text-sm transition-all duration-200 hover:scale-105">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path d="M3 12h18M12 3v18" />
+                        </svg>
+                        Theo tuần
+                    </button>
+                @else
+                    <button
+                        class="quick-send flex justify-center items-center gap-1 px-3 py-1 bg-teal-100 hover:bg-teal-200 text-teal-700 rounded-full text-sm transition-all duration-200 hover:scale-105">
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                        </svg>
+                        Giới thiệu
+                    </button>
+                    <button
+                        class="quick-send flex justify-center items-center gap-1 px-3 py-1 bg-teal-100 hover:bg-teal-200 text-teal-700 rounded-full text-sm transition-all duration-200 hover:scale-105">
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
+                        </svg>
+                        Hướng dẫn
+                    </button>
+                    <button
+                        class="quick-send flex justify-center items-center gap-1 px-3 py-1 bg-teal-100 hover:bg-teal-200 text-teal-700 rounded-full text-sm transition-all duration-200 hover:scale-105">
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+                        </svg>
+                        Liên hệ
+                    </button>
+                    <button
+                        class="quick-send flex justify-center items-center gap-1 px-3 py-1 bg-cyan-100 hover:bg-cyan-200 text-cyan-700 rounded-full text-sm transition-all duration-200 hover:scale-105">
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.82,11.69,4.82,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z" />
+                        </svg>
+                        Cài đặt
+                    </button>
+                @endif
             </div>
 
             <div class="bg-gradient-to-r from-teal-50 to-cyan-50 border border-teal-200 rounded-lg p-2">

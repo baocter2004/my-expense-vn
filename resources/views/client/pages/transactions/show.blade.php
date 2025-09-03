@@ -28,7 +28,7 @@
                 <p class="text-sm opacity-90">Thông tin chi tiết về giao dịch này</p>
             </div>
         </div>
-        <div class="w-full bg-white p-6 max-w-3xl rounded-2xl shadow-xl">
+        <div class="w-full bg-white p-4 md:p-6 max-w-3xl rounded-2xl shadow-xl">
             <button id="btn-pdf"
                 class="flex items-center gap-2 p-2 border border-teal-500 rounded-lg text-teal-600 hover:bg-teal-50 transition mx-auto md:ml-auto mb-4">
                 <i class="fa-solid fa-file-pdf"></i> Xuất PDF
@@ -145,7 +145,9 @@
                     <div class="p-4 bg-gray-50 rounded-xl border border-gray-100">
                         <div class="flex items-start gap-3">
                             <i class="fa-solid fa-comment text-gray-400 mt-1"></i>
-                            <div class="text-sm text-gray-700 break-words">{{ $item->description }}</div>
+                            <div class="text-sm text-gray-700 break-words break-all whitespace-normal">
+                                {{ $item->description }}
+                            </div>
                         </div>
                     </div>
                 @endif

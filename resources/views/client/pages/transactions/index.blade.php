@@ -103,7 +103,7 @@
                                 </div>
                             </div>
 
-                            <div class="p-6 pt-4 space-y-4">
+                            <div class="p-4 md:p-6 pt-4 space-y-4">
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <div
                                         class="flex items-center gap-3 p-3 bg-teal-50 rounded-xl border border-teal-100 hover:bg-teal-100 transition-colors duration-300">
@@ -170,20 +170,20 @@
                                     <a href="{{ route('client.transactions.show', $item->code) }}"
                                         class="flex items-center justify-center gap-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white py-2 px-4 rounded-xl font-medium shadow-lg hover:shadow-xl hover:from-teal-600 hover:to-cyan-600 transform hover:scale-105 transition-all duration-300">
                                         <i class="fa-solid fa-eye text-sm"></i>
-                                        <span class="text-sm">Chi tiết</span>
+                                        <span class="hidden md:inline-block text-sm">Chi tiết</span>
                                     </a>
 
                                     @if (!$item->is_reversal && $item->status !== \App\Consts\TransactionConst::STATUS_REVERSED)
                                         <a href="{{ route('client.transactions.edit', $item->code) }}"
                                             class="flex items-center justify-center gap-2 bg-white border border-teal-500 text-teal-500 py-2 px-4 rounded-xl font-medium shadow-lg hover:shadow-xl hover:bg-teal-50 transform hover:scale-105 transition-all duration-300">
                                             <i class="fa-solid fa-edit text-sm"></i>
-                                            <span class="text-sm">Sửa</span>
+                                            <span class="hidden md:inline-block text-sm">Sửa</span>
                                         </a>
                                     @else
                                         <div
                                             class="flex items-center justify-center gap-2 bg-gray-200 text-gray-500 py-2 px-4 rounded-xl font-medium shadow-md cursor-not-allowed">
                                             <i class="fa-solid fa-ban text-sm"></i>
-                                            <span class="text-sm">Không thể sửa</span>
+                                            <span class="hidden md:inline-block text-sm">Không thể sửa</span>
                                         </div>
                                     @endif
                                 </div>
