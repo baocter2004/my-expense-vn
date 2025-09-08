@@ -74,8 +74,8 @@ class TransactionService extends BaseCRUDService
             $wheres[] = [
                 function ($query) use ($keyword) {
                     $query->where(function ($q) use ($keyword) {
-                        $q->where('transactions.code', 'like', '%' . $keyword . '%');
-
+                        $q->where('transactions.code', 'like', '%' . $keyword . '%')
+                            ->orWhere('transactions.description', 'like', '%' . $keyword . '%');
                         if (is_numeric($keyword)) {
                             $q->orWhereBetween('transactions.amount', [0, (float) $keyword]);
                         }

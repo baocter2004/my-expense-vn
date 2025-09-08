@@ -339,29 +339,64 @@
             }
 
             $("#btn-pdf").on('click', function() {
-                const elementPdf = $('#content-pdf')[0];
+                Swal.fire({
+                        title: "Xác nhận tải xuống chi tiết giao dịch này ?",
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: '<i class="fa-solid fa-undo-alt"></i> Tải xuống',
+                        cancelButtonText: '<i class="fa-solid fa-times"></i> Hủy bỏ',
+                        reverseButtons: true,
+                    })
+                    .then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: 'Đang xử lý...',
+                                html: 'Vui lòng đợi trong giây lát',
+                                allowOutsideClick: false,
+                                showConfirmButton: false,
+                                customClass: {
+                                    popup: 'rounded-2xl'
+                                },
+                                willOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+                            const elementPdf = $('#content-pdf')[0];
 
-                const opt = {
-                    margin: 10,
-                    filename: "giao-dich-{{ $item->code }}.pdf",
-                    image: {
-                        type: 'jpeg',
-                        quality: 0.98
-                    },
-                    html2canvas: {
-                        scale: 2
-                    },
-                    jsPDF: {
-                        unit: 'mm',
-                        format: 'a4',
-                        orientation: 'portrait'
-                    },
-                    pagebreak: {
-                        mode: ['css', 'legacy']
-                    }
-                };
+                            const opt = {
+                                margin: 10,
+                                filename: "giao-dich-{{ $item->code }}.pdf",
+                                image: {
+                                    type: 'jpeg',
+                                    quality: 0.98
+                                },
+                                html2canvas: {
+                                    scale: 2
+                                },
+                                jsPDF: {
+                                    unit: 'mm',
+                                    format: 'a4',
+                                    orientation: 'portrait'
+                                },
+                                pagebreak: {
+                                    mode: ['css', 'legacy']
+                                }
+                            };
 
-                html2pdf().set(opt).from(elementPdf).save();
+                            html2pdf().set(opt).from(elementPdf).save()
+                                .then(() => {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Đã tải xuống!',
+                                        text: 'File PDF đã được xuất thành công.',
+                                        confirmButtonText: 'OK',
+                                    });
+                                })
+                                .catch((err) => {
+                                    Swal.fire('Lỗi', 'Không thể xuất PDF: ' + err, 'error');
+                                });
+                        }
+                    })
             });
         });
     </script>

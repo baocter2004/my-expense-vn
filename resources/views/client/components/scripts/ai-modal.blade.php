@@ -134,7 +134,10 @@
                 method: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({
-                    text: message
+                    text: message,
+                    @if (Auth::check())
+                        user_id: {{ Auth::id() }}
+                    @endif
                 }),
                 dataType: "text",
                 success: function(resText) {
