@@ -39,5 +39,10 @@ return [
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('GOOGLE_REDIRECT_URL'),
     ],
+    'gemini' => [
+        'endpoint' => env('GEMINI_ENDPOINT'),
+        'token' => env('GEMINI_TOKEN'),
+        'model' => env('GEMINI_MODEL'),
+    ],
 
 ];

@@ -381,8 +381,8 @@ class TransactionService extends BaseCRUDService
 
             $newTransaction = parent::create($data);
 
-            if($newTransaction) {
-                $this->update($transaction->id,['is_reversal' => 1]);
+            if ($newTransaction) {
+                $this->update($transaction->id, ['is_reversal' => 1]);
             }
 
             DB::commit();
@@ -480,5 +480,132 @@ class TransactionService extends BaseCRUDService
             'initialCurrency' => $initialCurrency,
             'oldItems' => $oldItems,
         ];
+    }
+    public function listByRange(int|string $userId, string $from, string $to, array $filters = [], int $limit = 20)
+    {
+        try {
+            $query = $this->getRepository()
+                ->getModel()
+                ->with(['wallet', 'category'])
+                ->where('user_id', $userId)
+                ->whereBetween('occurred_at', [$from, $to]);
+
+            if (!empty($filters['wallet_id'])) {
+                $query->where('wallet_id', $filters['wallet_id']);
+            }
+
+            if (!empty($filters['transaction_type'])) {
+                $query->where('transaction_type', $filters['transaction_type']);
+            }
+
+            if (!empty($filters['category_id'])) {
+                $query->where('category_id', $filters['category_id']);
+            }
+
+            if (!empty($filters['keyword'])) {
+                $keyword = $filters['keyword'];
+                $query->where(function ($q) use ($keyword) {
+                    $q->where('description', 'like', "%$keyword%")
+                        ->orWhere('code', 'like', "%$keyword%");
+                });
+            }
+            $query->orderBy('occurred_at', 'desc');
+
+            return $query->paginate($limit)->appends(request()->query());
+        } catch (\Throwable $e) {
+            Log::error('Error in ' . __CLASS__ . '::' . __FUNCTION__, [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return collect();
+        }
+    }
+
+    public function sumByUserAndRange(int|string $userId, string $from, string $to, string $transactionType = null): float
+    {
+        try {
+            $query = $this->getRepository()
+                ->getModel()
+                ->where('user_id', $userId)
+                ->whereBetween('occurred_at', [$from, $to]);
+
+            if ($transactionType) {
+                $query->where('transaction_type', $transactionType);
+            }
+
+            return (float) $query->sum('amount');
+        } catch (\Throwable $e) {
+            Log::error('Error in ' . __CLASS__ . '::' . __FUNCTION__, [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return 0.0;
+        }
+    }
+
+    public function sumByUserCategoryAndRange(
+        int|string $userId,
+        int|string $categoryId,
+        ?string $from = null,
+        ?string $to = null
+    ): float {
+        try {
+            $query = $this->getRepository()
+                ->getModel()
+                ->where('user_id', $userId)
+                ->where('category_id', $categoryId)
+                ->where('transaction_type', TransactionConst::EXPENSE);
+
+            if ($from) {
+                $query->where('occurred_at', '>=', $from);
+            }
+            if ($to) {
+                $query->where('occurred_at', '<=', $to);
+            }
+
+            return (float) $query->sum('amount');
+        } catch (\Throwable $e) {
+            Log::error('Error in ' . __CLASS__ . '::' . __FUNCTION__, [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return 0.0;
+        }
+    }
+
+    public function sumByCategory(
+        int|string $userId,
+        ?string $from = null,
+        ?string $to = null
+    ) {
+        try {
+            $query = $this->getRepository()
+                ->getModel()
+                ->select('category_id', DB::raw('SUM(amount) as total'))
+                ->where('user_id', $userId)
+                ->where('transaction_type', TransactionConst::EXPENSE)
+                ->groupBy('category_id');
+
+            if ($from) {
+                $query->where('occurred_at', '>=', $from);
+            }
+            if ($to) {
+                $query->where('occurred_at', '<=', $to);
+            }
+
+            return $query->with('category:id,name')->get()->map(function ($row) {
+                return (object) [
+                    'category' => $row->category->name ?? 'Khác',
+                    'total' => (float) $row->total
+                ];
+            });
+        } catch (\Throwable $e) {
+            Log::error('Error in ' . __CLASS__ . '::' . __FUNCTION__, [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return collect();
+        }
     }
 }

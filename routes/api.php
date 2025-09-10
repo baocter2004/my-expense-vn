@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AiController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\Client\CategoryController;
 use Illuminate\Http\Request;
@@ -16,4 +17,10 @@ Route::name('client.')
     ->prefix('client')
     ->group(function () {
         Route::patch('/{id}/update-status', [CategoryController::class, 'updateStatus'])->name('update-status');
+    });
+
+Route::name('ai.')
+    ->prefix('ai')
+    ->group(function () {
+        Route::post('/query', [AiController::class, 'query']);
     });

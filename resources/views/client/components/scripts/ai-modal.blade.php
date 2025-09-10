@@ -35,6 +35,7 @@
         }
     }
 </style>
+
 <script>
     $(document).ready(function() {
         const chatContainer = $("#chat-container");
@@ -44,6 +45,7 @@
 
         let isWaiting = false;
 
+        const apiUrl = @json(Auth::check() ? '/api/ai/query' : getenv('N8N_URL') . '/20089df3-6bdc-4de8-bcbf-dd80785c2326');
         function setWaiting(state) {
             isWaiting = state;
             input.prop("disabled", state);
@@ -122,7 +124,7 @@
         }
 
         function sendMessage(message) {
-            if (isWaiting) return; // chặn spam
+            if (isWaiting) return;
             setWaiting(true);
 
             addMessage(message, "user");
@@ -130,30 +132,20 @@
             const pendingEl = addMessage("", "ai", true);
 
             $.ajax({
-                url: "{{ getenv('N8N_URL') }}/20089df3-6bdc-4de8-bcbf-dd80785c2326",
+                url: apiUrl,
                 method: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({
-                    text: message,
+                    message: message,
                     @if (Auth::check())
-                        user_id: {{ Auth::id() }}
+                        user_id: {{ Auth::id() }},
+                        conversation_id: null
                     @endif
                 }),
-                dataType: "text",
-                success: function(resText) {
+                success: function(res) {
                     let reply = "Không có phản hồi từ AI";
-                    try {
-                        const obj = JSON.parse(resText);
-                        if (Array.isArray(obj) && obj[0]?.output) {
-                            reply = obj[0].output;
-                        } else if (obj.result) {
-                            reply = obj.result;
-                        } else if (obj.output) {
-                            reply = obj.output;
-                        }
-                    } catch (e) {
-                        console.warn("Parse JSON lỗi:", e, resText);
-                    }
+                    if (res.reply) reply = res.reply;
+                    if (res.data?.reply) reply = res.data.reply;
 
                     const newEl = $(`
                         <div class="flex items-start gap-2 ai-message">

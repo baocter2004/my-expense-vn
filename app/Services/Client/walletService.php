@@ -11,6 +11,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use PhpParser\Node\Expr\FuncCall;
 
 class WalletService extends BaseCRUDService
 {
@@ -25,11 +26,11 @@ class WalletService extends BaseCRUDService
 
     protected function buildFilterParams(array $params): array
     {
-        $wheres     = Arr::get($params, 'wheres', []);
+        $wheres = Arr::get($params, 'wheres', []);
         $whereLikes = Arr::get($params, 'likes', []);
-        $sort       = Arr::get($params, 'sort', 'created_at');
-        $order      = Arr::get($params, 'order', 'desc');
-        $relates    = Arr::get($params, 'relates', []);
+        $sort = Arr::get($params, 'sort', 'created_at');
+        $order = Arr::get($params, 'order', 'desc');
+        $relates = Arr::get($params, 'relates', []);
 
         $relates = [
             'user',
@@ -52,8 +53,8 @@ class WalletService extends BaseCRUDService
 
         return [
             'wheres' => $wheres,
-            'likes'  => $whereLikes,
-            'sort'   => $sort . ':' . $order,
+            'likes' => $whereLikes,
+            'sort' => $sort . ':' . $order,
             'relates' => $relates,
         ];
     }
@@ -124,7 +125,7 @@ class WalletService extends BaseCRUDService
         try {
             DB::beginTransaction();
 
-            $wallet      = $this->repository->with([], $id);
+            $wallet = $this->repository->with([], $id);
             $oldCurrency = $wallet->currency;
 
             $params['is_default'] = !empty($params['is_default']) ? 1 : 0;
@@ -168,7 +169,7 @@ class WalletService extends BaseCRUDService
         try {
             $wallet = $this->repository->with(['transactions'], $id);
 
-            if (! $wallet) {
+            if (!$wallet) {
                 return [
                     'status' => false,
                     'message' => 'ví tiền không tồn tại.',
@@ -266,5 +267,46 @@ class WalletService extends BaseCRUDService
             'by_currency' => $byCurrency,
             'wallets' => $wallets->toArray()
         ];
+    }
+
+    public function getTotalBalanceByUser($userId): float
+    {
+        return (float) $this->repository->getModel()
+            ->where('user_id', $userId)
+            ->sum('balance');
+    }
+    public function getBalance($walletId)
+    {
+        return $this->repository->filter([
+            'wheres' => ['id' => $walletId]
+        ])->first(['balance']);
+    }
+
+    public function findByUserAndName($userId, $wallet)
+    {
+        $userId = $userId ?? Auth::id();
+
+        $walletName = trim((string) $wallet);
+        if ($walletName === '') {
+            return null;
+        }
+
+        $query = $this->getRepository()->filter([
+            'wheres' => [
+                ['user_id', '=', $userId]
+            ]
+        ]);
+
+        if (is_numeric($wallet)) {
+            return $query
+                ->where('id', $wallet)
+                ->first();
+        }
+
+        $result = $query
+            ->whereRaw('LOWER(name) = ?', [mb_strtolower($walletName)])
+            ->first();
+
+        return $result ?: $query->where('name', 'like', '%' . $walletName . '%')->first();
     }
 }
