@@ -8,6 +8,7 @@ use App\Services\Client\AiMessageService;
 use App\Services\Client\CategoryService;
 use App\Services\Client\ContactService;
 use App\Services\Client\TransactionService;
+use App\Services\Client\UserService;
 use App\Services\Client\WalletService;
 use Exception;
 use Illuminate\Support\Facades\Http;
@@ -25,7 +26,8 @@ class AiService
         protected CategoryService $categoryService,
         protected AiMessageService $aiMessageService,
         protected AiConversationService $aiConversationService,
-        protected ContactService $contactService
+        protected ContactService $contactService,
+        protected UserService $userService
     ) {
         $this->endpoint = config('services.gemini.endpoint');
         $this->token = config('services.gemini.token');
@@ -50,7 +52,9 @@ class AiService
             ],
         ] + array_intersect_key($options, array_flip(['temperature', 'maxOutputTokens']));
 
-        $client = Http::acceptJson();
+        $client = Http::acceptJson()
+            ->timeout(12)
+            ->connectTimeout(5);
         if ($bearerToken) {
             $client = $client->withToken($bearerToken);
         } elseif (!empty($this->token)) {
@@ -231,12 +235,24 @@ class AiService
 
     protected function composeNaturalReply(string $userMessage, array $dataForReply): string
     {
-        $system = "Bạn là trợ lý tài chính. DỮ LIỆU SAU ĐÂY ĐƯỢC CUNG CẤP TỪ SERVER (không bịa):\n"
-            . json_encode($dataForReply, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
-            . "\nHãy trả lời câu hỏi của user ngắn gọn, thân thiện, không thêm dữ liệu ngoài này.";
+        $system = "Bạn là Nhân viên Chăm sóc Khách hàng của MyExpenseVN – ứng dụng quản lý chi tiêu cá nhân và gia đình.
+            Nhiệm vụ của bạn:
+            - Trả lời bằng tiếng Việt, ngắn gọn, dễ hiểu, thân thiện và tôn trọng.
+            - Luôn giữ thái độ tích cực, lịch sự, kiên nhẫn.
+            - Xác định rõ vấn đề khách hàng trước khi trả lời. Nếu thông tin chưa đủ thì đặt câu hỏi để làm rõ.
+            - Với yêu cầu phức tạp, hãy chia nhỏ thành các bước và hướng dẫn tuần tự.
+            - Luôn đưa ra giải pháp hoặc bước tiếp theo. Nếu có nhiều lựa chọn, hãy so sánh và đề xuất phương án phù hợp.
+            - Khi gặp sự cố hoặc khiếu nại: xin lỗi lịch sự, thể hiện sự đồng cảm và cam kết hỗ trợ.
+            - Nếu không tìm thấy thông tin chính xác trong dữ liệu nội bộ: hãy trả lời “Xin lỗi, tôi chưa có thông tin chính xác về vấn đề này. Anh/chị vui lòng liên hệ bộ phận hỗ trợ qua email support@myexpense.vn để được trợ giúp chi tiết hơn ạ.”
+            - Bảo mật tuyệt đối dữ liệu khách hàng, không tiết lộ thông tin nhạy cảm.
+            - Không bịa đặt, không suy đoán, không dùng ngôn ngữ tiêu cực.
+            - Trình bày nội dung trả lời bằng HTML cơ bản (<b>, <i>, <ul>, <li>, <br>) để gọn gàng, dễ đọc trong khung chat.";
 
-        $resp = $this->generateContent($system . "\n\nUser question: " . $userMessage);
-        return $resp['text'] ?? "Mình không lấy được câu trả lời từ AI.";
+        $resp = $this->generateContent($system . "\n\nDữ liệu nội bộ: "
+            . json_encode($dataForReply, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
+            . "\n\nCâu hỏi của khách hàng: " . $userMessage);
+
+        return $resp['text'] ?? "Xin lỗi, hiện tại tôi chưa lấy được câu trả lời. Anh/chị vui lòng thử lại sau ạ.";
     }
 
     /** ================= Main entry ================= */
