@@ -23,9 +23,9 @@ class HomeController extends Controller
     {
         if (Auth::check()) {
             $userId = Auth::id();
-            $sumBalace = $this->walletService->getSumBalance($userId);
+            $wallets = $this->walletService->getWalletSummaryByUser($userId);
             return view('client.pages.index', [
-                'sumBalance' => $sumBalace
+                'wallets' => $wallets
             ]);
         }
         return view('client.pages.landing-page');

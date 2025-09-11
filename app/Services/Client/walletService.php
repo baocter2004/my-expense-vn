@@ -275,12 +275,14 @@ class WalletService extends BaseCRUDService
             ->where('user_id', $userId)
             ->sum('balance');
     }
+
     public function getBalance($walletId)
     {
         return $this->repository->filter([
             'wheres' => ['id' => $walletId]
         ])->first(['balance']);
     }
+
     public function getSumBalance($userId)
     {
         return $this->repository->filter([
@@ -288,6 +290,20 @@ class WalletService extends BaseCRUDService
             => ['user_id' => $userId]
         ])->sum('balance');
     }
+
+    public function getWalletSummaryByUser($userId): array
+    {
+        $wallets = $this->repository->getModel()
+            ->where('user_id', $userId)
+            ->get(['id', 'name', 'balance', 'currency', 'is_default']);
+
+        return [
+            'total' => $wallets->sum('balance'),
+            'wallets' => $wallets->toArray()
+        ];
+    }
+
+
     public function findByUserAndName($userId, $wallet)
     {
         $userId = $userId ?? Auth::id();
