@@ -8,9 +8,8 @@ use App\Services\Client\TransactionService;
 use App\Services\Client\UserService;
 use App\Services\Client\WalletService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class HomeController extends Controller
+class DashboardController extends Controller
 {
     public function __construct(
         protected TransactionService $transactionService,
@@ -19,20 +18,8 @@ class HomeController extends Controller
         protected UserService $userService
     ) {}
 
-    public function index()
+    public function dashboard()
     {
-        if (Auth::check()) {
-            $userId = Auth::id();
-            $sumBalace = $this->walletService->getSumBalance($userId);
-            return view('client.pages.index', [
-                'sumBalance' => $sumBalace
-            ]);
-        }
-        return view('client.pages.landing-page');
-    }
-
-    public function introduce()
-    {
-        return view('client.pages.introduce');
+        
     }
 }

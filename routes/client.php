@@ -20,6 +20,10 @@ Route::name('client.')
 
         Route::middleware(['auth:user'])
             ->group(function () {
+                // DASHBOARD
+                Route::name('dashboard')
+                    ->group(function () {
+                    });
                 // PROFILE 
                 Route::get('/profile', [UserController::class, 'index'])->name('profile');
                 Route::patch('/update-info', [UserController::class, 'update'])->name('update-info');
@@ -66,7 +70,7 @@ Route::name('client.')
 
                         Route::get('/{code}/edit', [TransactionController::class, 'edit'])->name('edit');
                         Route::put('/{code}', [TransactionController::class, 'update'])->name('update');
-                        Route::put('/{code}/undo-transaction', [TransactionController::class,'undoTransaction'])->name('undo-transaction');
+                        Route::put('/{code}/undo-transaction', [TransactionController::class, 'undoTransaction'])->name('undo-transaction');
                         Route::get('/{code}', [TransactionController::class, 'show'])->name('show');
                     });
             });

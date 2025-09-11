@@ -10,7 +10,7 @@
                 <i class="fa-solid fa-wallet text-3xl text-teal-500"></i>
                 <div>
                     <div class="text-sm text-gray-500">Số dư hiện tại</div>
-                    <div class="text-xl font-bold text-teal-600">25,000,000₫</div>
+                    <div class="text-xl font-bold text-teal-600">{{ $sumBalance }}</div>
                 </div>
             </div>
             <div class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition flex items-center space-x-3">

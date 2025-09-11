@@ -281,7 +281,13 @@ class WalletService extends BaseCRUDService
             'wheres' => ['id' => $walletId]
         ])->first(['balance']);
     }
-
+    public function getSumBalance($userId)
+    {
+        return $this->repository->filter([
+            'wheres'
+            => ['user_id' => $userId]
+        ])->sum('balance');
+    }
     public function findByUserAndName($userId, $wallet)
     {
         $userId = $userId ?? Auth::id();
