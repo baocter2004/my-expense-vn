@@ -3,6 +3,9 @@
 namespace App\Services\Client;
 
 use App\Consts\GlobalConst;
+use App\Consts\TransactionConst;
+use App\Models\Category;
+use App\Models\Transaction;
 use App\Models\Wallet;
 use App\Repositories\WalletRepository;
 use App\Services\BaseCRUDService;
@@ -293,10 +296,12 @@ class WalletService extends BaseCRUDService
 
     public function getWalletSummaryByUser($userId): array
     {
-        $wallets = $this->repository->getModel()
-            ->where('user_id', $userId)
-            ->get(['id', 'name', 'balance', 'currency', 'is_default']);
-
+        $wallets = $this->repository->filter([
+            'wheres' => [
+                ['user_id', '=', $userId]
+            ],
+            'relates' => ['transactions', 'user']
+        ])->get(['id', 'name', 'balance', 'currency', 'is_default']);
         return [
             'total' => $wallets->sum('balance'),
             'wallets' => $wallets->toArray()
@@ -330,5 +335,34 @@ class WalletService extends BaseCRUDService
             ->first();
 
         return $result ?: $query->where('name', 'like', '%' . $walletName . '%')->first();
+    }
+
+    public function getDashboardSummaryByUser(int|string $userId): array
+    {
+        $wallets = $this->repository->filter([
+            'wheres' => [['user_id', '=', $userId]],
+        ])->get(['id', 'name', 'balance', 'currency', 'is_default']);
+
+        $totalBalance = $wallets->sum('balance');
+
+        $transactionsSummary = Transaction::query()
+            ->select('transaction_type', DB::raw('SUM(amount) as total'))
+            ->where('user_id', $userId)
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->groupBy('transaction_type')
+            ->pluck('total', 'transaction_type');
+
+        $expensesThisMonth = $transactionsSummary[TransactionConst::EXPENSE] ?? 0;
+        $incomeThisMonth   = $transactionsSummary[TransactionConst::INCOME] ?? 0;
+        $categoryCount = Category::where('user_id', $userId)->count();
+
+        return [
+            'total_balance'       => $totalBalance,
+            'expenses_this_month' => $expensesThisMonth,
+            'income_this_month'   => $incomeThisMonth,
+            'category_count'      => $categoryCount,
+            'wallets'             => $wallets->toArray(),
+        ];
     }
 }

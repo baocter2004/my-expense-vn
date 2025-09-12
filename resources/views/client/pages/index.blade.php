@@ -10,28 +10,40 @@
                 <i class="fa-solid fa-wallet text-3xl text-teal-500"></i>
                 <div>
                     <div class="text-sm text-gray-500">Số dư hiện tại</div>
-                    <div class="text-xl font-bold text-teal-600">{{ \App\Helpers\Helper::formatPrice($wallets['total']) }}</div>
+                    <div class="text-xl font-bold text-teal-600">
+                        {{ \App\Helpers\Helper::formatPrice($dashboard['total_balance']) }}
+                    </div>
+
                 </div>
             </div>
             <div class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition flex items-center space-x-3">
                 <i class="fa-solid fa-arrow-trend-down text-3xl text-red-500"></i>
                 <div>
                     <div class="text-sm text-gray-500">Chi tiêu tháng này</div>
-                    <div class="text-xl font-bold text-red-500">5,500,000₫</div>
+
+                    <div class="text-xl font-bold text-red-500">
+                        {{ \App\Helpers\Helper::formatPrice($dashboard['expenses_this_month']) }}
+                    </div>
+
                 </div>
             </div>
             <div class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition flex items-center space-x-3">
                 <i class="fa-solid fa-arrow-trend-up text-3xl text-green-500"></i>
                 <div>
                     <div class="text-sm text-gray-500">Thu nhập tháng này</div>
-                    <div class="text-xl font-bold text-green-500">8,200,000₫</div>
+                    <div class="text-xl font-bold text-green-500">
+                        {{ \App\Helpers\Helper::formatPrice($dashboard['income_this_month']) }}
+                    </div>
                 </div>
             </div>
             <div class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition flex items-center space-x-3">
                 <i class="fa-solid fa-list text-3xl text-blue-500"></i>
                 <div>
                     <div class="text-sm text-gray-500">Danh mục</div>
-                    <div class="text-xl font-bold text-blue-500">12</div>
+                    <div class="text-xl font-bold text-blue-500">
+                        {{ $dashboard['category_count'] }}
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -39,15 +51,15 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-8">
             <div class="bg-white p-4 rounded-xl shadow">
                 <h2 class="text-lg font-semibold mb-4">Thu chi hàng tháng</h2>
-                <div class="h-64 bg-gray-100 flex justify-center items-center text-gray-400">
-                    Biểu đồ thu chi
+                <div class="h-64 bg-gray-100">
+                    <canvas id="chartMonthly" class="w-full h-64"></canvas>
                 </div>
             </div>
 
             <div class="bg-white p-4 rounded-xl shadow">
                 <h2 class="text-lg font-semibold mb-4">Chi tiêu theo danh mục</h2>
-                <div class="h-64 bg-gray-100 flex justify-center items-center text-gray-400">
-                    Biểu đồ danh mục
+                <div class="h-64 bg-gray-100 flex justify-center items-center">
+                    <canvas id="chartCategory" class="w-full h-64 max-w-md"></canvas>
                 </div>
             </div>
         </div>
@@ -56,7 +68,7 @@
             <div class="bg-white p-4 rounded-xl shadow">
                 <h2 class="text-lg font-semibold mb-4">Danh mục</h2>
                 <ul class="space-y-2">
-                    @foreach([['Chi tiêu ăn uống', 'red'], ['Tiền nhà', 'blue'], ['Giải trí', 'teal'], ['Khác', 'gray']] as [$name, $color])
+                    @foreach ([['Chi tiêu ăn uống', 'red'], ['Tiền nhà', 'blue'], ['Giải trí', 'teal'], ['Khác', 'gray']] as [$name, $color])
                         <li class="flex justify-between items-center border-b last:border-none pb-2">
                             <span class="text-{{ $color }}-500">{{ $name }}</span>
                             <span class="text-sm text-gray-500">Tổng: 1,000,000₫</span>
@@ -68,7 +80,7 @@
             <div class="bg-white p-4 rounded-xl shadow">
                 <h2 class="text-lg font-semibold mb-4">Giao dịch gần đây</h2>
                 <ul class="space-y-2">
-                    @foreach(range(1,5) as $i)
+                    @foreach (range(1, 5) as $i)
                         <li class="flex justify-between items-center border-b last:border-none pb-2">
                             <span class="text-gray-700">Chi tiêu #{{ $i }}</span>
                             <span class="text-gray-500 text-sm">500,000₫</span>
@@ -80,6 +92,10 @@
 
     </div>
 @endsection
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+@endpush
 
 @push('js')
     <script>
@@ -102,6 +118,144 @@
                     confirmButtonText: 'OK'
                 });
             @endif
+
+            const charts = @json($charts ?? []);
+
+            const monthly = charts.monthly_summary ?? [];
+            const labels = monthly.map(m => m.month);
+            const incomeData = monthly.map(m => parseFloat(m.income ?? 0));
+            const expenseData = monthly.map(m => parseFloat(m.expense ?? 0));
+
+            const allZero = incomeData.concat(expenseData).every(v => v === 0);
+
+            const ctxMonthly = document.getElementById('chartMonthly').getContext('2d');
+            if (window._chartMonthly) {
+                window._chartMonthly.destroy();
+            }
+
+            window._chartMonthly = new Chart(ctxMonthly, {
+                type: 'line',
+                data: {
+                    labels: allZero ? ['No data'] : labels,
+                    datasets: [{
+                            label: 'Thu nhập',
+                            data: allZero ? [0] : incomeData,
+                            tension: 0.3,
+                            borderWidth: 2,
+                            borderColor: 'rgba(34,197,94,1)',
+                            backgroundColor: 'rgba(34,197,94,0.12)',
+                            fill: true,
+                            pointRadius: 3,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Chi tiêu',
+                            data: allZero ? [0] : expenseData,
+                            tension: 0.3,
+                            borderWidth: 2,
+                            borderColor: 'rgba(239,68,68,1)',
+                            backgroundColor: 'rgba(239,68,68,0.12)',
+                            fill: true,
+                            pointRadius: 3,
+                            yAxisID: 'y'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const v = context.raw ?? 0;
+                                    return context.dataset.label + ': ' + new Intl.NumberFormat('vi-VN')
+                                        .format(v) + '₫';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            display: true,
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value >= 1000 ? (value / 1000) + 'k' : value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            let categories = charts.category_summary ?? [];
+            if (typeof categories === 'object' && !Array.isArray(categories)) {
+                try {
+                    categories = Object.values(categories);
+                } catch (e) {
+                    categories = [];
+                }
+            }
+
+            const categoryLabels = categories.map(c => c.category_name ?? 'Khác');
+            const categoryValues = categories.map(c => parseFloat(c.total ?? 0));
+
+            const ctxCat = document.getElementById('chartCategory').getContext('2d');
+            if (window._chartCategory) {
+                window._chartCategory.destroy();
+            }
+
+            window._chartCategory = new Chart(ctxCat, {
+                type: 'doughnut',
+                data: {
+                    labels: (categoryLabels.length && categoryValues.some(v => v > 0)) ? categoryLabels : [
+                        'No data'
+                    ],
+                    datasets: [{
+                        data: (categoryValues.length && categoryValues.some(v => v > 0)) ?
+                            categoryValues : [1],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw ?? 0;
+                                    const formatted = new Intl.NumberFormat('vi-VN').format(value) +
+                                    '₫';
+                                    return label + ': ' + formatted;
+                                }
+                            }
+                        },
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                boxWidth: 12
+                            }
+                        }
+                    }
+                }
+            });
+
         });
     </script>
 @endpush

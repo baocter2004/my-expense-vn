@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Services\Client\CategoryService;
+use App\Services\Client\HomeService;
 use App\Services\Client\TransactionService;
 use App\Services\Client\UserService;
 use App\Services\Client\WalletService;
@@ -13,23 +14,28 @@ use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
     public function __construct(
+        protected HomeService $homeService,
         protected TransactionService $transactionService,
         protected WalletService $walletService,
         protected CategoryService $categoryService,
         protected UserService $userService
     ) {}
 
-    public function index()
+    public function index(Request $request)
     {
         if (Auth::check()) {
             $userId = Auth::id();
-            $wallets = $this->walletService->getWalletSummaryByUser($userId);
+            $dashboard = $this->walletService->getDashboardSummaryByUser($userId);
+            $charts = $this->homeService->getDashboardCharts($userId);
+
             return view('client.pages.index', [
-                'wallets' => $wallets
+                'dashboard' => $dashboard,
+                'charts' => $charts
             ]);
         }
         return view('client.pages.landing-page');
     }
+
 
     public function introduce()
     {
