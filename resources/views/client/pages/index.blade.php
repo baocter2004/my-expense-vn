@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="w-full px-4">
-        <h1 class="text-3xl font-bold mb-6 text-teal-600 text-center">Chào mừng bạn đến với MyExpenseVN</h1>
+        <h1 class="text-3xl font-bold my-6 text-teal-600 text-center">Chào mừng bạn đến với MyExpenseVN</h1>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
             <div class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition flex items-center space-x-3">
                 <i class="fa-solid fa-wallet text-3xl text-teal-500"></i>
@@ -49,14 +49,14 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-8">
-            <div class="bg-white p-4 rounded-xl shadow">
+            <div class="bg-white p-4 border border-teal-500 rounded-xl shadow">
                 <h2 class="text-lg font-semibold mb-4">Thu chi hàng tháng</h2>
                 <div class="h-64 bg-gray-100">
                     <canvas id="chartMonthly" class="w-full h-64"></canvas>
                 </div>
             </div>
 
-            <div class="bg-white p-4 rounded-xl shadow">
+            <div class="bg-white p-4 border border-teal-500 rounded-xl shadow">
                 <h2 class="text-lg font-semibold mb-4">Chi tiêu theo danh mục</h2>
                 <div class="h-64 bg-gray-100 flex justify-center items-center">
                     <canvas id="chartCategory" class="w-full h-64 max-w-md"></canvas>
@@ -65,31 +65,38 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
-            <div class="bg-white p-4 rounded-xl shadow">
+            <div class="bg-white p-4 rounded-xl border border-teal-500 shadow">
                 <h2 class="text-lg font-semibold mb-4">Danh mục</h2>
                 <ul class="space-y-2">
-                    @foreach ([['Chi tiêu ăn uống', 'red'], ['Tiền nhà', 'blue'], ['Giải trí', 'teal'], ['Khác', 'gray']] as [$name, $color])
+                    @forelse ($charts['category_summary'] as $category)
                         <li class="flex justify-between items-center border-b last:border-none pb-2">
-                            <span class="text-{{ $color }}-500">{{ $name }}</span>
-                            <span class="text-sm text-gray-500">Tổng: 1,000,000₫</span>
+                            <span class="text-gray-700">{{ $category['category_name'] }}</span>
+                            <span class="text-sm text-gray-500">
+                                Tổng: {{ \App\Helpers\Helper::formatPrice($category['total']) }}
+                            </span>
                         </li>
-                    @endforeach
+                    @empty
+                        <li class="text-gray-500 text-center py-2">Chưa có dữ liệu chi tiêu tháng này</li>
+                    @endforelse
                 </ul>
             </div>
 
-            <div class="bg-white p-4 rounded-xl shadow">
+            <div class="bg-white p-4 rounded-xl border border-teal-500 shadow">
                 <h2 class="text-lg font-semibold mb-4">Giao dịch gần đây</h2>
                 <ul class="space-y-2">
-                    @foreach (range(1, 5) as $i)
+                    @forelse ($transactionsToday ?? [] as $transaction)
                         <li class="flex justify-between items-center border-b last:border-none pb-2">
-                            <span class="text-gray-700">Chi tiêu #{{ $i }}</span>
-                            <span class="text-gray-500 text-sm">500,000₫</span>
+                            <span class="text-gray-700">{{ $transaction->description ?? 'Không rõ' }}</span>
+                            <span class="text-gray-500 text-sm">
+                                {{ \App\Helpers\Helper::formatPrice($transaction->amount) }}
+                            </span>
                         </li>
-                    @endforeach
+                    @empty
+                        <li class="text-gray-500 text-center py-2">Chưa có giao dịch nào</li>
+                    @endforelse
                 </ul>
             </div>
         </div>
-
     </div>
 @endsection
 
@@ -142,10 +149,11 @@
                             data: allZero ? [0] : incomeData,
                             tension: 0.3,
                             borderWidth: 2,
-                            borderColor: 'rgba(34,197,94,1)',
+                            borderColor: '#22c55e',
                             backgroundColor: 'rgba(34,197,94,0.12)',
                             fill: true,
                             pointRadius: 3,
+                            pointBackgroundColor: '#22c55e',
                             yAxisID: 'y'
                         },
                         {
@@ -153,13 +161,15 @@
                             data: allZero ? [0] : expenseData,
                             tension: 0.3,
                             borderWidth: 2,
-                            borderColor: 'rgba(239,68,68,1)',
+                            borderColor: '#ef4444',
                             backgroundColor: 'rgba(239,68,68,0.12)',
                             fill: true,
                             pointRadius: 3,
+                            pointBackgroundColor: '#ef4444',
                             yAxisID: 'y'
                         }
                     ]
+
                 },
                 options: {
                     responsive: true,
@@ -229,6 +239,13 @@
                     datasets: [{
                         data: (categoryValues.length && categoryValues.some(v => v > 0)) ?
                             categoryValues : [1],
+                        backgroundColor: categoryLabels.length && categoryValues.some(v => v > 0) ?
+                            [
+                                '#ef4444',
+                                '#3b82f6',
+                                '#14b8a6',
+                                '#6b7280',
+                            ] : ['#d1d5db'],
                     }]
                 },
                 options: {
@@ -241,7 +258,7 @@
                                     const label = context.label || '';
                                     const value = context.raw ?? 0;
                                     const formatted = new Intl.NumberFormat('vi-VN').format(value) +
-                                    '₫';
+                                        ' VND';
                                     return label + ': ' + formatted;
                                 }
                             }
