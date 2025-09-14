@@ -158,7 +158,8 @@
                                             </div>
                                             <div class="flex-1 w-full max-w-[300px]">
                                                 <div class="text-xs text-gray-500 font-medium mb-1">Ghi chú</div>
-                                                <div class="text-sm text-gray-700 truncate">
+                                                <div
+                                                    class="text-sm text-gray-700 truncate overflow-hidden whitespace-nowrap max-w-[150px] md:max-w-[300px]">
                                                     {{ $item->description }}
                                                 </div>
                                             </div>
