@@ -64,35 +64,69 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
-            <div class="bg-white p-4 rounded-xl border border-teal-500 shadow">
-                <h2 class="text-lg font-semibold mb-4">Danh mục</h2>
-                <ul class="space-y-2">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-2xl border border-teal-200 shadow-sm hover:shadow-md transition">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="flex items-center gap-2 text-lg font-semibold text-teal-600">
+                        <i class="fa-solid fa-folder-open"></i>
+                        <span class="hidden md:inline">Danh mục</span>
+                    </h2>
+                    <a href="{{ route('client.categories.index') }}"
+                        class="relative inline-block text-teal-600 font-medium 
+                      after:content-[''] after:absolute after:left-0 after:bottom-0 
+                      after:w-0 after:h-[2px] after:bg-teal-600 
+                      after:transition-all after:duration-300 hover:after:w-full">
+                        Danh sách
+                    </a>
+                </div>
+                <ul class="space-y-3">
                     @forelse ($charts['category_summary'] as $category)
-                        <li class="flex justify-between items-center border-b last:border-none pb-2">
-                            <span class="text-gray-700">{{ $category['category_name'] }}</span>
-                            <span class="text-sm text-gray-500">
-                                Tổng: {{ \App\Helpers\Helper::formatPrice($category['total']) }}
-                            </span>
+                        <li class="p-3 bg-gray-50 rounded-lg hover:bg-teal-50 transition">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                                <span class="text-gray-800 font-medium">
+                                    {{ $category['category_name'] }}
+                                </span>
+
+                                <span class="text-base font-semibold text-teal-600">
+                                    {{ \App\Helpers\Helper::formatPrice($category['total']) }}
+                                </span>
+                            </div>
                         </li>
                     @empty
-                        <li class="text-gray-500 text-center py-2">Chưa có dữ liệu chi tiêu tháng này</li>
+                        <li class="text-gray-500 text-center py-4">Chưa có dữ liệu chi tiêu tháng này</li>
                     @endforelse
                 </ul>
             </div>
 
-            <div class="bg-white p-4 rounded-xl border border-teal-500 shadow">
-                <h2 class="text-lg font-semibold mb-4">Giao dịch gần đây</h2>
-                <ul class="space-y-2">
-                    @forelse ($transactionsToday ?? [] as $transaction)
-                        <li class="flex justify-between items-center border-b last:border-none pb-2">
-                            <span class="text-gray-700">{{ $transaction->description ?? 'Không rõ' }}</span>
-                            <span class="text-gray-500 text-sm">
-                                {{ \App\Helpers\Helper::formatPrice($transaction->amount) }}
-                            </span>
+            <div class="bg-white p-6 rounded-2xl border border-teal-200 shadow-sm hover:shadow-md transition">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="flex items-center gap-2 text-lg font-semibold text-teal-600">
+                        <i class="fa-solid fa-receipt"></i>
+                        <span class="hidden md:inline">Giao dịch gần đây</span>
+                    </h2>
+                    <a href="{{ route('client.transactions.index') }}"
+                        class="relative inline-block text-teal-600 font-medium 
+                      after:content-[''] after:absolute after:left-0 after:bottom-0 
+                      after:w-0 after:h-[2px] after:bg-teal-600 
+                      after:transition-all after:duration-300 hover:after:w-full">
+                        Danh sách
+                    </a>
+                </div>
+                <ul class="space-y-3">
+                    @forelse ($transactionsToday as $transaction)
+                        <li class="p-3 bg-gray-50 rounded-lg hover:bg-teal-50 transition">
+                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+                                <span class="text-base font-semibold text-teal-600 order-1 sm:order-2">
+                                    {{ \App\Helpers\Helper::formatPrice($transaction->amount) }}
+                                </span>
+
+                                <span class="text-sm text-gray-700 order-2 sm:order-1">
+                                    {{ $transaction->description ?? 'Không rõ' }}
+                                </span>
+                            </div>
                         </li>
                     @empty
-                        <li class="text-gray-500 text-center py-2">Chưa có giao dịch nào</li>
+                        <li class="text-gray-500 text-center py-4">Chưa có giao dịch nào</li>
                     @endforelse
                 </ul>
             </div>
