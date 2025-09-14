@@ -3,6 +3,9 @@
 namespace App\Services\Client;
 
 use App\Consts\GlobalConst;
+use App\Consts\TransactionConst;
+use App\Models\Category;
+use App\Models\Transaction;
 use App\Models\Wallet;
 use App\Repositories\WalletRepository;
 use App\Services\BaseCRUDService;
@@ -11,6 +14,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use PhpParser\Node\Expr\FuncCall;
 
 class WalletService extends BaseCRUDService
 {
@@ -25,11 +29,11 @@ class WalletService extends BaseCRUDService
 
     protected function buildFilterParams(array $params): array
     {
-        $wheres     = Arr::get($params, 'wheres', []);
+        $wheres = Arr::get($params, 'wheres', []);
         $whereLikes = Arr::get($params, 'likes', []);
-        $sort       = Arr::get($params, 'sort', 'created_at');
-        $order      = Arr::get($params, 'order', 'desc');
-        $relates    = Arr::get($params, 'relates', []);
+        $sort = Arr::get($params, 'sort', 'created_at');
+        $order = Arr::get($params, 'order', 'desc');
+        $relates = Arr::get($params, 'relates', []);
 
         $relates = [
             'user',
@@ -52,8 +56,8 @@ class WalletService extends BaseCRUDService
 
         return [
             'wheres' => $wheres,
-            'likes'  => $whereLikes,
-            'sort'   => $sort . ':' . $order,
+            'likes' => $whereLikes,
+            'sort' => $sort . ':' . $order,
             'relates' => $relates,
         ];
     }
@@ -124,7 +128,7 @@ class WalletService extends BaseCRUDService
         try {
             DB::beginTransaction();
 
-            $wallet      = $this->repository->with([], $id);
+            $wallet = $this->repository->with([], $id);
             $oldCurrency = $wallet->currency;
 
             $params['is_default'] = !empty($params['is_default']) ? 1 : 0;
@@ -168,7 +172,7 @@ class WalletService extends BaseCRUDService
         try {
             $wallet = $this->repository->with(['transactions'], $id);
 
-            if (! $wallet) {
+            if (!$wallet) {
                 return [
                     'status' => false,
                     'message' => 'ví tiền không tồn tại.',
@@ -265,6 +269,100 @@ class WalletService extends BaseCRUDService
         return [
             'by_currency' => $byCurrency,
             'wallets' => $wallets->toArray()
+        ];
+    }
+
+    public function getTotalBalanceByUser($userId): float
+    {
+        return (float) $this->repository->getModel()
+            ->where('user_id', $userId)
+            ->sum('balance');
+    }
+
+    public function getBalance($walletId)
+    {
+        return $this->repository->filter([
+            'wheres' => ['id' => $walletId]
+        ])->first(['balance']);
+    }
+
+    public function getSumBalance($userId)
+    {
+        return $this->repository->filter([
+            'wheres'
+            => ['user_id' => $userId]
+        ])->sum('balance');
+    }
+
+    public function getWalletSummaryByUser($userId): array
+    {
+        $wallets = $this->repository->filter([
+            'wheres' => [
+                ['user_id', '=', $userId]
+            ],
+            'relates' => ['transactions', 'user']
+        ])->get(['id', 'name', 'balance', 'currency', 'is_default']);
+        return [
+            'total' => $wallets->sum('balance'),
+            'wallets' => $wallets->toArray()
+        ];
+    }
+
+
+    public function findByUserAndName($userId, $wallet)
+    {
+        $userId = $userId ?? Auth::id();
+
+        $walletName = trim((string) $wallet);
+        if ($walletName === '') {
+            return null;
+        }
+
+        $query = $this->getRepository()->filter([
+            'wheres' => [
+                ['user_id', '=', $userId]
+            ]
+        ]);
+
+        if (is_numeric($wallet)) {
+            return $query
+                ->where('id', $wallet)
+                ->first();
+        }
+
+        $result = $query
+            ->whereRaw('LOWER(name) = ?', [mb_strtolower($walletName)])
+            ->first();
+
+        return $result ?: $query->where('name', 'like', '%' . $walletName . '%')->first();
+    }
+
+    public function getDashboardSummaryByUser(int|string $userId): array
+    {
+        $wallets = $this->repository->filter([
+            'wheres' => [['user_id', '=', $userId]],
+        ])->get(['id', 'name', 'balance', 'currency', 'is_default']);
+
+        $totalBalance = $wallets->sum('balance');
+
+        $transactionsSummary = Transaction::query()
+            ->select('transaction_type', DB::raw('SUM(amount) as total'))
+            ->where('user_id', $userId)
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->groupBy('transaction_type')
+            ->pluck('total', 'transaction_type');
+
+        $expensesThisMonth = $transactionsSummary[TransactionConst::EXPENSE] ?? 0;
+        $incomeThisMonth   = $transactionsSummary[TransactionConst::INCOME] ?? 0;
+        $categoryCount = Category::where('user_id', $userId)->count();
+
+        return [
+            'total_balance'       => $totalBalance,
+            'expenses_this_month' => $expensesThisMonth,
+            'income_this_month'   => $incomeThisMonth,
+            'category_count'      => $categoryCount,
+            'wallets'             => $wallets->toArray(),
         ];
     }
 }

@@ -75,6 +75,6 @@ class Helper
 
         $decimals = ($currency === 'VND') ? 0 : 2;
 
-        return number_format($amount, $decimals, ',', '.') . ' ' . $currency;
+        return number_format($amount, $decimals, ',', ',') . ' ' . $currency;
     }
 }

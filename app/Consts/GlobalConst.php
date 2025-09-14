@@ -18,8 +18,8 @@ class GlobalConst
 
     const CURRENCIES = [
         self::CURRENCY_VND => 'VND',
-        self::CURRENCY_USD => 'USD',
-        self::CURRENCY_EUR => 'EUR',
+        // self::CURRENCY_USD => 'USD',
+        // self::CURRENCY_EUR => 'EUR',
     ];
 
     const EXCHANGE_RATES_TO_VND = [
