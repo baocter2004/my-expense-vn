@@ -44,7 +44,7 @@
     left: 0;
     height: 100vh;
     width: 250px;
-    background: linear-gradient(90deg, #26A69A, #4DD0E1);
+    background: #14b8a6;
     color: #fff;
     overflow-y: auto;
     transition: all 0.3s;
@@ -57,7 +57,7 @@
 
 #sidebar .sidebar-header {
     padding: 20px;
-    background: linear-gradient(90deg, #26A69A, #4DD0E1);
+    background: #14b8a6;
 }
 
 #sidebar .sidebar-header h3 {

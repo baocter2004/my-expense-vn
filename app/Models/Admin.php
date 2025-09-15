@@ -20,6 +20,8 @@ class Admin extends User
         'last_name',
         'email',
         'password',
+        'otp_code',
+        'otp_expires_at'
     ];
 
     /**

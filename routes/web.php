@@ -14,10 +14,12 @@ Route::name('auth.')
                 Route::middleware('guest:admin')->group(function () {
                     Route::get('/login', [AdminAuthController::class, 'showFormLogin'])->name('showFormLogin');
                     Route::post('/login', [AdminAuthController::class, 'login'])->name('login');
+                    Route::get('/otp', [AdminAuthController::class, 'showOtpForm'])->name('otp.form');
+                    Route::post('/otp', [AdminAuthController::class, 'verifyOtp'])->name('otp.verify');
                 });
 
                 Route::middleware('auth:admin')->group(function () {
-                    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+                    Route::get('/logout', [AdminAuthController::class, 'logout'])->name('logout');
                 });
             });
 
