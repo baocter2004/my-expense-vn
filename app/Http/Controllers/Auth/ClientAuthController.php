@@ -20,29 +20,31 @@ class ClientAuthController extends Controller
         return view('client.pages.auth.register');
     }
 
-    public function register(PostUserRequest $postUserRequest)
+    public function register(PostUserRequest $request)
     {
         try {
-            $data = $postUserRequest->validated();
-
+            $data = $request->validated();
             $data['password'] = Hash::make($data['password']);
 
             $user = User::create($data);
 
             if ($user) {
-                Auth::login($user);
+                $user->sendEmailVerificationNotification();
             }
 
-            return redirect()->route('client.index')->with('success', 'Đăng Ký Thành Công !');
+            return redirect()->route('verification.notice')
+                ->with('success', 'Đăng ký thành công! Vui lòng kiểm tra email để xác minh tài khoản.');
         } catch (\Throwable $th) {
             Log::error('Error in ' . __CLASS__ . '::' . __FUNCTION__ . ' => ' . $th->getMessage(), [
                 'file' => $th->getFile(),
                 'line' => $th->getLine(),
                 'trace' => $th->getTraceAsString(),
             ]);
-            return back()->with('error', 'Có Lỗi Khi Đăng Ký , Vui Lòng Thử Lại !');
+
+            return back()->with('error', 'Có lỗi khi đăng ký, vui lòng thử lại!');
         }
     }
+
 
     public function showFormLogin()
     {
