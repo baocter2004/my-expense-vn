@@ -18,7 +18,7 @@
 @section('content')
     <div
         class="w-full flex flex-col items-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-2 md:p-4 rounded-3xl min-h-screen">
-        <div class="relative z-10 container mx-auto px-4 py-8">
+        <div class="relative z-10 container mx-auto px-2 py-4 md:px-4 md:py-8">
             @include('client.components.search.form-search', [
                 'sloganText' => 'Khám phá và quản lý các mục chi tiêu của bạn một cách dễ dàng.',
                 'icon' => 'fa-list',
@@ -166,11 +166,11 @@
                             </div>
 
                             <div class="mt-4">
-                                <form method="POST" action="{{ route('client.categories.copy') }}">
+                                <form method="POST" action="{{ route('client.categories.copy') }}" class="copy-form">
                                     @csrf
                                     <input type="hidden" name="system_category_id" value="{{ $sys->id }}">
                                     <button type="submit"
-                                        class="px-4 py-2 text-sm bg-white border rounded-lg hover:bg-gray-50">
+                                        class="btn-copy px-4 py-2 text-sm bg-white border rounded-lg hover:bg-gray-50">
                                         <i class="fa-solid fa-copy mr-2"></i> Sao chép vào của tôi
                                     </button>
                                 </form>
@@ -269,6 +269,33 @@
                     });
                 }, 400);
             }
+        });
+
+        $(document).on('submit', '.copy-form', function(e) {
+            e.preventDefault();
+            let form = this;
+
+            Swal.fire({
+                title: 'Xác nhận sao chép?',
+                html: `
+                    <div class="text-left space-y-2">
+                        <p class="text-gray-700">
+                            Danh mục này sẽ được sao chép vào danh mục của bạn.
+                        </p>
+                        <p class="text-sm text-orange-600 flex items-center gap-2">
+                            <i class="fa-solid fa-exclamation-triangle"></i> 
+                            Hành động này không thể hoàn tác.
+                        </p>
+                    </div>
+                `,
+                icon: 'question',
+                showCancelButton: true,
+                reverseButtons: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
         });
     </script>
 @endpush
