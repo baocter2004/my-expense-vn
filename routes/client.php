@@ -22,8 +22,7 @@ Route::name('client.')
             ->group(function () {
                 // DASHBOARD
                 Route::name('dashboard')
-                    ->group(function () {
-                    });
+                    ->group(function () {});
                 // PROFILE 
                 Route::get('/profile', [UserController::class, 'index'])->name('profile');
                 Route::patch('/update-info', [UserController::class, 'update'])->name('update-info');
@@ -41,6 +40,7 @@ Route::name('client.')
                         Route::post('/create', [CategoryController::class, 'store'])->name('store');
                         Route::get('/trash', [CategoryController::class, 'trash'])->name('trash');
                         Route::post('/{id}/restore', [CategoryController::class, 'restore'])->name('restore');
+                        Route::post('/copy-categories',[CategoryController::class,'copyCategory'])->name('copy');
                     });
 
                 // WALLETS
