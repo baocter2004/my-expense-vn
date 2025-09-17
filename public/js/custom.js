@@ -21,6 +21,13 @@ $(document).ready(function () {
         $("#offcanvas-overlay").addClass("opacity-0 pointer-events-none");
     });
 
+    $(".has-submenu > .dropdown-toggle").click(function (e) {
+        e.preventDefault();
+        let parent = $(this).parent();
+        parent.toggleClass("open");
+        parent.find(".submenu").slideToggle(200);
+    });
+
     $(window).on("scroll", function () {
         if ($(this).scrollTop() > 200) {
             $("#scrollToTop").removeClass("opacity-0 pointer-events-none");

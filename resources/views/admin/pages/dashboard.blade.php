@@ -203,7 +203,6 @@
             </div>
         </div>
 
-
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
             <div class="lg:col-span-2 bg-white p-5 rounded-lg shadow">
                 <div class="flex items-center justify-between mb-4">

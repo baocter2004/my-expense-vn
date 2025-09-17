@@ -113,7 +113,7 @@ class ClientAuthController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('user')->logout();
 
         $message = 'Đăng Xuất Thành Công';
 
