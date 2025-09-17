@@ -154,4 +154,9 @@ abstract class BaseService
     {
         return $this->repository->getFields($fields, $params);
     }
+
+    public function count(array $params = [])
+    {
+        return $this->repository->count($params);
+    }
 }

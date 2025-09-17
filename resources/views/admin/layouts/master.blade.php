@@ -21,7 +21,7 @@
             <button type="button" id="sidebarToggle" class="navbar-btn">
                 <span>☰ Menu</span>
             </button>
-            <h2 class="ml-4">{{ Auth::user()->name ?? 'Name' }}</h2>
+            <h2 class="ml-4">{{ Auth::guard('admin')->user()->first_name . " " . Auth::guard('admin')->user()->last_name ?? 'Name' }}</h2>
         </nav>
 
         <div class="line"></div>

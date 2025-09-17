@@ -266,4 +266,9 @@ abstract class BaseRepository
     {
         return $this->filter($params)->select($fields)->get();
     }
+
+    public function count(array $params = []): int
+    {
+        return $this->filter($params)->count();
+    }
 }
