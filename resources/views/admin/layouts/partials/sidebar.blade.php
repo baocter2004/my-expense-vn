@@ -1,10 +1,16 @@
-<div class="sidebar-header">
-    <h3>
-        <span id="sidebar-header-logo">MY EXPENSE VN</span>
-    </h3>
-    <p class="sidebar-role-label">Dành cho Quản trị viên</p>
-</div>
+<div class="sidebar-header relative p-6 flex items-center justify-between">
+    <div>
+        <h3 class="font-semibold text-lg">
+            <span id="sidebar-header-logo">MY EXPENSE VN</span>
+        </h3>
+        <p class="sidebar-role-label text-sm opacity-80">Dành cho Quản trị viên</p>
+    </div>
 
+    <button id="closeSidebar"
+        class="md:hidden w-10 h-10 rounded-full bg-white text-teal-600 flex items-center justify-center shadow-md hover:bg-gray-200 transition">
+        <i class="fa-solid fa-xmark text-lg"></i>
+    </button>
+</div>
 
 <ul class="components" id="sidebar-menu">
     <li class="active">

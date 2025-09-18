@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <div class="p-6 bg-gray-100 min-h-screen">
+    <div class="p-4 md:p-6 rounded-lg bg-gray-100 min-h-screen">
         <div class="flex items-center justify-between mb-6">
             <div>
                 <h1 class="text-3xl font-semibold text-slate-800">Dashboard</h1>

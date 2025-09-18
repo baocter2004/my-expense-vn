@@ -28,6 +28,10 @@ $(document).ready(function () {
         parent.find(".submenu").slideToggle(200);
     });
 
+    $("#closeSidebar").on("click", function () {
+        $("#sidebar").removeClass("active");
+    });
+
     $(window).on("scroll", function () {
         if ($(this).scrollTop() > 200) {
             $("#scrollToTop").removeClass("opacity-0 pointer-events-none");

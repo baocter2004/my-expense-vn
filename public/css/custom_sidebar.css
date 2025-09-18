@@ -43,13 +43,14 @@
     top: 0;
     left: 0;
     height: 100vh;
-    width: 280px;
+    width: 100%;
+    max-width: 280px;
     background: #14b8a6;
     color: #fff;
     overflow-y: auto;
     transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     z-index: 1000;
-    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+    outline: none;
 }
 
 #sidebar::-webkit-scrollbar {
@@ -193,6 +194,7 @@
         opacity: 0;
         max-height: 0;
     }
+
     to {
         opacity: 1;
         max-height: 300px;
@@ -262,8 +264,8 @@
     }
 
     #sidebar.active+#content {
-        margin-left: 280px;
-        width: calc(100% - 280px);
+        margin-left: 0 !important;
+        width: 100% !important;
     }
 
     .sidebar-toggle {

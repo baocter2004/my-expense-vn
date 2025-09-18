@@ -36,7 +36,7 @@
 
         <div class="line"></div>
 
-        <div class="flex justify-center items-center m-auto">
+        <div class="w-full">
             @yield('content')
         </div>
     </div>
