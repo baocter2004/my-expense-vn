@@ -4,7 +4,10 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Notifications\CustomVerifyEmail;
 use App\Notifications\ResetPasswordNotification;
+use Carbon\Carbon;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -40,6 +43,37 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPasswordNotification($token, $this->email));
+    }
+
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new CustomVerifyEmail());
+    }
+
+    public function getEmailForVerification()
+    {
+        return $this->email;
+    }
+
+    public function hasVerifiedEmail()
+    {
+        if ($this->google_id) {
+            return true;
+        }
+
+        return ! is_null($this->email_verified_at);
+    }
+
+    public function markEmailAsVerified()
+    {
+        if (! $this->hasVerifiedEmail()) {
+            $this->email_verified_at = Carbon::now();
+            $this->save();
+
+            event(new Verified($this));
+        }
+
+        return true;
     }
 
     /**

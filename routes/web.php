@@ -40,6 +40,17 @@ Route::name('auth.')
                 });
 
                 Route::middleware('auth:user')->group(function () {
+                    Route::get('/email/verify', [ClientAuthController::class, 'verification'])
+                        ->name('verification.notice');
+
+                    Route::get('/email/verify/{id}/{hash}', [ClientAuthController::class, 'verify'])
+                        ->middleware(['signed'])
+                        ->name('verification.verify');
+
+                    Route::post('/email/verification-notification', [ClientAuthController::class, 'resendVerification'])
+                        ->middleware('throttle:6,1')
+                        ->name('verification.resend');
+
                     Route::post('/logout', [ClientAuthController::class, 'logout'])->name('logout');
                 });
             });

@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\PostUserRequest;
 use App\Models\User;
+use App\Notifications\CustomVerifyEmail;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -29,10 +32,11 @@ class ClientAuthController extends Controller
             $user = User::create($data);
 
             if ($user) {
+                Auth::guard('user')->login($user);
                 $user->sendEmailVerificationNotification();
             }
 
-            return redirect()->route('verification.notice')
+            return redirect()->route('auth.client.verification.notice')
                 ->with('success', 'Đăng ký thành công! Vui lòng kiểm tra email để xác minh tài khoản.');
         } catch (\Throwable $th) {
             Log::error('Error in ' . __CLASS__ . '::' . __FUNCTION__ . ' => ' . $th->getMessage(), [
@@ -44,7 +48,6 @@ class ClientAuthController extends Controller
             return back()->with('error', 'Có lỗi khi đăng ký, vui lòng thử lại!');
         }
     }
-
 
     public function showFormLogin()
     {
@@ -136,4 +139,31 @@ class ClientAuthController extends Controller
             'email' => $request->query('email'),
         ]);
     }
+
+    public function verification()
+    {
+        return view('client.pages.auth.verify-email');
+    }
+
+    public function verify(EmailVerificationRequest $request)
+    {
+        if ($request->user()->markEmailAsVerified()) {
+            event(new Verified($request->user()));
+        }
+
+        return redirect()->route('client.index')
+            ->with('success', 'Xác minh email thành công!');
+    }
+
+    public function resendVerification(Request $request)
+    {
+        if ($request->user()->hasVerifiedEmail()) {
+            return redirect()->route('client.index');
+        }
+
+        $request->user()->notify(new CustomVerifyEmail());
+
+        return back()->with('success', 'Liên kết xác minh mới đã được gửi đến email của bạn.');
+    }
+
 }

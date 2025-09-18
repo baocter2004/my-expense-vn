@@ -18,7 +18,7 @@ Route::name('client.')
         Route::get('/contact', [ContactController::class, 'showFormContact'])->name('showFormContact');
         Route::post('/contact', [ContactController::class, 'submit'])->name('submit');
 
-        Route::middleware(['auth:user'])
+        Route::middleware(['auth:user','ensure'])
             ->group(function () {
                 // DASHBOARD
                 Route::name('dashboard')
