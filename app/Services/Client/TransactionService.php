@@ -60,6 +60,11 @@ class TransactionService extends BaseCRUDService
             'reversal'
         ];
 
+        $userId = Auth::guard('user')->id();
+        if($userId) {
+            $wheres[] = ['transactions.user_id',$userId];
+        }
+
         if (!empty($params['created_from'])) {
             $wheres[] = ['transactions.occurred_at', '>=', $params['created_from']];
         }
@@ -463,7 +468,7 @@ class TransactionService extends BaseCRUDService
             )
             ->mapWithKeys(fn($cat) => [$cat->id => '[Hệ thống] ' . $cat->name])
             ->toArray();
-        $categories = $systemCategories + $userCategories;
+        $categories = array_merge($systemCategories, $userCategories);
 
         $walletData = $this->getWalletService()->getWalletForTransactions();
         $byCurrency = $walletData['by_currency'] ?? [];

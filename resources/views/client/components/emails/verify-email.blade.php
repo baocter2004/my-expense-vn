@@ -4,7 +4,7 @@
 @section('heading', 'Xác Minh Email Tài Khoản')
 
 @section('content')
-    <p>Xin chào {{ $user->name ?? 'bạn' }},</p>
+    <p>Xin chào {{ $user->last_name . " " .$user->first_name ?? 'bạn' }},</p>
 
     <p>Cảm ơn bạn đã đăng ký tài khoản MyExpenseVn.</p>
 
