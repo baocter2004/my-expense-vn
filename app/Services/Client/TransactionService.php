@@ -60,6 +60,11 @@ class TransactionService extends BaseCRUDService
             'reversal'
         ];
 
+        $userId = Auth::guard('user')->id();
+        if($userId) {
+            $wheres[] = ['transactions.user_id',$userId];
+        }
+
         if (!empty($params['created_from'])) {
             $wheres[] = ['transactions.occurred_at', '>=', $params['created_from']];
         }
@@ -442,16 +447,33 @@ class TransactionService extends BaseCRUDService
 
     public function prepareFormData(array $params = []): array
     {
-        $categories = $this->getCategoryService()
-            ->getFields(['id', 'name'], ['wheres' => ['is_active' => GlobalConst::ACTIVE]])
-            ->pluck('name', 'id')
+        $userCategories = $this->getCategoryService()
+            ->getFields(
+                ['id', 'name', 'user_id'],
+                ['wheres' => [
+                    ['is_active', '=', GlobalConst::ACTIVE],
+                    ['user_id', '=', Auth::id()],
+                ]]
+            )
+            ->mapWithKeys(fn($cat) => [$cat->id => '[Cá nhân] ' . $cat->name])
             ->toArray();
+
+        $systemCategories = $this->getCategoryService()
+            ->getFields(
+                ['id', 'name', 'user_id'],
+                ['wheres' => [
+                    ['is_active', '=', GlobalConst::ACTIVE],
+                    ['is_system', '=', true], 
+                ]]
+            )
+            ->mapWithKeys(fn($cat) => [$cat->id => '[Hệ thống] ' . $cat->name])
+            ->toArray();
+        $categories = array_merge($systemCategories, $userCategories);
 
         $walletData = $this->getWalletService()->getWalletForTransactions();
         $byCurrency = $walletData['by_currency'] ?? [];
 
         $oldItems = $params['oldItems'] ?? session('transaction_items', []);
-
         $initialCurrency = old('currency', $oldItems['currency'] ?? null);
 
         if (empty($initialCurrency)) {
@@ -466,9 +488,7 @@ class TransactionService extends BaseCRUDService
         }
 
         $walletsForInitialCurrency = $byCurrency[$initialCurrency]['items'] ?? [];
-
         $defaultWalletId = old('wallet_id', $oldItems['wallet_id'] ?? ($byCurrency[$initialCurrency]['default'] ?? null));
-
         $walletBalances = collect($walletData['wallets'] ?? [])->pluck('balance_vnd', 'id')->toArray();
 
         return [
@@ -481,6 +501,7 @@ class TransactionService extends BaseCRUDService
             'oldItems' => $oldItems,
         ];
     }
+
     public function listByRange(int|string $userId, string $from, string $to, array $filters = [], int $limit = 20)
     {
         try {

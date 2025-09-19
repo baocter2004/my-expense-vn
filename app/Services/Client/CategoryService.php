@@ -71,17 +71,33 @@ class CategoryService extends BaseCRUDService
 
         $params['wheres'][] = ['user_id', '=', $id];
 
-        $items = $this->filter($params)->paginate($limit)->appends(request()->query());
+        $items = $this->filter($params)->paginate($limit,'*','user_page')->appends(request()->query());
         $itemCountTrash = $this->repository->countOnlyTrashed([
             ['user_id', '=', $id],
         ]);
-
 
         return [
             'items' => $items,
             'count' => $itemCountTrash
         ];
     }
+
+    public function getSystemCategories(array $params = [], $limit = 6)
+    {
+        $params['wheres'][] = ['is_system', '=', 1];
+
+        $query = $this->filter($params,);
+
+        $items = $limit
+            ? $query->paginate($limit,'*','system_page')->appends(request()->query())
+            : $query->get();
+
+        return [
+            'items' => $items,
+            'count' => $items->count()
+        ];
+    }
+
 
     public function getListTrashed(int|string $id, array $params, $limit = 6)
     {

@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\PostUserRequest;
 use App\Models\User;
+use App\Notifications\CustomVerifyEmail;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -20,27 +23,29 @@ class ClientAuthController extends Controller
         return view('client.pages.auth.register');
     }
 
-    public function register(PostUserRequest $postUserRequest)
+    public function register(PostUserRequest $request)
     {
         try {
-            $data = $postUserRequest->validated();
-
+            $data = $request->validated();
             $data['password'] = Hash::make($data['password']);
 
             $user = User::create($data);
 
             if ($user) {
-                Auth::login($user);
+                Auth::guard('user')->login($user);
+                $user->sendEmailVerificationNotification();
             }
 
-            return redirect()->route('client.index')->with('success', 'Đăng Ký Thành Công !');
+            return redirect()->route('auth.client.verification.notice')
+                ->with('success', 'Đăng ký thành công! Vui lòng kiểm tra email để xác minh tài khoản.');
         } catch (\Throwable $th) {
             Log::error('Error in ' . __CLASS__ . '::' . __FUNCTION__ . ' => ' . $th->getMessage(), [
                 'file' => $th->getFile(),
                 'line' => $th->getLine(),
                 'trace' => $th->getTraceAsString(),
             ]);
-            return back()->with('error', 'Có Lỗi Khi Đăng Ký , Vui Lòng Thử Lại !');
+
+            return back()->with('error', 'Có lỗi khi đăng ký, vui lòng thử lại!');
         }
     }
 
@@ -111,7 +116,7 @@ class ClientAuthController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('user')->logout();
 
         $message = 'Đăng Xuất Thành Công';
 
@@ -134,4 +139,31 @@ class ClientAuthController extends Controller
             'email' => $request->query('email'),
         ]);
     }
+
+    public function verification()
+    {
+        return view('client.pages.auth.verify-email');
+    }
+
+    public function verify(EmailVerificationRequest $request)
+    {
+        if ($request->user()->markEmailAsVerified()) {
+            event(new Verified($request->user()));
+        }
+
+        return redirect()->route('client.index')
+            ->with('success', 'Xác minh email thành công!');
+    }
+
+    public function resendVerification(Request $request)
+    {
+        if ($request->user()->hasVerifiedEmail()) {
+            return redirect()->route('client.index');
+        }
+
+        $request->user()->notify(new CustomVerifyEmail());
+
+        return back()->with('success', 'Liên kết xác minh mới đã được gửi đến email của bạn.');
+    }
+
 }

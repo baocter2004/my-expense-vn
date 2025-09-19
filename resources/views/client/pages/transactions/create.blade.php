@@ -43,7 +43,7 @@
                 ])
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    @include('client.components.forms.select', [
+                    @include('client.components.forms.update-select', [
                         'placeholder' => 'Vui lòng chọn danh mục',
                         'name' => 'category_id',
                         'label' => 'Danh mục',
@@ -172,8 +172,6 @@
             const $submitBtn = $('button[type=submit]');
             const $transactionType = $('#transaction_type');
 
-            console.log($currency, $wallet, $amount, $balanceVnd, $submitBtn, $transactionType)
-
             function renderWalletOptions(currency, selectedWalletId = null) {
                 const meta = walletByCurrency[currency] || {
                     items: {},
@@ -193,10 +191,18 @@
                 if (Object.keys(meta.items).length === 0) {
                     $wallet.prop('disabled', true);
                     if ($('#wallet-empty-note').length === 0) {
-                        $wallet.after(
-                            '<p id="wallet-empty-note" class="text-red-500 text-sm mt-1">Không có ví nào cho loại tiền này.</p>'
-                        );
+                        $wallet.after('<div id="wallet-empty-note" class="mt-2"></div>');
                     }
+
+                    $('#wallet-empty-note').html(`
+                        <p class="text-red-500 text-sm">
+                            Chưa có ví cho loại tiền này.
+                        </p>
+                        <a href="{{ route('client.wallets.create') }}"
+                        class="inline-block mt-2 px-2 sm:px-3 py-1 bg-teal-500 text-white text-xs sm:text-sm rounded-lg hover:bg-teal-600">
+                        + Tạo ví
+                        </a>
+                    `);
                 } else {
                     $wallet.prop('disabled', false);
                     $('#wallet-empty-note').remove();
@@ -224,16 +230,14 @@
                     minimumFractionDigits: 0,
                     maximumFractionDigits: 0
                 });
-                console.log(type, bal, walletBalance)
+
                 if (type == 2 && bal > walletBalance) {
-                    console.log('eeeee')
-                    $amount.addClass('border-red-500');
-                    $amount.removeClass('focus:ring-1 focus:ring-teal-500');
+                    $amount.addClass('border-red-500').removeClass('focus:ring-1 focus:ring-teal-500');
                     if ($('#amount-error').length === 0) {
                         $amount.after(
                             `<p id="amount-error" class="text-red-500 text-sm mt-1">
-                                Số tiền vượt quá số dư trong ví (số dư: ${formattedBalance} ${curr})
-                            </p>`
+                        Số tiền vượt quá số dư trong ví (số dư: ${formattedBalance} ${curr})
+                    </p>`
                         );
                     } else {
                         $('#amount-error').text(
@@ -247,7 +251,6 @@
                     $submitBtn.prop('disabled', $wallet.prop('disabled'));
                 }
             }
-
 
             $currency.on('change', function() {
                 const curr = $(this).val();

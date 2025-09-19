@@ -91,6 +91,7 @@
             @include('client.components.forms.date', [
                 'icon' => 'calendar-days',
                 'name' => 'created_from',
+                'placeholder' => 'YYYY-MM-DD',
                 'label' => 'Từ ngày',
             ])
         </div>
@@ -99,6 +100,7 @@
             @include('client.components.forms.date', [
                 'icon' => 'calendar-days',
                 'name' => 'created_to',
+                'placeholder' => 'YYYY-MM-DD',
                 'label' => 'Đến ngày',
             ])
         </div>
@@ -121,10 +123,33 @@
 </div>
 <div class="flex items-center justify-center mb-8">
     <div
-        class="flex items-center gap-3 px-8 py-3.5 bg-white border border-emerald-400/40 rounded-2xl hover:border-emerald-400/60 transition-all duration-300 hover:scale-105">
-        <div class="w-2 h-2 bg-teal-400 rounded-full animate-ping opacity-75"></div>
-        <i class="fa-solid fa-list-check text-teal-400 text-base"></i>
-        <span class="font-semibold text-teal-300 tracking-wide">Danh sách</span>
-        <div class="w-2 h-2 bg-teal-400 rounded-full animate-ping opacity-75"></div>
+        class="relative flex items-center gap-3 px-10 py-6 border-4 border-teal-400 rounded-2xl hover:border-emerald-400 transition-all duration-300 hover:scale-105 shadow-lg">
+        <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-10 h-2 bg-slate-700 rounded"></div>
+        <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 w-16 h-2 bg-slate-700 rounded"></div>
+
+        <div class="flex items-center gap-3 text-teal-300">
+            <i class="fa-solid fa-tv text-xl"></i>
+            <span class="font-semibold tracking-wide">Danh sách</span>
+        </div>
     </div>
 </div>
+@if (request()->routeIs('client.categories.index'))
+    <div class="w-full flex justify-end mb-4 relative">
+        <div class="inline-flex items-center relative">
+            <a href="#system-categories"
+                class="relative inline-flex items-center gap-2 px-4 py-2 bg-white border border-teal-200 text-teal-700 rounded-full -ml-3 shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-teal-300"
+                aria-label="Danh mục sẵn có">
+                <i class="fa-solid fa-box-open"></i>
+                <span class="font-medium">Danh mục sẵn có</span>
+            </a>
+
+            <div id="system-wire" class="absolute left-1/2 transform -translate-x-1/2 top-full pointer-events-none"
+                aria-hidden="true">
+                <div id="wire-inner" class="inline-block animate-swing origin-top">
+                    <div class="w-px h-16 sm:h-24 border-l-2 border-dashed border-teal-300 opacity-90 mx-auto"></div>
+                    <div class="w-3 h-3 bg-teal-400 rounded-full mx-auto shadow-lg"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif

@@ -267,77 +267,6 @@
                 $("#image-modal").addClass('hidden');
             });
 
-            function confirmReversal() {
-                Swal.fire({
-                    title: 'Xác nhận hoàn tác?',
-                    html: `
-                    <div class="text-left space-y-3">
-                        <div class="flex items-center gap-2 text-orange-600">
-                            <i class="fa-solid fa-exclamation-triangle"></i>
-                            <span class="font-semibold">Cảnh báo quan trọng:</span>
-                        </div>
-                        <ul class="text-sm text-gray-700 space-y-1 ml-6">
-                            <li>Sẽ tạo giao dịch ngược lại để bù trừ</li>
-                            <li>Số dư ví sẽ được điều chỉnh</li>
-                            <li>Thao tác này không thể hoàn tác</li>
-                        </ul>
-                        <div class="mt-4 p-3 bg-gray-50 rounded-lg">
-                            <div class="text-sm text-gray-600">
-                                <strong>Giao dịch:</strong> {{ $item->code }}<br>
-                                <strong>Số tiền:</strong> {{ \App\Helpers\Helper::formatPrice($item->amount, \App\Consts\GlobalConst::CURRENCIES[$item->wallet?->currency] ?? 'VND') }}
-                            </div>
-                        </div>
-                    </div>
-                `,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#ef4444',
-                    cancelButtonColor: '#6b7280',
-                    confirmButtonText: '<i class="fa-solid fa-undo-alt"></i> Xác nhận hoàn tác',
-                    cancelButtonText: '<i class="fa-solid fa-times"></i> Hủy bỏ',
-                    reverseButtons: true,
-                    customClass: {
-                        popup: 'rounded-2xl',
-                        confirmButton: 'rounded-xl px-6 py-2',
-                        cancelButton: 'rounded-xl px-6 py-2'
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire({
-                            title: 'Đang xử lý...',
-                            html: 'Vui lòng đợi trong giây lát',
-                            allowOutsideClick: false,
-                            showConfirmButton: false,
-                            customClass: {
-                                popup: 'rounded-2xl'
-                            },
-                            willOpen: () => {
-                                Swal.showLoading();
-                            }
-                        });
-                        const form = document.createElement('form');
-                        form.method = 'POST';
-                        form.action = '{{ route('client.transactions.undo-transaction', $item->code) }}';
-                        console.log(form)
-
-                        const csrfToken = document.createElement('input');
-                        csrfToken.type = 'hidden';
-                        csrfToken.name = '_token';
-                        csrfToken.value = '{{ csrf_token() }}';
-                        form.appendChild(csrfToken);
-
-                        const methodInput = document.createElement('input');
-                        methodInput.type = 'hidden';
-                        methodInput.name = '_method';
-                        methodInput.value = 'PUT';
-                        form.appendChild(methodInput);
-
-                        document.body.appendChild(form);
-                        form.submit();
-                    }
-                });
-            }
-
             $("#btn-pdf").on('click', function() {
                 Swal.fire({
                         title: "Xác nhận tải xuống chi tiết giao dịch này ?",
@@ -399,5 +328,76 @@
                     })
             });
         });
+
+        function confirmReversal() {
+            Swal.fire({
+                title: 'Xác nhận hoàn tác?',
+                html: `
+                    <div class="text-left space-y-3">
+                        <div class="flex items-center gap-2 text-orange-600">
+                            <i class="fa-solid fa-exclamation-triangle"></i>
+                            <span class="font-semibold">Cảnh báo quan trọng:</span>
+                        </div>
+                        <ul class="text-sm text-gray-700 space-y-1 ml-6">
+                            <li>Sẽ tạo giao dịch ngược lại để bù trừ</li>
+                            <li>Số dư ví sẽ được điều chỉnh</li>
+                            <li>Thao tác này không thể hoàn tác</li>
+                        </ul>
+                        <div class="mt-4 p-3 bg-gray-50 rounded-lg">
+                            <div class="text-sm text-gray-600">
+                                <strong>Giao dịch:</strong> {{ $item->code }}<br>
+                                <strong>Số tiền:</strong> {{ \App\Helpers\Helper::formatPrice($item->amount, \App\Consts\GlobalConst::CURRENCIES[$item->wallet?->currency] ?? 'VND') }}
+                            </div>
+                        </div>
+                    </div>
+                `,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: '<i class="fa-solid fa-undo-alt"></i> Xác nhận hoàn tác',
+                cancelButtonText: '<i class="fa-solid fa-times"></i> Hủy bỏ',
+                reverseButtons: true,
+                customClass: {
+                    popup: 'rounded-2xl',
+                    confirmButton: 'rounded-xl px-6 py-2',
+                    cancelButton: 'rounded-xl px-6 py-2'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Đang xử lý...',
+                        html: 'Vui lòng đợi trong giây lát',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        customClass: {
+                            popup: 'rounded-2xl'
+                        },
+                        willOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '{{ route('client.transactions.undo-transaction', $item->code) }}';
+                    console.log(form)
+
+                    const csrfToken = document.createElement('input');
+                    csrfToken.type = 'hidden';
+                    csrfToken.name = '_token';
+                    csrfToken.value = '{{ csrf_token() }}';
+                    form.appendChild(csrfToken);
+
+                    const methodInput = document.createElement('input');
+                    methodInput.type = 'hidden';
+                    methodInput.name = '_method';
+                    methodInput.value = 'PUT';
+                    form.appendChild(methodInput);
+
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        }
     </script>
 @endpush

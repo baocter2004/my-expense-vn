@@ -21,8 +21,12 @@ class CategoryController extends Controller
         $id = Auth::id();
 
         $items = $this->categoryService->getList($id, $request->validated());
+        $itemSystems = $this->categoryService->getSystemCategories($request->validated());
 
-        return view('client.pages.categories.index', $items);
+        return view('client.pages.categories.index', [
+            'items' => $items,
+            'itemSystems' => $itemSystems
+        ]);
     }
 
     public function create()
@@ -109,5 +113,24 @@ class CategoryController extends Controller
         } else {
             return back()->with('error', 'Có lỗi khi khôi phục. Vui lòng thử lại.');
         }
+    }
+
+    public function copyCategory()
+    {
+        $systemCategoryId = request('system_category_id');
+        $category = $this->categoryService->find($systemCategoryId);
+
+        if ($category) {
+            $newCategory = $category->replicate();
+            $params = array_merge(
+                $newCategory->toArray(),
+                ['user_id' => Auth::id()]
+            );
+
+            $this->categoryService->create($params);
+            return redirect()->route('client.categories.index')
+                ->with('success', 'Sao chép danh mục thành công!');
+        }
+        return back()->with('error', 'Có lỗi khi sao chép. Vui lòng thử lại.');
     }
 }

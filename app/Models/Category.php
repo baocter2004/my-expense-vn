@@ -14,7 +14,8 @@ class Category extends Model
         'group_id',
         'name',
         'is_active',
-        'descriptions'
+        'descriptions',
+        'is_system'
     ];
 
     // ============================= Attributes ===========================

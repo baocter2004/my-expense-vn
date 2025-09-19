@@ -24,17 +24,13 @@
 @section('content')
     <div
         class="w-full flex flex-col items-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-2 md:p-4 rounded-3xl min-h-screen">
-        <div class="relative z-10 container mx-auto px-4 py-8">
+        <div class="relative z-10 container mx-auto px-2 py-4 md:px-4 md:py-8">
             @include('client.components.search.form-search', [
                 'sloganText' => 'Quản lý chi tiêu thông minh - Tương lai tài chính vững vàng',
                 'icon' => 'fa-wallet',
                 'routeSearch' => route('client.transactions.index'),
                 'routeCreate' => route('client.transactions.create'),
             ])
-
-            <div class="w-full flex justify-end items-center gap-6 mt-4 mb-4">
-
-            </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
                 @forelse ($items as $item)
@@ -206,7 +202,7 @@
                         <a href="{{ route('client.transactions.create') }}"
                             class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all duration-300">
                             <i class="fa-solid fa-plus"></i>
-                            Tạo ví mới
+                            Tạo giao dịch mới
                         </a>
                     </div>
                 @endforelse

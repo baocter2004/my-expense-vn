@@ -18,7 +18,7 @@
 @section('content')
     <div
         class="w-full flex flex-col items-center bg-gradient-to-br from-teal-100 via-white to-cyan-50 p-2 md:p-4 rounded-3xl min-h-screen">
-        <div class="relative z-10 container mx-auto px-4 py-8">
+        <div class="relative z-10 container mx-auto px-2 py-4 md:px-4 md:py-8">
             @include('client.components.search.form-search', [
                 'sloganText' => 'Quản lý chi tiêu thông minh - Tương lai tài chính vững vàng',
                 'icon' => 'fa-wallet',
