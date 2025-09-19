@@ -2,6 +2,13 @@
 
 @section('title', 'Quản Lý Chi Tiêu')
 
+@php
+    $breadcrumb = [
+        ['label' => 'Trang chủ', 'url' => route('client.index'), 'icon' => 'fa-home'],
+        ['label' => 'Liên Hệ'],
+    ];
+@endphp
+
 @section('content')
     <div class="w-full space-y-10">
         <div

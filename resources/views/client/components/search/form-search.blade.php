@@ -123,11 +123,14 @@
 </div>
 <div class="flex items-center justify-center mb-8">
     <div
-        class="flex items-center gap-3 px-8 py-3.5 bg-white border border-emerald-400/40 rounded-2xl hover:border-emerald-400/60 transition-all duration-300 hover:scale-105">
-        <div class="w-2 h-2 bg-teal-400 rounded-full animate-ping opacity-75"></div>
-        <i class="fa-solid fa-list-check text-teal-400 text-base"></i>
-        <span class="font-semibold text-teal-300 tracking-wide">Danh sách</span>
-        <div class="w-2 h-2 bg-teal-400 rounded-full animate-ping opacity-75"></div>
+        class="relative flex items-center gap-3 px-10 py-6 border-4 border-teal-400 rounded-2xl hover:border-emerald-400 transition-all duration-300 hover:scale-105 shadow-lg">
+        <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-10 h-2 bg-slate-700 rounded"></div>
+        <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 w-16 h-2 bg-slate-700 rounded"></div>
+
+        <div class="flex items-center gap-3 text-teal-300">
+            <i class="fa-solid fa-tv text-xl"></i>
+            <span class="font-semibold tracking-wide">Danh sách</span>
+        </div>
     </div>
 </div>
 @if (request()->routeIs('client.categories.index'))

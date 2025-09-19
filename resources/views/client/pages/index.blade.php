@@ -2,6 +2,12 @@
 
 @section('title', 'Quản Lý Chi Tiêu')
 
+@php
+    $breadcrumb = [
+        ['label' => 'Trang chủ', 'url' => route('client.index'), 'icon' => 'fa-home'],
+    ];
+@endphp
+
 @section('content')
     <div class="w-full px-4">
         <h1 class="text-3xl font-bold my-6 text-teal-600 text-center">Chào mừng bạn đến với MyExpenseVN</h1>
