@@ -33,8 +33,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="text-xs text-slate-400 mt-2">Active (30d): <span
-                                class="font-medium text-slate-700">892</span></div>
                     </div>
                 </div>
                 <div class="mt-4 hidden sm:block">

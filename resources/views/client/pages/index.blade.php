@@ -3,9 +3,7 @@
 @section('title', 'Quản Lý Chi Tiêu')
 
 @php
-    $breadcrumb = [
-        ['label' => 'Trang chủ', 'url' => route('client.index'), 'icon' => 'fa-home'],
-    ];
+    $breadcrumb = [['label' => 'Trang chủ', 'url' => route('client.index'), 'icon' => 'fa-home']];
 @endphp
 
 @section('content')

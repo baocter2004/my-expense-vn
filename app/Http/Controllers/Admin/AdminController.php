@@ -11,6 +11,7 @@ class AdminController extends Controller
     public function __construct(protected DashboardService $dashboardService){}
 
     public function dashboard() {
-        return view('admin.pages.dashboard');
+        $result = $this->dashboardService->dashboard();
+        return view('admin.pages.dashboard',compact('result'));
     }
 }
