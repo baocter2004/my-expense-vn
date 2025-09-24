@@ -19,6 +19,8 @@ Route::name('auth.')
                 });
 
                 Route::middleware('auth:admin')->group(function () {
+                    Route::get('/forgot-password', [AdminAuthController::class, 'showFormForgotPassword'])->name('showFormForgotPassword');
+                    Route::post('/reset-password', [AdminAuthController::class, 'resetPassword'])->name('reset-password');
                     Route::get('/logout', [AdminAuthController::class, 'logout'])->name('logout');
                 });
             });
@@ -35,8 +37,8 @@ Route::name('auth.')
                     Route::get('/google', [ClientAuthController::class, 'redirectToGoogle'])->name('redirectToGoogle');
                     Route::get('/google/callback', [ClientAuthController::class, 'handleGoogleCallback'])->name('handleGoogleCallback');
 
-                    Route::get('forgot-password', [ClientAuthController::class, 'showFormForgotPassword'])->name('showFormForgotPassword');
-                    Route::get('password/reset', [ClientAuthController::class, 'showFormResetPassword'])->name('password.reset');
+                    Route::get('/forgot-password', [ClientAuthController::class, 'showFormForgotPassword'])->name('showFormForgotPassword');
+                    Route::get('/password/reset', [ClientAuthController::class, 'showFormResetPassword'])->name('password.reset');
                 });
 
                 Route::middleware('auth:user')->group(function () {

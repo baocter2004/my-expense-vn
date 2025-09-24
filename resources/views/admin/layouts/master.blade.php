@@ -17,22 +17,8 @@
     </nav>
 
     <div id="content">
-        <nav class="navbar flex justify-between items-center px-4 py-3 bg-white shadow-md">
-            <button type="button" id="sidebarToggle"
-                class="navbar-btn flex items-center gap-2 bg-teal-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-teal-600 transition">
-                <i class="fa-solid fa-bars text-lg"></i>
-                <span class="hidden sm:inline">Menu</span>
-            </button>
-            <div class="flex items-center gap-3">
-                <div
-                    class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 font-bold shadow-inner">
-                    {{ strtoupper(substr(Auth::guard('admin')->user()->first_name, 0, 1)) }}
-                </div>
-                <h2 class="text-slate-700 font-medium">
-                    {{ Auth::guard('admin')->user()->first_name . ' ' . Auth::guard('admin')->user()->last_name ?? 'Name' }}
-                </h2>
-            </div>
-        </nav>
+
+        @include('admin.layouts.partials.nav-header')
 
         <div class="line"></div>
 
@@ -40,6 +26,11 @@
             @yield('content')
         </div>
     </div>
+
+    <button id="scrollToTop"
+        class="fixed z-[99999] bottom-6 right-6 p-3 w-[50px] h-[50px] rounded-full bg-teal-500 text-white shadow-lg hover:bg-teal-600 transition opacity-0 pointer-events-none">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
 
     @include('admin.layouts.partials.script')
 </body>
