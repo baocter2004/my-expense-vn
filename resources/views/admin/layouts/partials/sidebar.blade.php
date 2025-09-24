@@ -12,54 +12,79 @@
     </button>
 </div>
 
+@php
+    $adminMenus = [
+        [
+            'route' => 'admin.dashboard',
+            'label' => 'Thống Kê',
+            'icon' => 'fa-chart-line',
+        ],
+        [
+            'label' => 'Người Dùng',
+            'icon' => 'fa-users',
+            'submenu' => [
+                ['route' => 'admin.users.index', 'label' => 'Danh Sách', 'icon' => 'fa-list'],
+            ],
+        ],
+        // [
+        //     'route' => 'admin.accounts.index',
+        //     'label' => 'Tài Khoản',
+        //     'icon' => 'fa-wallet',
+        // ],
+        // [
+        //     'route' => 'admin.reports.index',
+        //     'label' => 'Báo Cáo',
+        //     'icon' => 'fa-file-alt',
+        // ],
+        // [
+        //     'route' => 'admin.settings.index',
+        //     'label' => 'Cài Đặt',
+        //     'icon' => 'fa-cog',
+        // ],
+        [
+            'route' => 'auth.admin.logout',
+            'label' => 'Đăng Xuất',
+            'icon' => 'fa-right-from-bracket',
+        ],
+    ];
+@endphp
+
 <ul class="components" id="sidebar-menu">
-    <li class="active">
-        <a href="#" class="sidebar-link">
-            <i class="fa-solid fa-chart-line"></i>
-            Thống Kê
-        </a>
-    </li>
+    @foreach ($adminMenus as $menu)
+        @php
+            $menuRoute = $menu['route'] ?? null;
+            $isActive = $menuRoute
+                ? Route::is($menuRoute) || Route::is(Str::before($menuRoute, '.index') . '.*')
+                : false;
+        @endphp
 
-    <li class="has-submenu">
-        <a href="#" class="sidebar-link dropdown-toggle">
-            <span>
-                <i class="fa-solid fa-users"></i>
-                Người Dùng
-            </span>
-            <i class="fa-solid fa-chevron-down caret"></i>
-        </a>
-        <ul class="submenu">
-            <li><a href="#" class="sidebar-link"><i class="fa-solid fa-user-plus"></i> Thêm</a></li>
-            <li><a href="#" class="sidebar-link"><i class="fa-solid fa-user-pen"></i> Sửa</a></li>
-            <li><a href="#" class="sidebar-link"><i class="fa-solid fa-user-xmark"></i> Xóa</a></li>
-        </ul>
-    </li>
+        <li class="{{ !empty($menu['submenu']) ? 'has-submenu' : '' }} {{ $isActive ? 'active' : '' }}">
+            <a href="{{ $menuRoute ? route($menuRoute) : '#' }}"
+                class="sidebar-link {{ !empty($menu['submenu']) ? 'dropdown-toggle' : '' }}">
+                <span>
+                    <i class="fa-solid {{ $menu['icon'] }}"></i>
+                    {{ $menu['label'] }}
+                </span>
+                @if (!empty($menu['submenu']))
+                    <i class="fa-solid fa-chevron-down caret"></i>
+                @endif
+            </a>
 
-    <li>
-        <a href="#" class="sidebar-link">
-            <i class="fa-solid fa-wallet"></i>
-            Tài Khoản
-        </a>
-    </li>
-
-    <li>
-        <a href="#" class="sidebar-link">
-            <i class="fa-solid fa-file-alt"></i>
-            Báo Cáo
-        </a>
-    </li>
-
-    <li>
-        <a href="#" class="sidebar-link">
-            <i class="fa-solid fa-cog"></i>
-            Cài Đặt
-        </a>
-    </li>
-
-    <li>
-        <a href="#" class="sidebar-link">
-            <i class="fa-solid fa-right-from-bracket"></i>
-            Đăng Xuất
-        </a>
-    </li>
+            @if (!empty($menu['submenu']))
+                <ul class="submenu">
+                    @foreach ($menu['submenu'] as $sub)
+                        @php
+                            $subActive = Route::is($sub['route']);
+                        @endphp
+                        <li class="{{ $subActive ? 'active' : '' }}">
+                            <a href="{{ route($sub['route']) }}" class="sidebar-link">
+                                <i class="fa-solid {{ $sub['icon'] }}"></i>
+                                {{ $sub['label'] }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
+        </li>
+    @endforeach
 </ul>

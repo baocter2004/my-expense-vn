@@ -15,6 +15,9 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('/images/favicon-32x32.jpg') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('/images/favicon-16x16.jpg') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
     <meta name="theme-color" content="@yield('theme_color', '#06b6d4')" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />

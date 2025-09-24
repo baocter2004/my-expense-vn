@@ -80,6 +80,15 @@ class AdminAuthController extends Controller
         return redirect()->route('admin.dashboard')->with('success', 'Đăng nhập thành công.');
     }
 
+    public function showFormForgotPassword()
+    {
+        return view('admin.pages.auth.forgot-password');
+    }
+
+    public function resetPassword(Request $request)
+    {
+
+    }
 
     public function logout(Request $request)
     {
