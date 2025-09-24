@@ -17,7 +17,7 @@
                 @csrf
                 @include('admin.components.forms.input', [
                     'icon' => 'lock',
-                    'label' => __('label.passwo~rd'),
+                    'label' => __('label.password'),
                     'name' => 'password',
                     'placeholder' => 'Vui Lòng Nhập Mật Khẩu',
                     'type' => 'password',
