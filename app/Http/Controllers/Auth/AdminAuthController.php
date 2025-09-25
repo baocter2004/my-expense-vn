@@ -99,7 +99,7 @@ class AdminAuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('client.index')
+        return redirect()->route('auth.admin.showFormLogin')
             ->with('success', $message);
     }
 }

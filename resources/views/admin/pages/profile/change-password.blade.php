@@ -4,6 +4,13 @@
     Đổi mật khẩu
 @endsection
 
+@php
+    $breadcrumbs = [
+        ['label' => 'Dashboard', 'url' => route('admin.dashboard')],
+        ['label' => 'Đổi Mật Khẩu'],
+    ];
+@endphp
+
 @section('content')
     <div class="p-4 md:p-6 rounded-lg bg-gray-100">
         <div class="flex items-center justify-between mb-6">
@@ -13,7 +20,7 @@
             </div>
         </div>
         <div class="bg-white p-5 rounded-xl shadow-sm hover:shadow-lg transition h-full flex flex-col justify-between">
-            <form action="" method="POST" class="space-y-5">
+            <form action="{{ route('admin.profile.change-password') }}" method="POST" class="space-y-5">
                 @csrf
                 @include('admin.components.forms.input', [
                     'icon' => 'lock',

@@ -41,11 +41,6 @@
         //     'label' => 'Cài Đặt',
         //     'icon' => 'fa-cog',
         // ],
-        [
-            'route' => 'auth.admin.logout',
-            'label' => 'Đăng Xuất',
-            'icon' => 'fa-right-from-bracket',
-        ],
     ];
 @endphp
 
@@ -56,6 +51,16 @@
             $isActive = $menuRoute
                 ? Route::is($menuRoute) || Route::is(Str::before($menuRoute, '.index') . '.*')
                 : false;
+    
+            $subActive = false;
+            if (!empty($menu['submenu'])) {
+                foreach ($menu['submenu'] as $sub) {
+                    if (Route::is($sub['route'])) {
+                        $subActive = true;
+                        break;
+                    }
+                }
+            }
         @endphp
 
         <li class="{{ !empty($menu['submenu']) ? 'has-submenu' : '' }} {{ $isActive ? 'active' : '' }}">
@@ -71,12 +76,12 @@
             </a>
 
             @if (!empty($menu['submenu']))
-                <ul class="submenu">
+                <ul class="submenu {{ $subActive ? 'show' : '' }}">
                     @foreach ($menu['submenu'] as $sub)
                         @php
-                            $subActive = Route::is($sub['route']);
+                            $isSubActive = Route::is($sub['route']);
                         @endphp
-                        <li class="{{ $subActive ? 'active' : '' }}">
+                        <li class="{{ $isSubActive ? 'active' : '' }}">
                             <a href="{{ route($sub['route']) }}" class="sidebar-link">
                                 <i class="fa-solid {{ $sub['icon'] }}"></i>
                                 {{ $sub['label'] }}

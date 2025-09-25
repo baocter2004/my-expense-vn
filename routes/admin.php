@@ -18,6 +18,7 @@ Route::prefix('admin')
             ->group(function () {
                 Route::get('/', [ProfileController::class, 'show'])->name('show');
                 Route::get('/change-pasword', [ProfileController::class, 'showFormChangePassword'])->name('change-password');
+                Route::post('/change-pasword', [ProfileController::class, 'changePassword'])->name('change-password');
             });
 
         Route::name('users.')

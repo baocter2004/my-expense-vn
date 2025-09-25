@@ -143,6 +143,7 @@ return [
         'birth_date' => 'Ngày sinh',
         'avatar' => 'Ảnh đại diện',
         'current_password' => 'Mật khẩu hiện tại',
-        'new_password' => 'Mật khẩu mới'
+        'new_password' => 'Mật khẩu mới',
+        'again_new_password' => 'Xác nhận mật khẩu mới'
     ],
 ];
