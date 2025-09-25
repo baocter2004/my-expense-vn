@@ -23,6 +23,7 @@
         <div class="line"></div>
 
         <div class="w-full">
+            @include('admin.layouts.partials.bread-crumb')
             @yield('content')
         </div>
     </div>

@@ -4,6 +4,12 @@
     My Expense VN - Admin Dashboard
 @endsection
 
+@php
+    $breadcrumbs = [
+        ['label' => 'Dashboard', 'url' => route('admin.dashboard')],
+    ];
+@endphp
+
 @section('content')
     <div class="p-4 md:p-6 rounded-lg bg-gray-100 min-h-screen">
         <div class="flex items-center justify-between mb-6">

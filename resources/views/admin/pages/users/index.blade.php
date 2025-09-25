@@ -4,6 +4,12 @@
     My Expense VN - Admin Dashboard
 @endsection
 
+@php
+    $breadcrumbs = [
+        ['label' => 'Dashboard', 'url' => route('admin.dashboard')],
+    ];
+@endphp
+
 @section('content')
 @endsection
 
