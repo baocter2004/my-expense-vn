@@ -21,7 +21,8 @@ class Admin extends User
         'email',
         'password',
         'otp_code',
-        'otp_expires_at'
+        'otp_expires_at',
+        'avatar'
     ];
 
     /**

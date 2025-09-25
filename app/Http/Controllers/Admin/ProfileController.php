@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-    public function show() {}
+    public function show() {
+        return view('admin.pages.profile.profile');
+    }
 
     public function showFormChangePassword()
     {
