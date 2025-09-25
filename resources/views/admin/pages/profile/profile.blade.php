@@ -86,6 +86,10 @@
 
             <div id="passwordForm"
                 class="md:col-span-2 relative bg-white p-5 rounded-xl shadow-sm hover:shadow-lg transition">
+                <div id="password-loader"
+                    class="hidden absolute inset-0 bg-white/60 backdrop-blur-sm z-20 flex items-center justify-center rounded-xl">
+                    <div class="w-12 h-12 border-4 border-dashed border-teal-500 rounded-full animate-spin"></div>
+                </div>
                 <h3 class="text-lg font-semibold text-slate-800 mb-4">Đổi mật khẩu</h3>
                 <form action="{{ route('admin.profile.change-password') }}" method="POST" class="space-y-5">
                     @csrf
@@ -125,9 +129,14 @@
 
             <div id="infoForm"
                 class="md:col-span-2 relative bg-white p-5 rounded-xl shadow-sm hover:shadow-lg transition hidden">
+                <div id="info-loader"
+                    class="hidden absolute inset-0 bg-white/60 backdrop-blur-sm z-20 flex items-center justify-center rounded-xl">
+                    <div class="w-12 h-12 border-4 border-dashed border-teal-500 rounded-full animate-spin"></div>
+                </div>
                 <h3 class="text-lg font-semibold text-slate-800 mb-4">Cập nhật thông tin</h3>
-                <form action="" method="POST" class="space-y-5">
+                <form action="{{ route('admin.profile.update-profile') }}" method="POST" class="space-y-5">
                     @csrf
+                    @method('PUT')
                     @include('admin.components.forms.input', [
                         'icon' => 'id-card',
                         'label' => 'Họ',
@@ -173,15 +182,41 @@
 @push('js')
     <script>
         $(document).ready(function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: "{{ session('success') }}",
+                    confirmButtonText: 'OK'
+                });
+            @endif
+            @if (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Thất Bại!',
+                    text: "{{ session('error') }}",
+                    confirmButtonText: 'OK'
+                });
+            @endif
             $("#toggleForm").change(function() {
                 if ($(this).is(":checked")) {
                     $("#passwordForm").hide();
+                    $("#info-loader").removeClass("hidden");
                     $("#infoForm").show();
                     $(".dot").addClass("translate-x-7 bg-teal-500");
+
+                    setTimeout(() => {
+                        $("#info-loader").addClass("hidden");
+                    }, 300);
                 } else {
                     $("#infoForm").hide();
+                    $("#password-loader").removeClass("hidden");
                     $("#passwordForm").show();
                     $(".dot").removeClass("translate-x-7 bg-teal-500");
+
+                    setTimeout(() => {
+                        $("#password-loader").addClass("hidden");
+                    }, 300);
                 }
             });
         });
