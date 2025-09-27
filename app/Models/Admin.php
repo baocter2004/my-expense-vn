@@ -34,4 +34,10 @@ class Admin extends User
         'password',
         'remember_token',
     ];
+
+    // Relates
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

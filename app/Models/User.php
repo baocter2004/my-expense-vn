@@ -108,6 +108,10 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     // =========================== Relation ============================
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class);
+    }
     public function wallets()
     {
         return $this->hasMany(Wallet::class);

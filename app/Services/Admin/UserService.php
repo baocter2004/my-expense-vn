@@ -25,6 +25,10 @@ class UserService extends BaseCRUDService
         $order      = Arr::get($params, 'order', 'desc');
         $relates    = Arr::get($params, 'relates', []);
 
+        $relates = ['admin'];
+
+        
+
         return [
             'wheres' => $wheres,
             'likes'  => $whereLikes,

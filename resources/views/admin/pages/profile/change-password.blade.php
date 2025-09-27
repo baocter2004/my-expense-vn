@@ -5,10 +5,7 @@
 @endsection
 
 @php
-    $breadcrumbs = [
-        ['label' => 'Dashboard', 'url' => route('admin.dashboard')],
-        ['label' => 'Đổi Mật Khẩu'],
-    ];
+    $breadcrumbs = [['label' => 'Dashboard', 'url' => route('admin.dashboard')], ['label' => 'Đổi Mật Khẩu']];
 @endphp
 
 @section('content')
@@ -57,3 +54,24 @@
         </div>
     </div>
 @endsection
+
+@push('js')
+    <script>
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: "{{ session('success') }}",
+                confirmButtonText: 'OK'
+            });
+        @endif
+        @if (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Thất Bại!',
+                text: "{{ session('error') }}",
+                confirmButtonText: 'OK'
+            });
+        @endif
+    </script>
+@endpush

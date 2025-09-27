@@ -144,6 +144,8 @@ return [
         'avatar' => 'Ảnh đại diện',
         'current_password' => 'Mật khẩu hiện tại',
         'new_password' => 'Mật khẩu mới',
-        'again_new_password' => 'Xác nhận mật khẩu mới'
+        'again_new_password' => 'Xác nhận mật khẩu mới',
+        'from_date' => 'Từ ngày',
+        'to_date' => 'Đến ngày'
     ],
 ];
