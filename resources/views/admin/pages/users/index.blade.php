@@ -4,6 +4,35 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 @endpush
 
+@push('css')
+    <style>
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            height: 0;
+            width: 0;
+        }
+
+        #top-scroll-inner {
+            background: rgba(20, 184, 166, 0.04);
+            border-radius: 9999px;
+        }
+
+        @media (pointer: coarse) {
+            #top-scroll {
+                height: 6px;
+            }
+
+            #top-scroll-inner {
+                height: 3px;
+            }
+        }
+    </style>
+@endpush
+
 @section('title')
     My Expense VN - Admin Dashboard
 @endsection
@@ -20,137 +49,217 @@
                 <p class="text-sm text-slate-500 mt-1">Quản lý danh sách người dùng</p>
             </div>
         </div>
-        <form method="GET" action="{{ route('admin.users.index') }}" class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                @include('admin.components.forms.input', [
-                    'label' => 'Họ',
-                    'name' => 'last_name',
-                    'placeholder' => 'Nhập họ người dùng...',
-                    'icon' => 'id-card',
-                ])
+        <form id="filterForm" method="GET" action="{{ route('admin.users.index') }}" class="space-y-4">
+            <div class="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
+                <div
+                    class="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 bg-gradient-to-r from-white to-gray-50">
+                    <div class="flex items-center gap-3">
+                        <button type="button" id="filterToggle"
+                            class="inline-flex items-center gap-2 text-sm md:text-base text-slate-700 hover:text-teal-600 focus:outline-none">
+                            <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01.293.707L16 13.414V19a1 1 0 01-1.447.894L9 17l-5.553 2.894A1 1 0 012 19v-5.586L.707 6.707A1 1 0 011 6V4z" />
+                            </svg>
+                            <span class="font-semibold">Bộ lọc</span>
+                            <span id="activeCount"
+                                class="ml-1 inline-flex items-center justify-center text-xs px-2 py-0.5 rounded-full bg-teal-100 text-teal-700">0</span>
+                        </button>
+                        <p class="text-sm text-slate-500 hidden md:block">Tìm kiếm & lọc nhanh danh sách người dùng</p>
+                    </div>
+                </div>
 
-                @include('admin.components.forms.input', [
-                    'label' => 'Tên',
-                    'name' => 'first_name',
-                    'placeholder' => 'Nhập tên người dùng...',
-                    'icon' => 'user',
-                ])
-            </div>
+                <div id="filterBody" class="px-4 md:px-6 pb-4 md:pb-6 hidden space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+                        <div class="space-y-1">
+                            @include('admin.components.forms.input', [
+                                'label' => 'Họ',
+                                'name' => 'last_name',
+                                'placeholder' => 'Nhập họ người dùng...',
+                                'icon' => 'id-card',
+                            ])
+                        </div>
 
-            @include('admin.components.forms.input', [
-                'label' => 'Email',
-                'name' => 'email',
-                'placeholder' => 'Nhập email...',
-                'icon' => 'envelope',
-            ])
+                        <div class="space-y-1">
+                            @include('admin.components.forms.input', [
+                                'label' => 'Tên',
+                                'name' => 'first_name',
+                                'placeholder' => 'Nhập tên người dùng...',
+                                'icon' => 'user',
+                            ])
+                        </div>
+                    </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                @include('admin.components.forms.select', [
-                    'label' => 'Giới tính',
-                    'name' => 'gender',
-                    'placeholder' => 'Vui lòng chọn',
-                    'options' => \App\Consts\UserConst::GENDER,
-                    'icon' => 'venus-mars',
-                ])
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            @include('admin.components.forms.input', [
+                                'label' => 'Email',
+                                'name' => 'email',
+                                'placeholder' => 'Nhập email...',
+                                'icon' => 'envelope',
+                            ])
+                        </div>
 
-                @include('admin.components.forms.select', [
-                    'label' => 'Trạng thái',
-                    'name' => 'is_active',
-                    'options' => \App\Consts\GlobalConst::STATUS,
-                    'icon' => 'toggle-on',
-                ])
-            </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                @include('admin.components.forms.select', [
+                                    'label' => 'Giới tính',
+                                    'name' => 'gender',
+                                    'placeholder' => 'Tất cả',
+                                    'options' => \App\Consts\UserConst::GENDER,
+                                    'icon' => 'venus-mars',
+                                ])
+                            </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-                @include('admin.components.forms.date', [
-                    'label' => 'Ngày tạo từ',
-                    'name' => 'from_date',
-                    'placeholder' => 'YYYY/MM/DD',
-                    'icon' => 'calendar',
-                ])
+                            <div class="space-y-1">
+                                @include('admin.components.forms.select', [
+                                    'label' => 'Trạng thái',
+                                    'name' => 'is_active',
+                                    'placeholder' => 'Tất cả',
+                                    'options' => \App\Consts\GlobalConst::STATUS,
+                                    'icon' => 'toggle-on',
+                                ])
+                            </div>
+                        </div>
+                    </div>
 
-                @include('admin.components.forms.date', [
-                    'label' => 'Ngày tạo đến',
-                    'name' => 'to_date',
-                    'placeholder' => 'YYYY/MM/DD',
-                    'icon' => 'calendar',
-                ])
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                        <div class="space-y-1">
+                            @include('admin.components.forms.date', [
+                                'label' => 'Ngày tạo từ',
+                                'name' => 'from_date',
+                                'placeholder' => 'YYYY/MM/DD',
+                                'icon' => 'calendar',
+                            ])
+                        </div>
 
-                <div class="flex flex-col sm:flex-row sm:justify-end sm:items-center gap-2">
-                    <button type="submit"
-                        class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-lg shadow transition hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-300">
-                        Lọc
-                    </button>
+                        <div class="space-y-1">
+                            @include('admin.components.forms.date', [
+                                'label' => 'Ngày tạo đến',
+                                'name' => 'to_date',
+                                'placeholder' => 'YYYY/MM/DD',
+                                'icon' => 'calendar',
+                            ])
+                        </div>
+                        <div class="flex justify-end items-center gap-2">
+                            <button type="submit"
+                                class="inline-flex items-center gap-2 px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-md shadow hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-300">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <span class="hidden sm:inline">Áp dụng</span>
+                            </button>
 
-                    <a href="{{ route('admin.users.index') }}"
-                        class="w-full sm:w-auto inline-flex items-center justify-center px-5 py-2.5 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200">
-                        Xóa lọc
-                    </a>
+                            <a href="{{ route('admin.users.index') }}"
+                                class="inline-flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 text-sm text-slate-700 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200">
+                                <i class="fa-solid fa-rotate-right"></i>
+                                <span class="hidden sm:inline">Đặt lại</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </form>
+        <p class="text-xs text-teal-400 mt-2">
+            Tip: Dùng <span class="font-medium">Ngày tạo</span>
+            để lọc theo khoảng thời gian. Nhấp vào "Bộ lọc" để ẩn/hiện nhanh.
+        </p>
 
-        <div class="bg-white p-5 rounded-xl shadow-sm hover:shadow-lg transition my-4 h-full overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200 text-sm">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-4 py-3 text-left font-medium text-slate-700">ID</th>
-                        <th class="px-4 py-3 text-left font-medium text-slate-700">Google ID</th>
-                        <th class="px-4 py-3 text-left font-medium text-slate-700">Admin ID</th>
-                        <th class="px-4 py-3 text-left font-medium text-slate-700">First Name</th>
-                        <th class="px-4 py-3 text-left font-medium text-slate-700">Last Name</th>
-                        <th class="px-4 py-3 text-left font-medium text-slate-700">Email</th>
-                        <th class="px-4 py-3 text-left font-medium text-slate-700">Gender</th>
-                        <th class="px-4 py-3 text-left font-medium text-slate-700">Birth Date</th>
-                        <th class="px-4 py-3 text-left font-medium text-slate-700">Active</th>
-                        <th class="px-4 py-3 text-left font-medium text-slate-700">Created At</th>
-                        <th class="px-4 py-3 text-left font-medium text-slate-700">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-100">
-                    @forelse ($items as $user)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-3">{{ $user->id }}</td>
-                            <td class="px-4 py-3">{{ $user->google_id ?? '-' }}</td>
-                            <td class="px-4 py-3">{{ $user->admin_id ?? '-' }}</td>
-                            <td class="px-4 py-3 font-medium text-slate-800">{{ $user->first_name }}</td>
-                            <td class="px-4 py-3">{{ $user->last_name }}</td>
-                            <td class="px-4 py-3">{{ $user->email }}</td>
-                            <td class="px-4 py-3">
-                                {{ \App\Consts\UserConst::GENDER[$user->gender] ?? '-' }}
-                            </td>
-                            <td class="px-4 py-3">{{ $user->birth_date ?? '-' }}</td>
-                            <td class="px-4 py-3">
-                                @if ($user->is_active)
-                                    <span class="px-2 py-1 text-xs rounded bg-green-100 text-green-700">Active</span>
-                                @else
-                                    <span class="px-2 py-1 text-xs rounded bg-red-100 text-red-700">Inactive</span>
-                                @endif
-                            </td>
-                            <td class="px-4 py-3">{{ $user->created_at->format('d/m/Y H:i') }}</td>
-                            <td class="px-4 py-3 text-center">
-                                <a href="" class="text-teal-600 hover:text-teal-800 mx-1">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </a>
-                                <form action="" method="POST" class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-800 mx-1"
-                                        onclick="return confirm('Bạn có chắc chắn muốn xóa?')">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    @empty
+        <div class="relative">
+            <div id="top-scroll" class="w-full overflow-x-auto overflow-y-hidden h-3 my-3 md:my-6">
+                <div id="top-scroll-inner" class="h-1"></div>
+            </div>
+
+            <div id="table-scroll"
+                class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 my-4 h-full overflow-x-auto border border-gray-100 no-scrollbar">
+                <table class="min-w-[1200px] w-full table-auto text-sm">
+                    <thead class="bg-gradient-to-r from-teal-500 to-teal-600 text-white">
                         <tr>
-                            <td colspan="11" class="px-4 py-6 text-center text-gray-500 italic">
-                                Không có người dùng nào.
-                            </td>
+                            <th class="px-6 py-5 text-left font-semibold whitespace-nowrap">Mã ID</th>
+                            <th class="px-6 py-5 text-left font-semibold whitespace-nowrap">Google ID</th>
+                            <th class="px-6 py-5 text-left font-semibold whitespace-nowrap">Tên Quản Trị Viên</th>
+                            <th class="px-6 py-5 text-left font-semibold whitespace-nowrap">Họ</th>
+                            <th class="px-6 py-5 text-left font-semibold whitespace-nowrap">Tên</th>
+                            <th class="px-6 py-5 text-left font-semibold whitespace-nowrap">Email</th>
+                            <th class="px-6 py-5 text-left font-semibold whitespace-nowrap">Giới Tính</th>
+                            <th class="px-6 py-5 text-left font-semibold whitespace-nowrap">Ngày Sinh</th>
+                            <th class="px-6 py-5 text-left font-semibold whitespace-nowrap">Trạng Thái</th>
+                            <th class="px-6 py-5 text-left font-semibold whitespace-nowrap">Ngày Tạo</th>
+                            <th class="px-6 py-5 text-center font-semibold whitespace-nowrap">Hành Động</th>
                         </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                    </thead>
+
+                    <tbody class="bg-white divide-y divide-gray-100">
+                        @forelse ($items as $user)
+                            <tr
+                                class="hover:bg-gradient-to-r hover:from-teal-50 hover:to-teal-50 transition-all duration-200 group">
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{{ $user->id }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ $user->google_id ?? '---' }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-teal-700">
+                                    {{ $user->admin ? trim($user->admin->first_name . ' ' . $user->admin->last_name) : '---' }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{{ $user->first_name }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{{ $user->last_name }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ $user->email }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">
+                                    {{ \App\Consts\UserConst::GENDER[$user->gender] ?? '---' }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ $user->birth_date ?? '---' }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @if ($user->is_active)
+                                        <span
+                                            class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200">
+                                            <div class="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>Active
+                                        </span>
+                                    @else
+                                        <span
+                                            class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-red-100 text-red-700 border border-red-200">
+                                            <div class="w-2 h-2 bg-red-500 rounded-full mr-2"></div>Inactive
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">
+                                    {{ $user->created_at?->format('d/m/Y H:i') ?? '---' }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                    <div
+                                        class="flex items-center justify-center gap-2 opacity-70 group-hover:opacity-100 transition-opacity">
+                                        <button
+                                            class="p-2 text-teal-600 hover:text-teal-800 hover:bg-teal-50 rounded-lg transition-all duration-200 tooltip"
+                                            title="Xem chi tiết">
+                                            <i class="fas fa-eye text-sm"></i>
+                                        </button>
+
+                                        <button
+                                            class="p-2 text-amber-600 hover:text-amber-800 hover:bg-amber-50 rounded-lg transition-all duration-200 tooltip"
+                                            title="Chỉnh sửa">
+                                            <i class="fas fa-edit text-sm"></i>
+                                        </button>
+
+                                        <button
+                                            class="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-all duration-200 tooltip"
+                                            title="Khóa người dùng">
+                                            <i class="fas fa-lock text-sm"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="11" class="px-6 py-12 text-center">
+                                    <div class="flex flex-col items-center justify-center text-gray-400">
+                                        <i class="fas fa-users text-4xl mb-4"></i>
+                                        <p class="text-lg font-medium">Không có người dùng nào</p>
+                                        <p class="text-sm mt-1">Dữ liệu sẽ được hiển thị ở đây khi có người dùng mới</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-4 flex justify-end">
+            {{ $items->onEachSide(1)->links('client.components.elements.paginate') }}
         </div>
     </div>
 @endsection
@@ -180,6 +289,99 @@
                     confirmButtonText: 'OK'
                 });
             @endif
+
+            var $topScroll = $('#top-scroll');
+            var $topInner = $('#top-scroll-inner');
+            var $tableScroll = $('#table-scroll');
+            var $table = $tableScroll.find('table');
+
+            if (!$topScroll.length || !$topInner.length || !$tableScroll.length || !$table.length) return;
+
+            function updateTopWidth() {
+                var w = $table[0].scrollWidth || 0;
+                $topInner.css('width', w + 'px');
+            }
+
+            updateTopWidth();
+
+            $(window).on('resize', updateTopWidth);
+
+            if (window.ResizeObserver) {
+                var ro = new ResizeObserver(function() {
+                    updateTopWidth();
+                });
+                ro.observe($table[0]);
+            }
+
+            var isSyncing = false;
+
+            $topScroll.on('scroll', function() {
+                if (isSyncing) return;
+                isSyncing = true;
+                $tableScroll.scrollLeft($topScroll.scrollLeft());
+                window.requestAnimationFrame(function() {
+                    isSyncing = false;
+                });
+            });
+
+            $tableScroll.on('scroll', function() {
+                if (isSyncing) return;
+                isSyncing = true;
+                $topScroll.scrollLeft($tableScroll.scrollLeft());
+                window.requestAnimationFrame(function() {
+                    isSyncing = false;
+                });
+            });
+
+            var hasError = @json($errors->any());
+            var $filterToggle = $('#filterToggle');
+            var $filterBody = $('#filterBody');
+            var $form = $('#filterForm');
+            var $activeCount = $('#activeCount');
+            var collapsed = false;
+
+            $filterToggle.on('click', function() {
+                collapsed = !collapsed;
+                $filterBody.slideToggle(180);
+            });
+
+            if (hasError || activeCount > 0) {
+                $filterBody.show();
+                collapsed = true;
+            }
+
+            function countActiveFilters() {
+                var count = 0;
+                $form.find('input, select').each(function() {
+                    var type = $(this).attr('type');
+                    var val = $(this).val();
+
+                    if (type === 'hidden') return;
+
+                    if (type === 'checkbox' || type === 'radio') {
+                        if (this.checked) count++;
+                    } else if ($(this).is('select')) {
+                        if (val && val.trim() !== '') count++;
+                    } else {
+                        if (val && String(val).trim() !== '') count++;
+                    }
+                });
+
+                $activeCount.text(count);
+                return count;
+            }
+
+            countActiveFilters();
+            $form.on('change input', 'input, select', function() {
+                countActiveFilters();
+            });
+
+            $form.on('keypress', 'input', function(e) {
+                if (e.which === 13) {
+                    e.preventDefault();
+                    $form.submit();
+                }
+            });
         });
     </script>
 @endpush

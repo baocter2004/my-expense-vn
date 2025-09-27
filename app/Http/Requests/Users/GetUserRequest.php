@@ -22,7 +22,13 @@ class GetUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'last_name'  => 'nullable|string',
+            'first_name' => 'nullable|string',
+            'email'      => 'nullable|string',
+            'gender'     => 'nullable|in:0,1,2',
+            'is_active'  => 'nullable|in:0,1',
+            'from_date'  => 'nullable|date',
+            'to_date'    => 'nullable|date',
         ];
     }
 }
