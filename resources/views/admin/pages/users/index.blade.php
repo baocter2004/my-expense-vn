@@ -157,10 +157,20 @@
                 </div>
             </div>
         </form>
-        <p class="text-xs text-teal-400 mt-2">
-            Tip: Dùng <span class="font-medium">Ngày tạo</span>
-            để lọc theo khoảng thời gian. Nhấp vào "Bộ lọc" để ẩn/hiện nhanh.
-        </p>
+
+        <div class="flex justify-between items-center mt-3">
+            <div class="w-1/2 p-2 border border-teal-500 rounded-xl bg-white">
+                <p class="text-xs text-teal-400 mt-2">
+                    Tip: Dùng <span class="font-medium">Ngày tạo</span>
+                    để lọc theo khoảng thời gian. Nhấp vào "Bộ lọc" để ẩn/hiện nhanh.
+                </p>
+            </div>
+            <a href=""
+                class="flex items-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-xl hover:shadow-lg transition-all duration-300">
+                <i class="fa-solid fa-plus"></i>
+                <span class="hidden sm:inline">Thêm mới</span>
+            </a>
+        </div>
 
         <div class="relative">
             <div id="top-scroll" class="w-full overflow-x-auto overflow-y-hidden h-3 my-3 md:my-6">
