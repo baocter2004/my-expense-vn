@@ -26,5 +26,6 @@ Route::prefix('admin')
             ->prefix('users')
             ->group(function () {
                 Route::get('/', [UserController::class, 'index'])->name('index');
+                Route::get('/{id}', [UserController::class, 'show'])->name('show');
             });
     });

@@ -46,7 +46,7 @@
                     </div>
                     <div>
                         <h2 class="text-xl font-semibold text-slate-800">
-                            {{ $admin->first_name . ' ' . $admin->last_name }}
+                            {{ $admin->last_name . ' ' . $admin->first_name }}
                         </h2>
                         <p class="text-gray-500 text-sm">{{ $admin->email }}</p>
                     </div>

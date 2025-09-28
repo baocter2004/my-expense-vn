@@ -73,7 +73,7 @@
                         <div class="space-y-1">
                             @include('admin.components.forms.input', [
                                 'label' => 'Họ',
-                                'name' => 'last_name',
+                                'name' => 'first_name',
                                 'placeholder' => 'Nhập họ người dùng...',
                                 'icon' => 'id-card',
                             ])
@@ -82,7 +82,7 @@
                         <div class="space-y-1">
                             @include('admin.components.forms.input', [
                                 'label' => 'Tên',
-                                'name' => 'first_name',
+                                'name' => 'last_name',
                                 'placeholder' => 'Nhập tên người dùng...',
                                 'icon' => 'user',
                             ])
@@ -158,18 +158,34 @@
             </div>
         </form>
 
-        <div class="flex justify-between items-center mt-3">
-            <div class="w-1/2 p-2 border border-teal-500 rounded-xl bg-white">
-                <p class="text-xs text-teal-400 mt-2">
-                    Tip: Dùng <span class="font-medium">Ngày tạo</span>
-                    để lọc theo khoảng thời gian. Nhấp vào "Bộ lọc" để ẩn/hiện nhanh.
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mt-3">
+            <div class="w-full md:w-1/2 p-3 border border-teal-500 rounded-xl bg-white flex items-start gap-2">
+                <i class="fa-regular fa-lightbulb text-teal-500 mt-0.5"></i>
+                <p class="text-xs text-teal-500 leading-relaxed">
+                    Dùng <span class="font-medium">Ngày tạo</span> để lọc theo khoảng thời gian.
+                    Nhấp vào "Bộ lọc" để ẩn/hiện nhanh.
                 </p>
             </div>
-            <a href=""
-                class="flex items-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-xl hover:shadow-lg transition-all duration-300">
-                <i class="fa-solid fa-plus"></i>
-                <span class="hidden sm:inline">Thêm mới</span>
-            </a>
+
+            <div class="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+                <button id="scrollToAction"
+                    class="flex items-center justify-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-lg shadow hover:bg-amber-600 transition text-sm">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <span class="hidden sm:inline">Đi đến Hành động</span>
+                </button>
+
+                <button id="scrollToFirst"
+                    class="flex items-center justify-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-lg shadow hover:bg-amber-600 transition text-sm hidden">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span class="hidden sm:inline">Quay lại ID</span>
+                </button>
+
+                <a href="#"
+                    class="flex items-center justify-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-lg shadow hover:bg-teal-600 transition text-sm">
+                    <i class="fa-solid fa-plus"></i>
+                    <span class="hidden sm:inline">Thêm mới</span>
+                </a>
+            </div>
         </div>
 
         <div class="relative">
@@ -182,7 +198,9 @@
                 <table class="min-w-[1200px] w-full table-auto text-sm">
                     <thead class="bg-gradient-to-r from-teal-500 to-teal-600 text-white">
                         <tr>
-                            <th class="px-6 py-5 text-left font-semibold whitespace-nowrap">Mã ID</th>
+                            <th class="sticky left-0 bg-teal-600 text-white px-6 py-5 font-semibold whitespace-nowrap z-10">
+                                Mã ID
+                            </th>
                             <th class="px-6 py-5 text-left font-semibold whitespace-nowrap">Google ID</th>
                             <th class="px-6 py-5 text-left font-semibold whitespace-nowrap">Tên Quản Trị Viên</th>
                             <th class="px-6 py-5 text-left font-semibold whitespace-nowrap">Họ</th>
@@ -191,6 +209,7 @@
                             <th class="px-6 py-5 text-left font-semibold whitespace-nowrap">Giới Tính</th>
                             <th class="px-6 py-5 text-left font-semibold whitespace-nowrap">Ngày Sinh</th>
                             <th class="px-6 py-5 text-left font-semibold whitespace-nowrap">Trạng Thái</th>
+                            <th class="px-6 py-5 text-left font-semibold whitespace-nowrap">Tổng Số Giao Dịch</th>
                             <th class="px-6 py-5 text-left font-semibold whitespace-nowrap">Ngày Tạo</th>
                             <th class="px-6 py-5 text-center font-semibold whitespace-nowrap">Hành Động</th>
                         </tr>
@@ -200,14 +219,18 @@
                         @forelse ($items as $user)
                             <tr
                                 class="hover:bg-gradient-to-r hover:from-teal-50 hover:to-teal-50 transition-all duration-200 group">
-                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{{ $user->id }}</td>
+                                <td class="sticky left-0 bg-white px-6 py-4 font-medium text-gray-900 z-10">
+                                    {{ $user->id }}
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ $user->google_id ?? '---' }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap font-medium text-teal-700">
-                                    {{ $user->admin ? trim($user->admin->first_name . ' ' . $user->admin->last_name) : '---' }}
+                                    {{ $user->admin ? trim($user->admin->last_name . ' ' . $user->admin->first_name) : '---' }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{{ $user->first_name }}
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                                    {{ $user->last_name }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{{ $user->last_name }}
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                                    {{ $user->first_name }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ $user->email }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-gray-700">
@@ -215,7 +238,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ $user->birth_date ?? '---' }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    @if ($user->is_active)
+                                    @if ($user->is_active && $user->is_active === 1)
                                         <span
                                             class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200">
                                             <div class="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>Active
@@ -227,16 +250,19 @@
                                         </span>
                                     @endif
                                 </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-center text-gray-700">
+                                    {{ $user->transactions_count }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-gray-700">
-                                    {{ $user->created_at?->format('d/m/Y H:i') ?? '---' }}</td>
+                                    {{ $user->created_at?->format('d/m/Y') ?? '---' }}
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     <div
                                         class="flex items-center justify-center gap-2 opacity-70 group-hover:opacity-100 transition-opacity">
-                                        <button
-                                            class="p-2 text-teal-600 hover:text-teal-800 hover:bg-teal-50 rounded-lg transition-all duration-200 tooltip"
+                                        <a href="{{ route('admin.users.show', $user->id) }}"
+                                            class="p-2 cursor-pointer text-teal-600 hover:text-teal-800 hover:bg-teal-50 rounded-lg transition-all duration-200 tooltip"
                                             title="Xem chi tiết">
                                             <i class="fas fa-eye text-sm"></i>
-                                        </button>
+                                        </a>
 
                                         <button
                                             class="p-2 text-amber-600 hover:text-amber-800 hover:bg-amber-50 rounded-lg transition-all duration-200 tooltip"
@@ -343,6 +369,35 @@
                 });
             });
 
+            $('#scrollToAction').on('click', function() {
+                let $tableScroll = $('#table-scroll');
+                let $lastTh = $('#table-scroll table thead th:last');
+
+                if ($lastTh.length) {
+                    let left = $lastTh.position().left + $tableScroll.scrollLeft();
+                    $tableScroll.animate({
+                        scrollLeft: left
+                    }, 500);
+
+                    setTimeout(() => {
+                        $('#scrollToAction').addClass('hidden');
+                        $('#scrollToFirst').removeClass('hidden');
+                    }, 500);
+                }
+            });
+
+            $('#scrollToFirst').on('click', function() {
+                let $tableScroll = $('#table-scroll');
+                $tableScroll.animate({
+                    scrollLeft: 0
+                }, 500);
+
+                setTimeout(() => {
+                    $('#scrollToFirst').addClass('hidden');
+                    $('#scrollToAction').removeClass('hidden');
+                }, 500);
+            });
+
             var hasError = @json($errors->any());
             var $filterToggle = $('#filterToggle');
             var $filterBody = $('#filterBody');
@@ -354,11 +409,6 @@
                 collapsed = !collapsed;
                 $filterBody.slideToggle(180);
             });
-
-            if (hasError || activeCount > 0) {
-                $filterBody.show();
-                collapsed = true;
-            }
 
             function countActiveFilters() {
                 var count = 0;
@@ -382,6 +432,12 @@
             }
 
             countActiveFilters();
+
+            if (hasError || countActiveFilters() > 0) {
+                $filterBody.show();
+                collapsed = true;
+            }
+
             $form.on('change input', 'input, select', function() {
                 countActiveFilters();
             });

@@ -11,7 +11,7 @@
                 {{ strtoupper(substr(Auth::guard('admin')->user()->first_name, 0, 1)) }}
             </div>
             <h2 class="text-slate-700 font-medium">
-                {{ Auth::guard('admin')->user()->first_name . ' ' . Auth::guard('admin')->user()->last_name ?? 'Name' }}
+                {{ Auth::guard('admin')->user()->last_name . ' ' . Auth::guard('admin')->user()->first_name ?? 'Name' }}
             </h2>
         </div>
         <div id="dropDownMenu"
