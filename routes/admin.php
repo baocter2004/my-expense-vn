@@ -29,5 +29,6 @@ Route::prefix('admin')
                 Route::get('/create', [UserController::class, 'create'])->name('create');
                 Route::get('/{id}', [UserController::class, 'show'])->name('show');
                 Route::patch('/{id}/lock', [UserController::class, 'lockUser']);
+                Route::delete('/{id}/soft-delete', [UserController::class, 'softDelete']);
             });
     });
