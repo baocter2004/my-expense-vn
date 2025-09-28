@@ -1,4 +1,4 @@
-{{-- <nav class="navbar flex justify-between items-center px-4 py-3 bg-white shadow-md">
+<nav class="navbar flex justify-between items-center px-4 py-3 bg-white shadow-md">
     <button type="button" id="sidebarToggle"
         class="navbar-btn flex items-center gap-2 bg-teal-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-teal-600 transition">
         <i class="fa-solid fa-bars text-lg"></i>
@@ -11,7 +11,7 @@
                 {{ strtoupper(substr(Auth::guard('admin')->user()->first_name, 0, 1)) }}
             </div>
             <h2 class="text-slate-700 font-medium">
-                {{ Auth::guard('admin')->user()->first_name . ' ' . Auth::guard('admin')->user()->last_name ?? 'Name' }}
+                {{ Auth::guard('admin')->user()->last_name . ' ' . Auth::guard('admin')->user()->first_name ?? 'Name' }}
             </h2>
         </div>
         <div id="dropDownMenu"
@@ -40,4 +40,4 @@
             $("#dropDownMenu").toggleClass('hidden');
         });
     });
-</script> --}}
+</script>

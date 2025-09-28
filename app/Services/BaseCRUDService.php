@@ -20,7 +20,11 @@ abstract class BaseCRUDService extends BaseService
             $limit = $params['limit'];
         }
         $query = $this->filter($params);
-        
+        if (!empty($params['with_count'])) {
+            $withCount = is_array($params['with_count']) ? $params['with_count'] : [$params['with_count']];
+            $query->withCount($withCount);
+        }
+
         return $query->paginate($limit)->appends(request()->query());
     }
 
