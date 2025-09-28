@@ -66,6 +66,23 @@ class UserController extends Controller
         ], 200);
     }
 
+    public function softDelete($id)
+    {
+        $user = $this->userService->find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'Không tìm thấy người dùng'], 404);
+        }
+
+        $user->delete();
+        $user->update([
+            'is_active' => 2,
+        ]);
+
+        return response()->json([
+            'message' => 'Người dùng đã bị xóa thành công!',
+        ], 200);
+    }
 
     public function create()
     {

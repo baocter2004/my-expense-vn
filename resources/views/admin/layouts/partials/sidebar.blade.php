@@ -24,23 +24,9 @@
             'icon' => 'fa-users',
             'submenu' => [
                 ['route' => 'admin.users.index', 'label' => 'Danh Sách', 'icon' => 'fa-list'],
+                ['route' => 'admin.users.create', 'label' => 'Thêm mới', 'icon' => 'fa-plus'],
             ],
         ],
-        // [
-        //     'route' => 'admin.accounts.index',
-        //     'label' => 'Tài Khoản',
-        //     'icon' => 'fa-wallet',
-        // ],
-        // [
-        //     'route' => 'admin.reports.index',
-        //     'label' => 'Báo Cáo',
-        //     'icon' => 'fa-file-alt',
-        // ],
-        // [
-        //     'route' => 'admin.settings.index',
-        //     'label' => 'Cài Đặt',
-        //     'icon' => 'fa-cog',
-        // ],
     ];
 @endphp
 

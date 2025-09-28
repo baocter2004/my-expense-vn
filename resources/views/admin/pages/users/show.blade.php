@@ -68,7 +68,7 @@
                     </div>
                     <div>
                         <p class="text-xs text-slate-500">Ngày sinh</p>
-                        <p class="font-medium">{{ $user->birth_date ?? '---' }}</p>
+                        <p class="font-medium">{{ $user->birth_date->format('d/m/Y') ?? '---' }}</p>
                     </div>
                 </div>
             </div>
@@ -139,10 +139,26 @@
                         <span class="hidden sm:inline">Chỉnh sửa</span>
                     </button>
 
-                    <button
-                        class="flex items-center justify-center gap-2 px-4 py-3 bg-red-500 text-white text-sm rounded-lg shadow hover:bg-red-600 transition">
-                        <i class="fas fa-lock"></i>
-                        <span class="hidden sm:inline">Khóa</span>
+                    @if ($user->is_active == 1)
+                        <button data-id="{{ $user->id }}"
+                            class="flex items-center justify-center gap-2 px-4 py-3 bg-red-500 text-white text-sm rounded-lg shadow hover:bg-red-600 transition btn-lock-user">
+                            <i class="fas fa-lock"></i>
+                            <span class="hidden sm:inline">Khóa</span>
+                        </button>
+                    @endif
+
+                    @if ($user->is_active == 2)
+                        <button data-id="{{ $user->id }}" data-reason="{{ $user->reason_for_unactive }}"
+                            class="flex items-center justify-center gap-2 px-4 py-3 bg-blue-500 text-white text-sm rounded-lg shadow hover:bg-blue-600 transition btn-unlock-user">
+                            <i class="fas fa-unlock"></i>
+                            <span class="hidden sm:inline">Mở Khóa</span>
+                        </button>
+                    @endif
+
+                    <button data-id="{{ $user->id }}"
+                        class="flex items-center justify-center gap-2 px-4 py-3 bg-gray-500 text-white text-sm rounded-lg shadow hover:bg-gray-600 transition btn-delete-user">
+                        <i class="fas fa-trash"></i>
+                        <span class="hidden sm:inline">Xóa</span>
                     </button>
                 </div>
             </div>
@@ -173,6 +189,133 @@
                 });
             @endif
 
+            $('.btn-lock-user').on('click', function() {
+                let userId = $(this).data('id');
+
+                Swal.fire({
+                    title: 'Khóa người dùng',
+                    text: 'Nhập lý do khóa tài khoản này:',
+                    input: 'text',
+                    inputPlaceholder: 'Ví dụ: Vi phạm chính sách...',
+                    inputAttributes: {
+                        maxlength: 255,
+                    },
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Khóa',
+                    cancelButtonText: 'Hủy',
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    inputValidator: (value) => {
+                        if (!value) {
+                            return 'Bạn phải nhập lý do!';
+                        }
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        let reason = result.value;
+                        $.ajax({
+                            url: `/admin/users/${userId}/lock`,
+                            type: 'PATCH',
+                            data: {
+                                _token: '{{ csrf_token() }}',
+                                reason: reason,
+                                user_id: userId
+                            },
+                            success: function(res) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Đã khóa!',
+                                    text: res.message ||
+                                        'Người dùng đã bị khóa thành công.'
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            },
+                            error: function(xhr) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Thất bại!',
+                                    text: xhr.responseJSON?.message ||
+                                        'Không thể khóa người dùng.'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+            $('.btn-unlock-user').on('click', function() {
+                let userId = $(this).data('id');
+                let reason = $(this).data('reason');
+
+                Swal.fire({
+                    title: 'Mở khóa người dùng?',
+                    html: `
+                            <p class="text-gray-700 mb-2">Người dùng này đã bị khóa với lý do:</p>
+                            <p class="font-semibold text-red-600">"${reason || 'Không có lý do'}"</p>
+                        `,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Mở khóa',
+                    cancelButtonText: 'Hủy',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: `/admin/users/${userId}/unlock`,
+                            type: 'PATCH',
+                            data: {
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(res) {
+                                Swal.fire('Đã mở khóa!', res.message ||
+                                        'Người dùng đã được mở khóa.', 'success')
+                                    .then(() => location.reload());
+                            },
+                            error: function(xhr) {
+                                Swal.fire('Thất bại!', xhr.responseJSON?.message ||
+                                    'Không thể mở khóa.', 'error');
+                            }
+                        });
+                    }
+                });
+            });
+
+            $('.btn-delete-user').on('click', function() {
+                let userId = $(this).data('id');
+
+                Swal.fire({
+                    title: 'Xóa người dùng?',
+                    text: 'Người dùng sẽ bị chuyển vào thùng rác.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Xóa',
+                    cancelButtonText: 'Hủy',
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: `/admin/users/${userId}/soft-delete`,
+                            type: 'DELETE',
+                            data: {
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(res) {
+                                Swal.fire('Đã xóa!', res.message ||
+                                        'Người dùng đã bị xóa.', 'success')
+                                    .then(() => window.location.href =
+                                        "{{ route('admin.users.index') }}";
+                                    );
+                            },
+                            error: function(xhr) {
+                                Swal.fire('Thất bại!', xhr.responseJSON?.message ||
+                                    'Không thể xóa.', 'error');
+                            }
+                        });
+                    }
+                });
+            });
         });
     </script>
 @endpush
