@@ -9,7 +9,11 @@
 @endsection
 
 @php
-    $breadcrumbs = [['label' => 'Dashboard', 'url' => route('admin.dashboard')], ['label' => 'Users']];
+    $breadcrumbs = [
+        ['label' => 'Dashboard', 'url' => route('admin.dashboard')],
+        ['label' => 'Users', 'url' => route('admin.users.index')],
+        ['label' => 'Show'],
+    ];
 @endphp
 
 @section('content')
@@ -39,7 +43,7 @@
                     <p class="text-sm text-slate-500">{{ $user->email }}</p>
                 </div>
                 <div>
-                    @if ($user->is_active)
+                    @if ($user->is_active == 1)
                         <span
                             class="px-3 py-1 text-xs font-medium rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200">
                             Active
@@ -92,6 +96,15 @@
                         <p class="text-xs text-slate-500">Ngày cập nhật</p>
                         <p class="font-medium">{{ $user->updated_at?->format('d/m/Y H:i') ?? '---' }}</p>
                     </div>
+
+                    @if ($user->is_active == 2 && !empty($user->reason_for_unactive))
+                        <div class="md:col-span-2">
+                            <p class="text-xs text-slate-500">Lý do khóa</p>
+                            <p class="font-medium text-red-600">
+                                <i class="fa-solid fa-ban mr-1"></i> {{ $user->reason_for_unactive }}
+                            </p>
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -119,13 +132,17 @@
                 <h3 class="text-lg font-semibold text-slate-700 border-b border-gray-200 pb-2 mb-4">
                     <i class="fa-solid fa-gears mr-2 text-amber-500"></i> Quản lý
                 </h3>
-                <div class="flex gap-3">
+                <div class="flex gap-2 flex-wrap">
                     <button
-                        class="px-4 py-2 bg-amber-500 text-white text-sm rounded-lg shadow hover:bg-amber-600 transition">
-                        <i class="fas fa-edit mr-2"></i> Chỉnh sửa
+                        class="flex items-center justify-center gap-2 px-4 py-3 bg-amber-500 text-white text-sm rounded-lg shadow hover:bg-amber-600 transition">
+                        <i class="fas fa-edit"></i>
+                        <span class="hidden sm:inline">Chỉnh sửa</span>
                     </button>
-                    <button class="px-4 py-2 bg-red-500 text-white text-sm rounded-lg shadow hover:bg-red-600 transition">
-                        <i class="fas fa-lock mr-2"></i> Khóa người dùng
+
+                    <button
+                        class="flex items-center justify-center gap-2 px-4 py-3 bg-red-500 text-white text-sm rounded-lg shadow hover:bg-red-600 transition">
+                        <i class="fas fa-lock"></i>
+                        <span class="hidden sm:inline">Khóa</span>
                     </button>
                 </div>
             </div>

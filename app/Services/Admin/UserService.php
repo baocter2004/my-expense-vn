@@ -21,7 +21,7 @@ class UserService extends BaseCRUDService
     {
         $whereEquals = Arr::get($params, 'where_likes', []);
         $whereLikes  = Arr::get($params, 'where_equals', []);
-        $wheres      = Arr::get($params,'wheres', []);
+        $wheres      = Arr::get($params, 'wheres', []);
         $sort        = Arr::get($params, 'sort', 'created_at');
         $order       = Arr::get($params, 'order', 'desc');
         $relates     = Arr::get($params, 'relates', [

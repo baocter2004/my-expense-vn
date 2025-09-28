@@ -43,4 +43,32 @@ class UserController extends Controller
 
         return view('admin.pages.users.show', compact('user'));
     }
+
+    public function lockUser(Request $request, $id)
+    {
+        $request->validate([
+            'reason' => 'required|string|max:255',
+        ]);
+
+        $user = $this->userService->find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'Không tìm thấy người dùng'], 404);
+        }
+
+        $user->update([
+            'is_active' => 2,
+            'locked_reason' => $request->reason,
+        ]);
+
+        return response()->json([
+            'message' => 'Người dùng đã bị khóa thành công!',
+        ], 200);
+    }
+
+
+    public function create()
+    {
+        return view('admin.pages.users.create');
+    }
 }

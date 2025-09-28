@@ -36,7 +36,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'birth_date',
         'gender',
         'is_active',
-        'is_change_password'
+        'is_change_password',
+        'reason_for_unactive'
     ];
 
 
