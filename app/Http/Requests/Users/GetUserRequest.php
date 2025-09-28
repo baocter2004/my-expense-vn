@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\Users;
 
+use App\Consts\GlobalConst;
+use App\Consts\UserConst;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class GetUserRequest extends FormRequest
 {
@@ -25,8 +28,14 @@ class GetUserRequest extends FormRequest
             'last_name'  => 'nullable|string',
             'first_name' => 'nullable|string',
             'email'      => 'nullable|string',
-            'gender'     => 'nullable|in:0,1,2',
-            'is_active'  => 'nullable|in:0,1',
+            'gender'     => [
+                'nullable',
+                Rule::in(array_keys(UserConst::GENDER))
+            ],
+            'is_active'  => [
+                'nullable',
+                Rule::in(array_keys(GlobalConst::STATUS))
+            ],
             'from_date'  => 'nullable|date',
             'to_date'    => 'nullable|date',
         ];

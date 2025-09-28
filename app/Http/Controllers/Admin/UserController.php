@@ -13,7 +13,7 @@ class UserController extends Controller
 
     public function index(GetUserRequest $getUserRequest)
     {
-        $items = $this->userService->search($getUserRequest->validated(),10);
+        $items = $this->userService->searchFilter($getUserRequest->validated(),10);
 
         return view('admin.pages.users.index', compact('items'));
     }

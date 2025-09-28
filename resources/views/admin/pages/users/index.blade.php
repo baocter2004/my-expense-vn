@@ -73,7 +73,7 @@
                         <div class="space-y-1">
                             @include('admin.components.forms.input', [
                                 'label' => 'Họ',
-                                'name' => 'last_name',
+                                'name' => 'first_name',
                                 'placeholder' => 'Nhập họ người dùng...',
                                 'icon' => 'id-card',
                             ])
@@ -82,7 +82,7 @@
                         <div class="space-y-1">
                             @include('admin.components.forms.input', [
                                 'label' => 'Tên',
-                                'name' => 'first_name',
+                                'name' => 'last_name',
                                 'placeholder' => 'Nhập tên người dùng...',
                                 'icon' => 'user',
                             ])
@@ -158,15 +158,15 @@
             </div>
         </form>
 
-        <div class="flex justify-between items-center mt-3">
-            <div class="w-1/2 p-2 border border-teal-500 rounded-xl bg-white">
+        <div class="flex flex-col md:flex-row justify-between items-center mt-3">
+            <div class="w-full md:w-1/2 p-2 border border-teal-500 rounded-xl bg-white">
                 <p class="text-xs text-teal-400 mt-2">
                     Tip: Dùng <span class="font-medium">Ngày tạo</span>
                     để lọc theo khoảng thời gian. Nhấp vào "Bộ lọc" để ẩn/hiện nhanh.
                 </p>
             </div>
             <a href=""
-                class="flex items-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-xl hover:shadow-lg transition-all duration-300">
+                class="flex items-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-xl hover:shadow-lg transition-all mt-2 duration-300">
                 <i class="fa-solid fa-plus"></i>
                 <span class="hidden sm:inline">Thêm mới</span>
             </a>
@@ -215,7 +215,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ $user->birth_date ?? '---' }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    @if ($user->is_active)
+                                    @if ($user->is_active && $user->is_active === 1)
                                         <span
                                             class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200">
                                             <div class="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>Active
@@ -355,11 +355,6 @@
                 $filterBody.slideToggle(180);
             });
 
-            if (hasError || activeCount > 0) {
-                $filterBody.show();
-                collapsed = true;
-            }
-
             function countActiveFilters() {
                 var count = 0;
                 $form.find('input, select').each(function() {
@@ -382,6 +377,12 @@
             }
 
             countActiveFilters();
+
+            if (hasError || countActiveFilters() > 0) {
+                $filterBody.show();
+                collapsed = true;
+            }
+
             $form.on('change input', 'input, select', function() {
                 countActiveFilters();
             });

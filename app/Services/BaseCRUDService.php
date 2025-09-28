@@ -14,6 +14,16 @@ abstract class BaseCRUDService extends BaseService
         return $this->paginate($params, $limit)->appends(request()->query());
     }
 
+    public function searchFilter(array $params = [], $limit = GlobalConst::DEFAULT_LIMIT): LengthAwarePaginator
+    {
+        if (!empty($params['limit'])) {
+            $limit = $params['limit'];
+        }
+        $query = $this->filter($params);
+        
+        return $query->paginate($limit)->appends(request()->query());
+    }
+
     public function all(array $params): Collection
     {
         return $this->get($params);
