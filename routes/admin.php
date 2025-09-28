@@ -26,6 +26,8 @@ Route::prefix('admin')
             ->prefix('users')
             ->group(function () {
                 Route::get('/', [UserController::class, 'index'])->name('index');
+                Route::get('/create', [UserController::class, 'create'])->name('create');
                 Route::get('/{id}', [UserController::class, 'show'])->name('show');
+                Route::patch('/{id}/lock', [UserController::class, 'lockUser']);
             });
     });

@@ -61,6 +61,12 @@ class ClientAuthController extends Controller
             'password' => ['required'],
         ]);
 
+        $user = User::where('email', $credentials['email'])->firstOrFail();
+        if ($user && $user->is_active == 2) {
+            return back()->with('error', 'Tài khoản đã bị khóa. Lý do: ' . ($user->locked_reason ?? 'Không xác định'))
+                ->withInput();
+        }
+
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
@@ -165,5 +171,4 @@ class ClientAuthController extends Controller
 
         return back()->with('success', 'Liên kết xác minh mới đã được gửi đến email của bạn.');
     }
-
 }

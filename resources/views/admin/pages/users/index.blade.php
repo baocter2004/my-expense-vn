@@ -180,7 +180,7 @@
                     <span class="hidden sm:inline">Quay lại ID</span>
                 </button>
 
-                <a href="#"
+                <a href="{{ route('admin.users.create') }}"
                     class="flex items-center justify-center gap-2 px-4 py-2 bg-teal-500 text-white rounded-lg shadow hover:bg-teal-600 transition text-sm">
                     <i class="fa-solid fa-plus"></i>
                     <span class="hidden sm:inline">Thêm mới</span>
@@ -236,7 +236,8 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-gray-700">
                                     {{ \App\Consts\UserConst::GENDER[$user->gender] ?? '---' }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ $user->birth_date ?? '---' }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">
+                                    {{ $user->birth_date?->format('d/m/Y') ?? '---' }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     @if ($user->is_active && $user->is_active === 1)
                                         <span
@@ -259,21 +260,39 @@
                                     <div
                                         class="flex items-center justify-center gap-2 opacity-70 group-hover:opacity-100 transition-opacity">
                                         <a href="{{ route('admin.users.show', $user->id) }}"
-                                            class="p-2 cursor-pointer text-teal-600 hover:text-teal-800 hover:bg-teal-50 rounded-lg transition-all duration-200 tooltip"
+                                            class="p-3 cursor-pointer text-teal-600 hover:text-teal-800 hover:bg-teal-200 rounded-lg transition-all duration-200 tooltip"
                                             title="Xem chi tiết">
                                             <i class="fas fa-eye text-sm"></i>
                                         </a>
 
                                         <button
-                                            class="p-2 text-amber-600 hover:text-amber-800 hover:bg-amber-50 rounded-lg transition-all duration-200 tooltip"
+                                            class="p-3 text-amber-600 hover:text-amber-800 hover:bg-amber-200 rounded-lg transition-all duration-200 tooltip"
                                             title="Chỉnh sửa">
                                             <i class="fas fa-edit text-sm"></i>
                                         </button>
 
+                                        @if ($user->is_active == 1)
+                                            <button
+                                                class="p-3 text-red-600 hover:text-red-800 hover:bg-red-200 rounded-lg transition-all duration-200 tooltip btn-lock-user"
+                                                data-id="{{ $user->id }}" title="Khóa người dùng">
+                                                <i class="fas fa-lock text-sm"></i>
+                                            </button>
+                                        @endif
+
+                                        @if ($user->is_active == 2)
+                                            <button
+                                                class="p-3 text-blue-600 hover:text-blue-800 hover:bg-blue-200 rounded-lg transition-all duration-200 tooltip btn-unlock-user"
+                                                data-id="{{ $user->id }}"
+                                                data-reason="{{ $user->reason_for_unactive }}"
+                                                title="Mở khóa người dùng">
+                                                <i class="fas fa-unlock text-sm"></i>
+                                            </button>
+                                        @endif
+
                                         <button
-                                            class="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-all duration-200 tooltip"
-                                            title="Khóa người dùng">
-                                            <i class="fas fa-lock text-sm"></i>
+                                            class="p-3 text-gray-600 hover:text-gray-800 hover:bg-gray-200 rounded-lg transition-all duration-200 tooltip btn-delete-user"
+                                            data-id="{{ $user->id }}" title="Xóa người dùng">
+                                            <i class="fas fa-trash text-sm"></i>
                                         </button>
                                     </div>
                                 </td>
@@ -367,7 +386,19 @@
                 window.requestAnimationFrame(function() {
                     isSyncing = false;
                 });
+
+                let scrollLeft = $tableScroll.scrollLeft();
+                let maxScroll = $tableScroll[0].scrollWidth - $tableScroll.outerWidth();
+
+                if (scrollLeft <= 20) {
+                    $('#scrollToFirst').addClass('hidden');
+                    $('#scrollToAction').removeClass('hidden');
+                } else if (scrollLeft >= maxScroll - 20) {
+                    $('#scrollToAction').addClass('hidden');
+                    $('#scrollToFirst').removeClass('hidden');
+                }
             });
+
 
             $('#scrollToAction').on('click', function() {
                 let $tableScroll = $('#table-scroll');
@@ -447,6 +478,132 @@
                     e.preventDefault();
                     $form.submit();
                 }
+            });
+
+            $('.btn-lock-user').on('click', function() {
+                let userId = $(this).data('id');
+
+                Swal.fire({
+                    title: 'Khóa người dùng',
+                    text: 'Nhập lý do khóa tài khoản này:',
+                    input: 'text',
+                    inputPlaceholder: 'Ví dụ: Vi phạm chính sách...',
+                    inputAttributes: {
+                        maxlength: 255,
+                    },
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Khóa',
+                    cancelButtonText: 'Hủy',
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    inputValidator: (value) => {
+                        if (!value) {
+                            return 'Bạn phải nhập lý do!';
+                        }
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        let reason = result.value;
+                        $.ajax({
+                            url: `/admin/users/${userId}/lock`,
+                            type: 'PATCH',
+                            data: {
+                                _token: '{{ csrf_token() }}',
+                                reason: reason,
+                                user_id: userId
+                            },
+                            success: function(res) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Đã khóa!',
+                                    text: res.message ||
+                                        'Người dùng đã bị khóa thành công.'
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            },
+                            error: function(xhr) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Thất bại!',
+                                    text: xhr.responseJSON?.message ||
+                                        'Không thể khóa người dùng.'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+            $('.btn-unlock-user').on('click', function() {
+                let userId = $(this).data('id');
+                let reason = $(this).data('reason');
+
+                Swal.fire({
+                    title: 'Mở khóa người dùng?',
+                    html: `
+                        <p class="text-gray-700 mb-2">Người dùng này đã bị khóa với lý do:</p>
+                        <p class="font-semibold text-red-600">"${reason || 'Không có lý do'}"</p>
+                    `,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Mở khóa',
+                    cancelButtonText: 'Hủy',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: `/admin/users/${userId}/unlock`,
+                            type: 'PATCH',
+                            data: {
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(res) {
+                                Swal.fire('Đã mở khóa!', res.message ||
+                                        'Người dùng đã được mở khóa.', 'success')
+                                    .then(() => location.reload());
+                            },
+                            error: function(xhr) {
+                                Swal.fire('Thất bại!', xhr.responseJSON?.message ||
+                                    'Không thể mở khóa.', 'error');
+                            }
+                        });
+                    }
+                });
+            });
+
+            $('.btn-delete-user').on('click', function() {
+                let userId = $(this).data('id');
+
+                Swal.fire({
+                    title: 'Xóa người dùng?',
+                    text: 'Người dùng sẽ bị chuyển vào thùng rác.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Xóa',
+                    cancelButtonText: 'Hủy',
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: `/admin/users/${userId}`,
+                            type: 'DELETE',
+                            data: {
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(res) {
+                                Swal.fire('Đã xóa!', res.message ||
+                                        'Người dùng đã bị xóa.', 'success')
+                                    .then(() => location.reload());
+                            },
+                            error: function(xhr) {
+                                Swal.fire('Thất bại!', xhr.responseJSON?.message ||
+                                    'Không thể xóa.', 'error');
+                            }
+                        });
+                    }
+                });
             });
         });
     </script>
