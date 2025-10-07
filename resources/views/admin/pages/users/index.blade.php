@@ -1,9 +1,5 @@
 @extends('admin.layouts.master')
 
-@push('css_library')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-@endpush
-
 @push('css')
     <style>
         .no-scrollbar {
@@ -318,10 +314,6 @@
         </div>
     </div>
 @endsection
-
-@push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-@endpush
 
 @push('js')
     <script>

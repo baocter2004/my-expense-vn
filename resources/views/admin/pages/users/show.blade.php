@@ -1,8 +1,5 @@
 @extends('admin.layouts.master')
 
-@push('css_library')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-@endpush
 
 @section('title')
     My Expense VN - Chi tiết người dùng
@@ -165,7 +162,6 @@
         </div>
     </div>
 @endsection
-
 
 @push('js')
     <script>

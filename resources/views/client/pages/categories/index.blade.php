@@ -1,8 +1,5 @@
 @extends('client.layouts.master')
 
-@push('css_library')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-@endpush
 
 @section('title')
     Trang Danh Mục
@@ -188,10 +185,6 @@
     </div>
     @include('client.components.elements.modal')
 @endsection
-
-@push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-@endpush
 
 @push('js')
     @include('client.components.scripts.reset', [

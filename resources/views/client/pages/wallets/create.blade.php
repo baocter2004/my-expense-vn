@@ -1,9 +1,5 @@
 @extends('client.layouts.master')
 
-@push('css_library')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-@endpush
-
 @section('title')
     Trang Ví Cá Nhân
 @endsection

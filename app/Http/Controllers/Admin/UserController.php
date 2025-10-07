@@ -41,6 +41,10 @@ class UserController extends Controller
             'wallets'
         ])->first();
 
+        if (!$user) {
+            return redirect()->route('admin.users.index')->with('error', 'Không tìm thấy người dùng');
+        }
+
         return view('admin.pages.users.show', compact('user'));
     }
 
