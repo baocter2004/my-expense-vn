@@ -26,14 +26,14 @@
                 @csrf
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    @include('client.components.forms.input', [
+                    @include('admin.components.forms.input', [
                         'name' => 'last_name',
                         'label' => 'Họ',
                         'icon' => 'user',
                         'placeholder' => 'Nhập họ',
                         'required' => true,
                     ])
-                    @include('client.components.forms.input', [
+                    @include('admin.components.forms.input', [
                         'name' => 'first_name',
                         'label' => 'Tên',
                         'icon' => 'user',
@@ -42,7 +42,7 @@
                     ])
                 </div>
 
-                @include('client.components.forms.input', [
+                @include('admin.components.forms.input', [
                     'name' => 'email',
                     'type' => 'email',
                     'label' => 'Email',
@@ -52,7 +52,7 @@
                 ])
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    @include('client.components.forms.input', [
+                    @include('admin.components.forms.input', [
                         'name' => 'password',
                         'type' => 'password',
                         'label' => 'Mật khẩu',
@@ -61,7 +61,7 @@
                         'required' => true,
                     ])
 
-                    @include('client.components.forms.input', [
+                    @include('admin.components.forms.input', [
                         'name' => 'password_confirmation',
                         'type' => 'password',
                         'label' => 'Xác nhận mật khẩu',
@@ -72,7 +72,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    @include('client.components.forms.select', [
+                    @include('admin.components.forms.select', [
                         'name' => 'gender',
                         'label' => 'Giới tính',
                         'icon' => 'venus-mars',
@@ -80,7 +80,7 @@
                         'options' => \App\Consts\UserConst::GENDER,
                     ])
 
-                    @include('client.components.forms.date', [
+                    @include('admin.components.forms.date', [
                         'name' => 'birth_date',
                         'label' => 'Ngày sinh',
                         'icon' => 'calendar',
@@ -88,14 +88,14 @@
                     ])
                 </div>
 
-                @include('client.components.forms.input', [
+                @include('admin.components.forms.input', [
                     'name' => 'avatar',
                     'type' => 'file',
                     'label' => 'Ảnh đại diện',
                     'icon' => 'image',
                 ])
 
-                @include('client.components.forms.select', [
+                @include('admin.components.forms.select', [
                     'name' => 'is_active',
                     'label' => 'Trạng thái',
                     'icon' => 'toggle-on',
@@ -104,7 +104,7 @@
                 ])
 
                 <div id="reason" class="hidden">
-                    @include('client.components.forms.text-area', [
+                    @include('admin.components.forms.text-area', [
                         'name' => 'reason_for_unactive',
                         'label' => 'Lý do không hoạt động',
                         'icon' => 'comment',
