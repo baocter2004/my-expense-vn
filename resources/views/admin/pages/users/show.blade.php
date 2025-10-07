@@ -33,17 +33,17 @@
         <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
             <div class="flex flex-col items-center text-center space-y-4 mb-8">
                 <div>
-                    <img src="{{ $user->avatar_url ?? asset('images/default.png') }}" alt="Avatar"
+                    <img src="{{ $user?->avatar_url ?? asset('images/default.png') }}" alt="Avatar"
                         class="w-32 h-32 rounded-full object-cover border-4 border-teal-100 shadow">
                 </div>
                 <div>
                     <h2 class="text-xl font-semibold text-slate-800">
-                        {{ $user->last_name }} {{ $user->first_name }}
+                        {{ $user?->last_name }} {{ $user?->first_name }}
                     </h2>
-                    <p class="text-sm text-slate-500">{{ $user->email }}</p>
+                    <p class="text-sm text-slate-500">{{ $user?->email }}</p>
                 </div>
                 <div>
-                    @if ($user->is_active == 1)
+                    @if ($user?->is_active == 1)
                         <span
                             class="px-3 py-1 text-xs font-medium rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200">
                             Active
@@ -64,11 +64,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <p class="text-xs text-slate-500">Giới tính</p>
-                        <p class="font-medium">{{ \App\Consts\UserConst::GENDER[$user->gender] ?? '---' }}</p>
+                        <p class="font-medium">{{ \App\Consts\UserConst::GENDER[$user?->gender] ?? '---' }}</p>
                     </div>
                     <div>
                         <p class="text-xs text-slate-500">Ngày sinh</p>
-                        <p class="font-medium">{{ $user->birth_date->format('d/m/Y') ?? '---' }}</p>
+                        <p class="font-medium">{{ $user?->birth_date?->format('d/m/Y') ?? '---' }}</p>
                     </div>
                 </div>
             </div>
@@ -80,28 +80,28 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <p class="text-xs text-slate-500">Google ID</p>
-                        <p class="font-medium">{{ $user->google_id ?? '---' }}</p>
+                        <p class="font-medium">{{ $user?->google_id ?? '---' }}</p>
                     </div>
                     <div>
                         <p class="text-xs text-slate-500">Admin quản lý</p>
                         <p class="font-medium">
-                            {{ $user->admin ? trim($user->admin->last_name . ' ' . $user->admin->first_name) : '---' }}
+                            {{ $user?->admin ? trim($user?->admin->last_name . ' ' . $user?->admin->first_name) : '---' }}
                         </p>
                     </div>
                     <div>
                         <p class="text-xs text-slate-500">Ngày tạo</p>
-                        <p class="font-medium">{{ $user->created_at?->format('d/m/Y H:i') ?? '---' }}</p>
+                        <p class="font-medium">{{ $user?->created_at?->format('d/m/Y H:i') ?? '---' }}</p>
                     </div>
                     <div>
                         <p class="text-xs text-slate-500">Ngày cập nhật</p>
-                        <p class="font-medium">{{ $user->updated_at?->format('d/m/Y H:i') ?? '---' }}</p>
+                        <p class="font-medium">{{ $user?->updated_at?->format('d/m/Y H:i') ?? '---' }}</p>
                     </div>
 
-                    @if ($user->is_active == 2 && !empty($user->reason_for_unactive))
+                    @if ($user?->is_active == 2 && !empty($user?->reason_for_unactive))
                         <div class="md:col-span-2">
                             <p class="text-xs text-slate-500">Lý do khóa</p>
                             <p class="font-medium text-red-600">
-                                <i class="fa-solid fa-ban mr-1"></i> {{ $user->reason_for_unactive }}
+                                <i class="fa-solid fa-ban mr-1"></i> {{ $user?->reason_for_unactive }}
                             </p>
                         </div>
                     @endif
@@ -115,15 +115,15 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="p-4 bg-teal-50 rounded-xl text-center shadow-sm">
                         <p class="text-xs text-slate-500">Danh mục</p>
-                        <p class="text-2xl font-bold text-teal-600">{{ $user->categories_count }}</p>
+                        <p class="text-2xl font-bold text-teal-600">{{ $user?->categories_count }}</p>
                     </div>
                     <div class="p-4 bg-indigo-50 rounded-xl text-center shadow-sm">
                         <p class="text-xs text-slate-500">Giao dịch</p>
-                        <p class="text-2xl font-bold text-indigo-600">{{ $user->transactions_count }}</p>
+                        <p class="text-2xl font-bold text-indigo-600">{{ $user?->transactions_count }}</p>
                     </div>
                     <div class="p-4 bg-amber-50 rounded-xl text-center shadow-sm">
                         <p class="text-xs text-slate-500">Ví</p>
-                        <p class="text-2xl font-bold text-amber-600">{{ $user->wallets_count }}</p>
+                        <p class="text-2xl font-bold text-amber-600">{{ $user?->wallets_count }}</p>
                     </div>
                 </div>
             </div>
@@ -139,23 +139,23 @@
                         <span class="hidden sm:inline">Chỉnh sửa</span>
                     </button>
 
-                    @if ($user->is_active == 1)
-                        <button data-id="{{ $user->id }}"
+                    @if ($user?->is_active == 1)
+                        <button data-id="{{ $user?->id }}"
                             class="flex items-center justify-center gap-2 px-4 py-3 bg-red-500 text-white text-sm rounded-lg shadow hover:bg-red-600 transition btn-lock-user">
                             <i class="fas fa-lock"></i>
                             <span class="hidden sm:inline">Khóa</span>
                         </button>
                     @endif
 
-                    @if ($user->is_active == 2)
-                        <button data-id="{{ $user->id }}" data-reason="{{ $user->reason_for_unactive }}"
+                    @if ($user?->is_active == 2)
+                        <button data-id="{{ $user?->id }}" data-reason="{{ $user?->reason_for_unactive }}"
                             class="flex items-center justify-center gap-2 px-4 py-3 bg-blue-500 text-white text-sm rounded-lg shadow hover:bg-blue-600 transition btn-unlock-user">
                             <i class="fas fa-unlock"></i>
                             <span class="hidden sm:inline">Mở Khóa</span>
                         </button>
                     @endif
 
-                    <button data-id="{{ $user->id }}"
+                    <button data-id="{{ $user?->id }}"
                         class="flex items-center justify-center gap-2 px-4 py-3 bg-gray-500 text-white text-sm rounded-lg shadow hover:bg-gray-600 transition btn-delete-user">
                         <i class="fas fa-trash"></i>
                         <span class="hidden sm:inline">Xóa</span>

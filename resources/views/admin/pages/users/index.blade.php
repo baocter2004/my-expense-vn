@@ -242,12 +242,12 @@
                                     @if ($user->is_active && $user->is_active === 1)
                                         <span
                                             class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200">
-                                            <div class="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>Active
+                                            <div class="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>Hoạt Động
                                         </span>
                                     @else
                                         <span
                                             class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-red-100 text-red-700 border border-red-200">
-                                            <div class="w-2 h-2 bg-red-500 rounded-full mr-2"></div>Inactive
+                                            <div class="w-2 h-2 bg-red-500 rounded-full mr-2"></div>Không Hoạt Động
                                         </span>
                                     @endif
                                 </td>
