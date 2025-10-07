@@ -300,9 +300,10 @@
                             success: function(res) {
                                 Swal.fire('Đã xóa!', res.message ||
                                         'Người dùng đã bị xóa.', 'success')
-                                    .then(() => window.location.href =
-                                        "{{ route('admin.users.index') }}";
-                                    );
+                                    .then(() => {
+                                        window.location.href =
+                                            "{{ route('admin.users.index') }}";
+                                    });
                             },
                             error: function(xhr) {
                                 Swal.fire('Thất bại!', xhr.responseJSON?.message ||

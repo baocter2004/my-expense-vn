@@ -20,26 +20,24 @@
                 <p class="text-sm text-slate-500 mt-1">Thêm mới người dùng vào hệ thống</p>
             </div>
         </div>
-        <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
-            <form action="" method="POST" enctype="multipart/form-data" class="space-y-6" id="userForm">
+        <div class="bg-white rounded-2xl shadow-lg  px-4 md:px-6 py-3 md:py-4">
+            <form action="{{ route('admin.users.create') }}" method="POST" enctype="multipart/form-data" class="space-y-6"
+                id="userForm">
                 @csrf
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    @include('client.components.forms.input', [
-                        'name' => 'first_name',
-                        'label' => 'Tên',
-                        'icon' => 'user',
-                        'placeholder' => 'Nhập tên',
-                        'value' => old('first_name'),
-                        'required' => true,
-                    ])
-
                     @include('client.components.forms.input', [
                         'name' => 'last_name',
                         'label' => 'Họ',
                         'icon' => 'user',
                         'placeholder' => 'Nhập họ',
-                        'value' => old('last_name'),
+                        'required' => true,
+                    ])
+                    @include('client.components.forms.input', [
+                        'name' => 'first_name',
+                        'label' => 'Tên',
+                        'icon' => 'user',
+                        'placeholder' => 'Nhập tên',
                         'required' => true,
                     ])
                 </div>
@@ -50,7 +48,6 @@
                     'label' => 'Email',
                     'icon' => 'envelope',
                     'placeholder' => 'Nhập email',
-                    'value' => old('email'),
                     'required' => true,
                 ])
 
@@ -81,7 +78,6 @@
                         'icon' => 'venus-mars',
                         'placeholder' => 'Chọn giới tính',
                         'options' => \App\Consts\UserConst::GENDER,
-                        'value' => old('gender'),
                     ])
 
                     @include('client.components.forms.date', [
@@ -89,7 +85,6 @@
                         'label' => 'Ngày sinh',
                         'icon' => 'calendar',
                         'placeholder' => 'Chọn ngày sinh',
-                        'value' => old('birth_date'),
                     ])
                 </div>
 
@@ -105,21 +100,17 @@
                     'label' => 'Trạng thái',
                     'icon' => 'toggle-on',
                     'placeholder' => 'Chọn trạng thái',
-                    'options' => [
-                        1 => 'Hoạt động',
-                        2 => 'Không hoạt động'
-                    ],
-                    'value' => old('is_active', 1),
+                    'options' => \App\Consts\GlobalConst::STATUS,
                 ])
 
-                @include('client.components.forms.text-area', [
-                    'name' => 'reason_for_unactive',
-                    'label' => 'Lý do không hoạt động',
-                    'icon' => 'comment',
-                    'placeholder' => 'Nhập lý do (nếu có)',
-                    'value' => old('reason_for_unactive'),
-                    'rows' => 3,
-                ])
+                <div id="reason" class="hidden">
+                    @include('client.components.forms.text-area', [
+                        'name' => 'reason_for_unactive',
+                        'label' => 'Lý do không hoạt động',
+                        'icon' => 'comment',
+                        'placeholder' => 'Nhập lý do (nếu có)',
+                    ])
+                </div>
             </form>
         </div>
 
@@ -160,6 +151,16 @@
                     confirmButtonText: 'OK'
                 });
             @endif
+
+            $('#is_active').on('change', function() {
+                const status = $(this).val();
+
+                if (status == 2) {
+                    $('#reason').removeClass('hidden');
+                } else if (status == 1) {
+                    $('#reason').addClass('hidden');
+                }
+            });
         });
     </script>
 @endpush

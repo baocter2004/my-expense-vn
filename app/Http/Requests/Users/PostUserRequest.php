@@ -51,6 +51,14 @@ class PostUserRequest extends FormRequest
                 'nullable',
                 'integer',
             ],
+            'reason_for_unactive' => [
+                'sometimes'
+            ],
+            'avatar' => [
+                'image',
+                'mimes:jpeg,png,jpg,gif,svg',
+                'max:4096'
+            ]
         ];
     }
 }

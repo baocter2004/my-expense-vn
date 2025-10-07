@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\GetUserRequest;
+use App\Http\Requests\Users\PostUserRequest;
 use App\Services\Admin\UserService;
 use Illuminate\Http\Request;
 
@@ -16,7 +17,7 @@ class UserController extends Controller
         $params = $getUserRequest->validated();
         $params['with_count'] = ['transactions'];
 
-        $items = $this->userService->searchFilter($params, 10);
+        $items = $this->userService->searchFilter($params);
 
         return view('admin.pages.users.index', compact('items'));
     }
@@ -62,7 +63,7 @@ class UserController extends Controller
 
         $user->update([
             'is_active' => 2,
-            'locked_reason' => $request->reason,
+            'reason_for_unactive' => $request->reason,
         ]);
 
         return response()->json([
@@ -92,4 +93,17 @@ class UserController extends Controller
     {
         return view('admin.pages.users.create');
     }
+
+    public function store(PostUserRequest $postUserRequest)
+    {
+        $result = $this->userService->store($postUserRequest->validated());
+
+        if ($result['status']) {
+            return redirect()->route('admin.users.index')
+                ->with('success', $result['message']);
+        } else {
+            return redirect()->route('admin.users.create')->with('error', $result['message']);
+        }
+    }
 }
+

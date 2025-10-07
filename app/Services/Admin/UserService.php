@@ -2,10 +2,16 @@
 
 namespace App\Services\Admin;
 
+use App\Consts\GlobalConst;
+use App\Consts\UserConst;
 use App\Repositories\UserRepository;
 use App\Services\BaseCRUDService;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class UserService extends BaseCRUDService
 {
@@ -64,6 +70,52 @@ class UserService extends BaseCRUDService
             'sort'         => $sort . ':' . $order,
             'relates'      => $relates,
         ];
+    }
+
+    public function store(array $params = [])
+    {
+        try {
+            DB::beginTransaction();
+            $params['status'] = $params['status'] ?? GlobalConst::ACTIVE;
+            if (empty($params['admin_id'])) {
+                $params['admin_id'] = Auth::guard('admin')->id();
+            }
+
+            if (!empty($params['avatar'])) {
+                if ($params['avatar'] instanceof \Illuminate\Http\UploadedFile) {
+                    $path = $params['avatar']->store('users/avatars', 'public');
+                } else {
+                    $filename = uniqid() . '.jpg';
+                    $path = "users/avatars/{$filename}";
+                    Storage::disk('public')->put($path, $params['avatar']);
+                }
+                $params['avatar'] = $path;
+            }
+
+            $user = $this->create($params);
+            DB::commit();
+            return [
+                'status' => true,
+                'data' => $user,
+                'message' => 'Thêm mới người dùng thành công ! Họ Và Tên : ' . $user->fullname
+            ];
+        } catch (\Throwable $th) {
+            Log::error('Error in ' . __CLASS__ . '::' . __FUNCTION__ . ' => ' . $th->getMessage(), [
+                'file' => $th->getFile(),
+                'line' => $th->getLine(),
+                'trace' => $th->getTraceAsString(),
+            ]);
+
+            if (isset($path) && Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
+            }
+
+            DB::rollBack();
+            return [
+                'status' => false,
+                'message' => 'Có lỗi xảy ra , vui lòng thử lại !'
+            ];
+        }
     }
 
     public function totalUser(): int
