@@ -20,7 +20,7 @@
     </label>
 
     <select name="{{ $name }}" id="{{ $name }}"
-        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500 {{ $hasError ? 'is-valid' : '' }}">
+        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500 {{ $hasError ? 'is-invalid' : '' }}">
         @if ($placeholder)
             <option value="" disabled {{ old($name, $value) === '' ? 'selected' : '' }}>
                 {{ $placeholder }}

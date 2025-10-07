@@ -50,7 +50,7 @@ $(document).ready(function () {
         }
     });
 
-    const firstInvalid = $(".is-valid").first();
+    const firstInvalid = $(".is-invalid").first();
     if (firstInvalid.length) {
         $("html, body").animate(
             {

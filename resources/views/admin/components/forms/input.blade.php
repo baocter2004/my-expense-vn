@@ -31,7 +31,7 @@
                 value="{{ old($name, request($name, $value)) }}"
                 placeholder="{{ $placeholder }}"
                 class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-teal-500
-                    {{ $hasError ? 'is-valid' : '' }}
+                    {{ $hasError ? 'is-invalid' : '' }}
                     {{ $type === 'password' ? 'pr-10' : 'pr-4' }}">
         @endif
 
