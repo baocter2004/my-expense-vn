@@ -21,9 +21,10 @@
             </div>
         </div>
         <div class="bg-white rounded-2xl shadow-lg  px-4 md:px-6 py-3 md:py-4">
-            <form action="{{ route('admin.users.create') }}" method="POST" enctype="multipart/form-data" class="space-y-6"
-                id="userForm">
+            <form action="{{ route('admin.users.update', $user->id) }}" method="POST" enctype="multipart/form-data"
+                class="space-y-6" id="userForm">
                 @csrf
+                @method('PATCH')
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     @include('admin.components.forms.input', [
@@ -31,12 +32,14 @@
                         'label' => 'Họ',
                         'icon' => 'user',
                         'placeholder' => 'Nhập họ',
+                        'value' => $user->last_name,
                         'required' => true,
                     ])
                     @include('admin.components.forms.input', [
                         'name' => 'first_name',
                         'label' => 'Tên',
                         'icon' => 'user',
+                        'value' => $user->first_name,
                         'placeholder' => 'Nhập tên',
                         'required' => true,
                     ])
@@ -47,6 +50,7 @@
                     'type' => 'email',
                     'label' => 'Email',
                     'icon' => 'envelope',
+                    'value' => $user->email,
                     'placeholder' => 'Nhập email',
                     'required' => true,
                 ])
@@ -77,6 +81,7 @@
                         'label' => 'Giới tính',
                         'icon' => 'venus-mars',
                         'placeholder' => 'Chọn giới tính',
+                        'value' => $user->gender,
                         'options' => \App\Consts\UserConst::GENDER,
                     ])
 
@@ -84,6 +89,7 @@
                         'name' => 'birth_date',
                         'label' => 'Ngày sinh',
                         'icon' => 'calendar',
+                        'value' => $user->birth_date,
                         'placeholder' => 'Chọn ngày sinh',
                     ])
                 </div>
@@ -92,6 +98,7 @@
                     'name' => 'avatar',
                     'type' => 'file',
                     'label' => 'Ảnh đại diện',
+                    'value' => $user->avatar,
                     'icon' => 'image',
                 ])
 
@@ -99,6 +106,7 @@
                     'name' => 'is_active',
                     'label' => 'Trạng thái',
                     'icon' => 'toggle-on',
+                    'value' => $user->is_active,
                     'placeholder' => 'Chọn trạng thái',
                     'options' => \App\Consts\GlobalConst::STATUS,
                 ])
@@ -108,6 +116,7 @@
                         'name' => 'reason_for_unactive',
                         'label' => 'Lý do không hoạt động',
                         'icon' => 'comment',
+                        'value' => $user->reason_for_unactive,
                         'placeholder' => 'Nhập lý do (nếu có)',
                     ])
                 </div>
@@ -151,6 +160,10 @@
                     confirmButtonText: 'OK'
                 });
             @endif
+
+            const status = $('#is_active').val();
+            if (status == 2)
+                $('#reason').removeClass('hidden');
 
             $('#is_active').on('change', function() {
                 const status = $(this).val();

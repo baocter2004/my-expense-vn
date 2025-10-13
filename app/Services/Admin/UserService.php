@@ -9,6 +9,7 @@ use App\Services\BaseCRUDService;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -25,8 +26,8 @@ class UserService extends BaseCRUDService
 
     protected function buildFilterParams(array $params): array
     {
-        $whereEquals = Arr::get($params, 'where_likes', []);
-        $whereLikes  = Arr::get($params, 'where_equals', []);
+        $whereEquals = Arr::get($params, 'where_equals', []);
+        $whereLikes  = Arr::get($params, 'where_likes', []);
         $wheres      = Arr::get($params, 'wheres', []);
         $sort        = Arr::get($params, 'sort', 'created_at');
         $order       = Arr::get($params, 'order', 'desc');
@@ -91,6 +92,7 @@ class UserService extends BaseCRUDService
                 }
                 $params['avatar'] = $path;
             }
+            $params['email_verified_at'] = Date::now();
 
             $user = $this->create($params);
             DB::commit();
@@ -114,6 +116,75 @@ class UserService extends BaseCRUDService
             return [
                 'status' => false,
                 'message' => 'Có lỗi xảy ra , vui lòng thử lại !'
+            ];
+        }
+    }
+
+    public function updateUser($userId, array $params = [])
+    {
+        try {
+            DB::beginTransaction();
+
+            $params['status'] = $params['status'] ?? GlobalConst::ACTIVE;
+            $params['admin_id'] = $params['admin_id'] ?? Auth::guard('admin')->id();
+
+            if (empty($params['password'])) {
+                unset($params['password']);
+            } else {
+                $params['password'] = bcrypt($params['password']);
+            }
+
+            $user = $this->find($userId);
+
+            $avatar = $params['avatar'] ?? null;
+            if (isset($params['avatar'])) {
+                unset($params['avatar']);
+            }
+
+            $newPath = null;
+            if ($avatar) {
+                if ($avatar instanceof \Illuminate\Http\UploadedFile) {
+                    $newPath = $avatar->store("users/avatars", 'public');
+                } else {
+                    $filename = uniqid() . '.jpg';
+                    $newPath = "users/avatars/{$filename}";
+                    Storage::disk('public')->put($newPath, $avatar);
+                }
+
+                $params['avatar'] = $newPath;
+            }
+
+            $user = $this->update($userId, $params);
+
+            if (!empty($newPath) && !empty($user->getRawOriginal('avatar'))) {
+                $oldAvatar = $user->getRawOriginal('avatar');
+                if ($oldAvatar && $oldAvatar !== $newPath && Storage::disk('public')->exists($oldAvatar)) {
+                    Storage::disk('public')->delete($oldAvatar);
+                }
+            }
+
+            DB::commit();
+
+            return [
+                'status' => true,
+                'data' => $user,
+                'message' => 'Chỉnh sửa người dùng ' . $user->fullname . ' thành công!'
+            ];
+        } catch (\Throwable $th) {
+            Log::error('Error in ' . __CLASS__ . '::' . __FUNCTION__ . ' => ' . $th->getMessage(), [
+                'file' => $th->getFile(),
+                'line' => $th->getLine(),
+                'trace' => $th->getTraceAsString(),
+            ]);
+            
+            if (isset($newPath) && Storage::disk('public')->exists($newPath)) {
+                Storage::disk('public')->delete($newPath);
+            }
+
+            DB::rollBack();
+            return [
+                'status' => false,
+                'message' => 'Có lỗi xảy ra, vui lòng thử lại!'
             ];
         }
     }

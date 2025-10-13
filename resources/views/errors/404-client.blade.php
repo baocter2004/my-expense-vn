@@ -29,7 +29,7 @@
 @endpush
 
 @section('content')
-    <div class="relative min-h-screen w-full flex items-center justify-center bg-gray-100 p-4 overflow-hidden">
+    <div class="relative min-h-screen h-full w-full flex items-center justify-center bg-gray-100 p-4 overflow-hidden">
         
         @include('client.pages.auth.elements.background')
 

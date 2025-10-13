@@ -241,10 +241,20 @@
                                             <div class="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>Hoạt Động
                                         </span>
                                     @else
-                                        <span
-                                            class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-red-100 text-red-700 border border-red-200">
-                                            <div class="w-2 h-2 bg-red-500 rounded-full mr-2"></div>Không Hoạt Động
-                                        </span>
+                                        <div class="relative inline-block group">
+                                            <span
+                                                class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-red-100 text-red-700 border border-red-200 cursor-help">
+                                                <div class="w-2 h-2 bg-red-500 rounded-full mr-2"></div>Không Hoạt Động
+                                            </span>
+
+                                            <div
+                                                class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-xs text-xs text-white bg-gray-800 px-3 py-1 rounded-md shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 z-10">
+                                                {{ $user->reason_for_unactive ?? 'Không có lý do' }}
+                                                <div
+                                                    class="absolute top-full left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-800 rotate-45">
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center text-gray-700">
@@ -261,11 +271,11 @@
                                             <i class="fas fa-eye text-sm"></i>
                                         </a>
 
-                                        <button
+                                        <a href="{{ route('admin.users.edit', $user->id) }}"
                                             class="p-3 text-amber-600 hover:text-amber-800 hover:bg-amber-200 rounded-lg transition-all duration-200 tooltip"
                                             title="Chỉnh sửa">
                                             <i class="fas fa-edit text-sm"></i>
-                                        </button>
+                                        </a>
 
                                         @if ($user->is_active == 1)
                                             <button
@@ -309,7 +319,7 @@
             </div>
         </div>
 
-        <div class="mt-4 flex justify-end">
+        <div class="mt-4 flex justify-center items-center">
             {{ $items->onEachSide(1)->links('client.components.elements.paginate') }}
         </div>
     </div>

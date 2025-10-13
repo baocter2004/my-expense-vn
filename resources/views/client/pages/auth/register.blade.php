@@ -51,15 +51,15 @@
                         @csrf
                         @include('client.components.forms.input', [
                             'icon' => 'user',
-                            'label' => trans('auth.registers.first_name'),
-                            'name' => 'first_name',
+                            'label' => trans('auth.registers.last_name'),
+                            'name' => 'last_name',
                             'placeholder' => 'Vui Lòng Nhập Họ',
                             'required' => true,
                         ])
                         @include('client.components.forms.input', [
                             'icon' => 'user',
-                            'label' => trans('auth.registers.last_name'),
-                            'name' => 'last_name',
+                            'label' => trans('auth.registers.first_name'),
+                            'name' => 'first_name',
                             'placeholder' => 'Vui Lòng Nhập Tên',
                             'required' => true,
                         ])

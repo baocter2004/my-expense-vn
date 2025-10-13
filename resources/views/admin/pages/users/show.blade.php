@@ -30,7 +30,7 @@
         <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
             <div class="flex flex-col items-center text-center space-y-4 mb-8">
                 <div>
-                    <img src="{{ $user?->avatar_url ?? asset('images/default.png') }}" alt="Avatar"
+                    <img src="{{ $user->avatar ? Storage::url($user?->avatar) : asset('images/default.png') }}" alt="Avatar"
                         class="w-32 h-32 rounded-full object-cover border-4 border-teal-100 shadow">
                 </div>
                 <div>
@@ -130,11 +130,12 @@
                     <i class="fa-solid fa-gears mr-2 text-amber-500"></i> Quản lý
                 </h3>
                 <div class="flex gap-2 flex-wrap">
-                    <button
+                    <a
+                        href="{{ route('admin.users.edit',$user?->id) }}"
                         class="flex items-center justify-center gap-2 px-4 py-3 bg-amber-500 text-white text-sm rounded-lg shadow hover:bg-amber-600 transition">
                         <i class="fas fa-edit"></i>
                         <span class="hidden sm:inline">Chỉnh sửa</span>
-                    </button>
+                    </a>
 
                     @if ($user?->is_active == 1)
                         <button data-id="{{ $user?->id }}"

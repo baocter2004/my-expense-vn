@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\GetUserRequest;
 use App\Http\Requests\Users\PostUserRequest;
+use App\Http\Requests\Users\UpdateUserByAdminRequest;
 use App\Services\Admin\UserService;
 use Illuminate\Http\Request;
 
@@ -105,5 +106,22 @@ class UserController extends Controller
             return redirect()->route('admin.users.create')->with('error', $result['message']);
         }
     }
-}
 
+    public function edit(string|int $userId)
+    {
+        $user = $this->userService->find($userId);
+        return view('admin.pages.users.edit', compact('user'));
+    }
+
+    public function update(string|int $userId, UpdateUserByAdminRequest $updateUserByAdminRequest)
+    {
+        $result = $this->userService->updateUser($userId,$updateUserByAdminRequest->validated());
+
+        if ($result['status']) {
+            return redirect()->route('admin.users.index')
+                ->with('success', $result['message']);
+        } else {
+            return redirect()->route('admin.users.create')->with('error', $result['message']);
+        }
+    }
+}
